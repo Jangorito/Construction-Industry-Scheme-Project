@@ -9,9 +9,10 @@ sharpen an ambiguous one rather than patching the prompt with a one-off
 exception.
 
 Two output labels per line item: **Construction** (CIS-relevant) or
-**Services** (non-CIS). Rules R12–R13 cover the cases that don't cleanly fit
-either label at face value (materials, mixed contracts) — resolve those down
-to one of the two labels plus a note, don't invent a third label.
+**Services** (non-CIS). Rules R11b–R13 cover the cases that don't cleanly fit
+either label at face value (materials-adjacent costs, mixed contracts) —
+resolve those down to one of the two labels plus a note, don't invent a
+third label.
 
 **Rule IDs and citations.** Every rule has a stable ID (`R1`, `R6`, `R11a`, …)
 and a `Source:` line naming what backs it — either a real HMRC reference
@@ -184,6 +185,54 @@ Services-leaning framing at face value; the underlying operation is still
 Construction (R5) and a labour estimate would be needed in practice.
 *Source: CISR15060 (primary — verified against source PDF).*
 
+**R11b — Hired plant cost can be treated as "materials" in the deduction
+calculation.** Where a subcontractor hires plant (scaffolding, cranes,
+cement mixers, etc.) from a third party to carry out their own construction
+work, the cost of that hire — plus consumables like fuel needed to run it —
+may be treated as "materials" for calculating the CIS deduction, even though
+it isn't materials in the ordinary sense. This only matters for
+subcontractors **without gross payment status** — a gross-status
+subcontractor is paid with no deduction at all, so there's nothing for this
+treatment to apply to. This is a deduction-calculation rule only: it doesn't
+touch R8's scope question (is the plant-hire *line item itself* Construction
+or Services). It only applies to plant actually hired from a third party —
+if the subcontractor owns the plant, including plant acquired via
+hire-purchase, there's no "notional" materials deduction for it, though
+fuel/consumables can still count. (Tugs, barges, and vessels used in
+constructing docks/marinas/offshore installations follow the same
+crewed/bare-hire split as R8: crewed = plant hire with operator = subject to
+CIS; bare-hired with the contractor's own crew = not subject to CIS.)
+*Source: CISR14260 and CISR15090 (both primary) — resolves the open item
+CISR15060 pointed to without detail.*
+
+**R11c — Travel, subsistence, and accommodation are not materials.**
+Payments a contractor makes for a subcontractor's travel, subsistence, or
+accommodation — paid directly, reimbursed, or paid to a nominated third
+party (e.g. a hotel) — are part of the overall contract payment under
+FA04/S60 and are **fully subject to the CIS deduction**, unlike direct
+materials costs (R11). Don't treat these as a materials-style carve-out in
+the reasoning, and don't classify them as Services either — they're
+Construction, taxed in full alongside the labour value, regardless of
+whether the obligation to pay them is written, verbal, express, or implied.
+The one exception: if a contractor lets a subcontractor use the contractor's
+*own* facilities (e.g. a vehicle, or accommodation the contractor already
+holds) entirely free, with no cost ever passed on, no deduction arises on
+that value — but HMRC itself flags this pattern as unusual and a possible
+sign of disguised employment (PAYE) rather than genuine subcontracting, so
+treat it as something to flag in reasoning, not a default assumption.
+*Source: CISR15080 (primary).*
+
+**R11d — Land purchase bundled into a construction contract (niche).** If a
+single contract requires a subcontractor (e.g. a developer) to acquire land
+as well as carry out construction, the whole payment is technically subject
+to deduction under S60(1)/S61(1) since materials are the only carve-out —
+but the portion reimbursing the subcontractor for the land purchase itself
+can be treated as "materials" and excluded from the deduction, on the same
+"direct cost" logic as R11. Unlikely to appear as an invoice line item in
+this POC (land purchase reads as a property transaction, not a line item on
+a subcontractor's invoice) — recorded here for completeness.
+*Source: CISR15070 (primary).*
+
 ## Mixed contracts / mixed invoices
 
 **R12 — An invoice can legitimately contain both labels.** Real
@@ -284,6 +333,12 @@ Services if this is a pure survey report").
     finishing operations — note in reasoning that vinyl, linoleum, or
     laminate flooring on the same job would be Construction).
 
+16. **"Subcontractor accommodation costs, 3 months on-site — £3,600"** →
+    **Construction** (R11c: travel/subsistence/accommodation the contractor
+    pays on a subcontractor's behalf are part of the taxable contract
+    payment — don't mistake this for a materials-style exclusion, and don't
+    classify it as Services just because it isn't labour or goods).
+
 ## Sources
 
 - [What is the Construction Industry Scheme?](https://www.gov.uk/what-is-the-construction-industry-scheme) — gov.uk overview, included/excluded work summary
@@ -293,16 +348,13 @@ Services if this is a pure survey report").
 - [CISR14270 — professional work](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14270) — advisory vs. execution/supervision test (R6)
 - [CISR14330 — index of construction operations](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14330) — navigation index into the CISR14xxx series
 - [CISR15060 — payments: materials](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060) — FA04/S61(1) direct-cost-of-materials deduction, chain/reimbursement restriction, and the "materials only, free installation" scrutiny point (R11, R11a); verified directly against the source PDF, not secondary commentary
+- [CISR14260 — construction operations: plant hire](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14260) — hired plant/fuel treated as "materials" in the deduction calculation, owned/hire-purchase plant excluded from that treatment, crewed vs. bare-hired vessels (R11b)
+- [CISR15090 — payments: plant hire as 'materials'](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15090) — same plant-hire-as-materials rule, adds that it only matters for subcontractors without gross payment status (R11b)
+- [CISR15070 — payments: land purchases](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15070) — land purchase reimbursement treated as "materials" within a bundled contract (R11d)
+- [CISR15080 — contract payments: travel, subsistence and accommodation](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15080) — these expenses are part of the taxable contract payment, not a materials-style exclusion (R11c)
 
 ## Open items to verify before production use
 
-- **CISR15060's "special cases" pointer** (page 4 of the PDF) references
-  separate, unverified guidance on how plant hire, land purchase, and
-  travel/accommodation costs are treated when paid "as materials" — this is
-  distinct from the scope question R8 answers (is plant hire Construction or
-  Services) and hasn't been checked. Don't assume R8's operator/no-operator
-  split says anything about materials-deduction treatment; treat as a gap
-  until the "information menu" pages it references are read.
 - Multi-trade invoices where the same supplier does both supply-only and
   supply-and-fix lines on one document haven't been stress-tested yet.
 - CISR14305 (traffic management, cited in the CISR manual index) hasn't been
