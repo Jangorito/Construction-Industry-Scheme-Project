@@ -1,0 +1,81 @@
+{
+  "invoice_id": "INV-2026-0002",
+  "scenario": "clear_construction",
+  "supplier": "BrightSpark M&E Contractors",
+  "customer": "Harborne Estates Ltd",
+  "date": "2026-05-22",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0002-L1",
+      "description": "Install air conditioning system, warehouse unit 4",
+      "amount_gbp": 2977.12,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R3"
+        ],
+        "note": "Complete system installation in a building.",
+        "gap": false,
+        "template_id": "cc_ac_install"
+      }
+    },
+    {
+      "line_id": "INV-2026-0002-L2",
+      "description": "Erection of scaffolding for roof works, 4 weeks",
+      "amount_gbp": 3170.89,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R8"
+        ],
+        "note": "Erection/dismantling labour is integral works \u2014 included.",
+        "gap": false,
+        "template_id": "cc_scaffold_erect"
+      }
+    },
+    {
+      "line_id": "INV-2026-0002-L3",
+      "description": "Painting and decorating, internal walls and ceilings, office suite",
+      "amount_gbp": 2428.91,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R4"
+        ],
+        "note": "Painting/decorating explicitly included.",
+        "gap": false,
+        "template_id": "cc_paint"
+      }
+    },
+    {
+      "line_id": "INV-2026-0002-L4",
+      "description": "Site clearance and earth-moving ahead of construction",
+      "amount_gbp": 7012.59,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R4"
+        ],
+        "note": "Preparatory works \u2014 included.",
+        "gap": false,
+        "template_id": "cc_siteclearance"
+      }
+    },
+    {
+      "line_id": "INV-2026-0002-L5",
+      "description": "Preparation and laying of foundations, Plot 4",
+      "amount_gbp": 12772.42,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1",
+          "R4"
+        ],
+        "note": "Site preparation/construction \u2014 core included operation.",
+        "gap": false,
+        "template_id": "cc_foundations"
+      }
+    }
+  ],
+  "total_gbp": 28361.93
+}

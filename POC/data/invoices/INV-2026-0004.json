@@ -1,0 +1,53 @@
+{
+  "invoice_id": "INV-2026-0004",
+  "scenario": "clear_services",
+  "supplier": "Solace Security Systems Ltd",
+  "customer": "Camden Retail Partners",
+  "date": "2026-06-24",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0004-L1",
+      "description": "Delivery of ready-mix concrete, 15 tonnes, no laying obligation",
+      "amount_gbp": 1545.68,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R7",
+          "R11"
+        ],
+        "note": "Delivery only.",
+        "gap": false,
+        "template_id": "cs_concrete_delivery"
+      }
+    },
+    {
+      "line_id": "INV-2026-0004-L2",
+      "description": "Sign-writing and installation of shop signboard",
+      "amount_gbp": 2254.72,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Named exclusion \u2014 signage.",
+        "gap": false,
+        "template_id": "cs_signage"
+      }
+    },
+    {
+      "line_id": "INV-2026-0004-L3",
+      "description": "Installation of venetian blinds, office windows",
+      "amount_gbp": 668.76,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Named exclusion \u2014 blinds.",
+        "gap": false,
+        "template_id": "cs_blinds"
+      }
+    }
+  ],
+  "total_gbp": 4469.16
+}

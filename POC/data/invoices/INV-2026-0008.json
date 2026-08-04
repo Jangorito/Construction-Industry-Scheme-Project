@@ -1,0 +1,96 @@
+{
+  "invoice_id": "INV-2026-0008",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Camden Bridge Construction Group Ltd",
+  "customer": "Camden Retail Partners",
+  "date": "2026-05-27",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0008-L1",
+      "description": "Materials: 14 tonnes ready-mix concrete, delivered",
+      "amount_gbp": 1420.4,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R7",
+          "R11"
+        ],
+        "note": "Standalone delivery on this invoice, no laying/installation obligation.",
+        "gap": false,
+        "template_id": "am_ready_mix_standalone"
+      }
+    },
+    {
+      "line_id": "INV-2026-0008-L2",
+      "description": "Installation of CCTV for traffic monitoring, site access road",
+      "amount_gbp": 2773.8,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "CCTV for a non-security purpose isn't the named security-systems exclusion.",
+        "gap": false,
+        "template_id": "am_cctv_traffic"
+      }
+    },
+    {
+      "line_id": "INV-2026-0008-L3",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 3328.69,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Carpet fitting is the sole excluded finishing operation.",
+        "gap": false,
+        "template_id": "cs_carpet"
+      }
+    },
+    {
+      "line_id": "INV-2026-0008-L4",
+      "description": "Concrete pumping service, wet concrete distribution around site",
+      "amount_gbp": 2215.06,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R7"
+        ],
+        "note": "Third-party pumping is a site service, not a delivery \u2014 contrasts with plain chute delivery.",
+        "gap": false,
+        "template_id": "am_concrete_pump_op"
+      }
+    },
+    {
+      "line_id": "INV-2026-0008-L5",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5353.04,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+        "gap": false,
+        "template_id": "am_fencing"
+      }
+    },
+    {
+      "line_id": "INV-2026-0008-L6",
+      "description": "Supply of boiler and full heating system (installation included at no extra charge)",
+      "amount_gbp": 10613.68,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R5",
+          "R11a"
+        ],
+        "note": "'Free installation' framing is a known dodge \u2014 flag as likely understating the labour value.",
+        "gap": false,
+        "template_id": "am_boiler_free_install"
+      }
+    }
+  ],
+  "total_gbp": 25704.67
+}

@@ -1,0 +1,81 @@
+{
+  "invoice_id": "INV-2026-0003",
+  "scenario": "clear_construction",
+  "supplier": "BrightSpark M&E Contractors",
+  "customer": "Meadowgate Asset Management Ltd",
+  "date": "2026-04-13",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0003-L1",
+      "description": "Groundworks labour and materials, concrete foundations, fixed price",
+      "amount_gbp": 11879.38,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1",
+          "R11"
+        ],
+        "note": "Whole line is one construction operation; materials sub-amount is excluded from the deduction, not from the classification.",
+        "gap": false,
+        "template_id": "cc_groundworks_combined"
+      }
+    },
+    {
+      "line_id": "INV-2026-0003-L2",
+      "description": "Construction, repair and resurfacing of access road including white-lining",
+      "amount_gbp": 21722.45,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1"
+        ],
+        "note": "Named included operation.",
+        "gap": false,
+        "template_id": "cc_roads"
+      }
+    },
+    {
+      "line_id": "INV-2026-0003-L3",
+      "description": "Provision of traffic management services during resurfacing works",
+      "amount_gbp": 1700.71,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1"
+        ],
+        "note": "Traffic management supplied to a contractor carrying out construction ops is included.",
+        "gap": false,
+        "template_id": "cc_traffic_mgmt"
+      }
+    },
+    {
+      "line_id": "INV-2026-0003-L4",
+      "description": "Supply and fit 30 fire doors, including ironmongery",
+      "amount_gbp": 4077.37,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R5"
+        ],
+        "note": "Supply-and-fix.",
+        "gap": false,
+        "template_id": "cc_firedoors_fit"
+      }
+    },
+    {
+      "line_id": "INV-2026-0003-L5",
+      "description": "Installation of drainage and sanitation pipework, new build",
+      "amount_gbp": 6723.36,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R3"
+        ],
+        "note": "System installation.",
+        "gap": false,
+        "template_id": "cc_drainage"
+      }
+    }
+  ],
+  "total_gbp": 46103.27
+}

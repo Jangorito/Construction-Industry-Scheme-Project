@@ -1,0 +1,67 @@
+{
+  "invoice_id": "INV-2026-0001",
+  "scenario": "clear_construction",
+  "supplier": "Ashcroft Building Services Ltd",
+  "customer": "Meadowgate Asset Management Ltd",
+  "date": "2026-07-30",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0001-L1",
+      "description": "Erection of scaffolding for roof works, 3 weeks",
+      "amount_gbp": 1967.65,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R8"
+        ],
+        "note": "Erection/dismantling labour is integral works \u2014 included.",
+        "gap": false,
+        "template_id": "cc_scaffold_erect"
+      }
+    },
+    {
+      "line_id": "INV-2026-0001-L2",
+      "description": "Preparation and laying of foundations, Plot 4",
+      "amount_gbp": 12612.57,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1",
+          "R4"
+        ],
+        "note": "Site preparation/construction \u2014 core included operation.",
+        "gap": false,
+        "template_id": "cc_foundations"
+      }
+    },
+    {
+      "line_id": "INV-2026-0001-L3",
+      "description": "Install air conditioning system, 2nd floor office",
+      "amount_gbp": 5755.46,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R3"
+        ],
+        "note": "Complete system installation in a building.",
+        "gap": false,
+        "template_id": "cc_ac_install"
+      }
+    },
+    {
+      "line_id": "INV-2026-0001-L4",
+      "description": "Painting and decorating, internal walls and ceilings, office suite",
+      "amount_gbp": 4326.58,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R4"
+        ],
+        "note": "Painting/decorating explicitly included.",
+        "gap": false,
+        "template_id": "cc_paint"
+      }
+    }
+  ],
+  "total_gbp": 24662.26
+}

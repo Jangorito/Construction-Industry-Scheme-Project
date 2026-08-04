@@ -1,0 +1,81 @@
+{
+  "invoice_id": "INV-2026-0007",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Riverline Build & Fit-Out Ltd",
+  "customer": "Riverside Developments Ltd",
+  "date": "2026-07-01",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0007-L1",
+      "description": "Erection of scaffolding for roof works, 2 weeks",
+      "amount_gbp": 2805.47,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R8"
+        ],
+        "note": "Erection/dismantling labour is integral works \u2014 included.",
+        "gap": false,
+        "template_id": "cc_scaffold_erect"
+      }
+    },
+    {
+      "line_id": "INV-2026-0007-L2",
+      "description": "Supply of 30 fire doors, delivered to site (materials only)",
+      "amount_gbp": 3524.53,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R7"
+        ],
+        "note": "Manufacture/delivery only, no installation obligation on this line.",
+        "gap": false,
+        "template_id": "cs_doors_delivery"
+      }
+    },
+    {
+      "line_id": "INV-2026-0007-L3",
+      "description": "Supply of boiler and full heating system (installation included at no extra charge)",
+      "amount_gbp": 8911.67,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R5",
+          "R11a"
+        ],
+        "note": "'Free installation' framing is a known dodge \u2014 flag as likely understating the labour value.",
+        "gap": false,
+        "template_id": "am_boiler_free_install"
+      }
+    },
+    {
+      "line_id": "INV-2026-0007-L4",
+      "description": "Installation of louvered security shutters, shopfront",
+      "amount_gbp": 3457.18,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Shutters ARE the named exclusion, unlike the awning case above.",
+        "gap": false,
+        "template_id": "am_shutters"
+      }
+    },
+    {
+      "line_id": "INV-2026-0007-L5",
+      "description": "Subcontractor accommodation costs, 6 weeks on-site",
+      "amount_gbp": 2895.94,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R11c"
+        ],
+        "note": "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
+        "gap": false,
+        "template_id": "am_accommodation"
+      }
+    }
+  ],
+  "total_gbp": 21594.79
+}

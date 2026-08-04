@@ -1,0 +1,38 @@
+{
+  "invoice_id": "INV-2026-0005",
+  "scenario": "clear_services",
+  "supplier": "Solace Security Systems Ltd",
+  "customer": "Harborne Estates Ltd",
+  "date": "2026-07-27",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0005-L1",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 4665.77,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Carpet fitting is the sole excluded finishing operation.",
+        "gap": false,
+        "template_id": "cs_carpet"
+      }
+    },
+    {
+      "line_id": "INV-2026-0005-L2",
+      "description": "Structural survey and written assessment report (no remedial works)",
+      "amount_gbp": 1283.81,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R6"
+        ],
+        "note": "Consultative/advisory only.",
+        "gap": false,
+        "template_id": "cs_survey_report"
+      }
+    }
+  ],
+  "total_gbp": 5949.58
+}

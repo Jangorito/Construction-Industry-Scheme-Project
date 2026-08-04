@@ -1,0 +1,96 @@
+{
+  "invoice_id": "INV-2026-0009",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Camden Bridge Construction Group Ltd",
+  "customer": "Oakfield Property Group",
+  "date": "2026-05-29",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0009-L1",
+      "description": "Supply and fit carpet tiles as part of wider office refurbishment contract",
+      "amount_gbp": 4377.46,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10",
+          "R2"
+        ],
+        "note": "Carpet fitting alone is excluded, but as part of a mixed contract the whole contract \u2014 and this line \u2014 comes within the scheme.",
+        "gap": false,
+        "template_id": "am_carpet_mixed"
+      }
+    },
+    {
+      "line_id": "INV-2026-0009-L2",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 3285.26,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Carpet fitting is the sole excluded finishing operation.",
+        "gap": false,
+        "template_id": "cs_carpet"
+      }
+    },
+    {
+      "line_id": "INV-2026-0009-L3",
+      "description": "Consultancy \u2014 remedial works",
+      "amount_gbp": 3570.2,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R6",
+          "R13"
+        ],
+        "note": "'Consultancy' suggests advisory (R6\u2192Services) but 'remedial works' suggests hands-on execution \u2014 resolved toward Construction per R13; flag the ambiguity in reasoning.",
+        "gap": false,
+        "template_id": "am_consultancy_remedial"
+      }
+    },
+    {
+      "line_id": "INV-2026-0009-L4",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5216.68,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+        "gap": false,
+        "template_id": "am_fencing"
+      }
+    },
+    {
+      "line_id": "INV-2026-0009-L5",
+      "description": "Installation and repair of glazing, warehouse windows",
+      "amount_gbp": 3543.31,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1"
+        ],
+        "note": "Installation of glazing is a listed included operation.",
+        "gap": false,
+        "template_id": "cc_glazing_fit"
+      }
+    },
+    {
+      "line_id": "INV-2026-0009-L6",
+      "description": "Subcontractor accommodation costs, 6 weeks on-site",
+      "amount_gbp": 3470.87,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R11c"
+        ],
+        "note": "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
+        "gap": false,
+        "template_id": "am_accommodation"
+      }
+    }
+  ],
+  "total_gbp": 23463.78
+}

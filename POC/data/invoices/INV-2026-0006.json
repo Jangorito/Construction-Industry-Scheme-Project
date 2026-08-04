@@ -1,0 +1,94 @@
+{
+  "invoice_id": "INV-2026-0006",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Thornfield Contractors Ltd",
+  "customer": "Riverside Developments Ltd",
+  "date": "2026-06-14",
+  "line_items": [
+    {
+      "line_id": "INV-2026-0006-L1",
+      "description": "Running of site canteen facility, 1 month",
+      "amount_gbp": 2878.05,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R9"
+        ],
+        "note": "Site facilities running \u2014 excluded.",
+        "gap": false,
+        "template_id": "cs_canteen"
+      }
+    },
+    {
+      "line_id": "INV-2026-0006-L2",
+      "description": "Hire of barge, contractor to provide own crew",
+      "amount_gbp": 4423.04,
+      "_ground_truth": {
+        "label": "Services",
+        "rule_ids": [
+          "R8"
+        ],
+        "note": "Bare vessel hire with the contractor's own crew = plant hire without operator.",
+        "gap": false,
+        "template_id": "am_vessel_bare"
+      }
+    },
+    {
+      "line_id": "INV-2026-0006-L3",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5115.17,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+        "gap": false,
+        "template_id": "am_fencing"
+      }
+    },
+    {
+      "line_id": "INV-2026-0006-L4",
+      "description": "Supply and install retractable awning, shopfront",
+      "amount_gbp": 3138.56,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R10"
+        ],
+        "note": "Awnings are explicitly NOT excluded, unlike blinds/shutters next to them in the rule.",
+        "gap": false,
+        "template_id": "am_awning"
+      }
+    },
+    {
+      "line_id": "INV-2026-0006-L5",
+      "description": "Demolition of existing outbuilding prior to new build",
+      "amount_gbp": 8183.91,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R1"
+        ],
+        "note": "Demolition is a named included operation.",
+        "gap": false,
+        "template_id": "cc_demolition"
+      }
+    },
+    {
+      "line_id": "INV-2026-0006-L6",
+      "description": "Erection of scaffolding for roof works, 3 weeks",
+      "amount_gbp": 3495.35,
+      "_ground_truth": {
+        "label": "Construction",
+        "rule_ids": [
+          "R8"
+        ],
+        "note": "Erection/dismantling labour is integral works \u2014 included.",
+        "gap": false,
+        "template_id": "cc_scaffold_erect"
+      }
+    }
+  ],
+  "total_gbp": 27234.08
+}
