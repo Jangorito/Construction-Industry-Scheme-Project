@@ -50,7 +50,11 @@ of its value is furniture. For this POC we still classify at line-item level
 (per the brief), but when a line item is ambiguous, ask "does this sit inside
 a contract whose overall purpose is a construction operation?" before
 defaulting to Services.
-*Source: CISR14020 (primary).*
+*Source: CISR14020 (primary); the same principle is stated directly in CIS340
+Appendix A.3–A.4 ("Mixed contracts": "If a contract includes some work that
+is within the scheme and some that is nothing to do with construction at all
+then all payments made under that contract will come within the scheme —
+even if shown on separate invoices") (primary).*
 
 ## Included operations
 
@@ -100,14 +104,18 @@ third party pumping wet concrete around a site *is* Construction (it's a site
 service, not a delivery).
 *Source: CISR14220 (primary).*
 
-**R8 — Plant/equipment hire: operator presence is the switch.** Hiring plant
-(scaffolding, cranes, cement mixers, excavators, compressors) **without** an
-operator is Services/out-of-scope — it's a straight rental. Hiring the same
-plant **with** an operator means the operator's labour is Construction, while
-the bare hire cost is not. Scaffolding follows the same rule: supply-and-erect
-is Construction; hire-only (no erection/dismantling labour) is Services.
-*Source: CIS340 (secondary — sourced via commentary summaries, not yet
-checked against primary CIS340 text; see Open Items).*
+**R8 — Plant/equipment hire: operator presence is the switch.** CIS340's
+Appendix C table lists "plant hire with operator for use on site" as a whole
+included construction operation — classify the full line as Construction, not
+just an operator-labour portion within it. Without an operator, plant hire is
+named as excluded: "hire of scaffolding equipment (without labour)" and
+"delivery, repair or maintenance of construction plant or hire equipment
+without an operator — for example, concrete mixers, pumps and skips" are both
+Services. Scaffolding follows the same split: "erection or dismantling of
+scaffolding falsework and formwork" (labour) is Construction; bare hire with
+no erection/dismantling is Services.
+*Source: CIS340, Appendix A.19 (integral works — scaffolding) and Appendix C
+"Construction" included/excluded tables (primary).*
 
 **R9 — Facilities/site-support services are excluded.** Running a canteen or
 hostel, providing medical or safety services, providing security *services*
@@ -115,16 +123,36 @@ hostel, providing medical or safety services, providing security *services*
 construction work" regardless of being on a construction site.
 *Source: CIS340 (primary).*
 
-**R10 — Specific named exclusions.** HMRC excludes these even though they
-involve installing something in a building: sign-writing and
-erecting/repairing signboards or advertisements; installation of seating,
-blinds, and shutters; installation of security/alarm systems, CCTV, and
-public address systems; installation or replacement of computer/
-telecommunications wiring through existing ducting; carpet fitting. Treat
-these as Services even when they otherwise look like "installing a system in
-a building" (R3) — HMRC carves them out by name.
-*Source: CIS340 (secondary — sourced via commentary summaries, not yet
-checked against primary CIS340 text; see Open Items).*
+**R10 — Specific named exclusions.** Five categories are excluded by name,
+each narrower than the plain description suggests:
+- **Signage** (A.29): sign-writing and erecting/installing/repairing
+  signboards and advertisements — "very specific," does **not** extend to
+  traffic signs or street furniture, which stay Construction.
+- **Seating, blinds, shutters** (A.30): fixed/theatre/stadium seating,
+  louvered shutters, venetian and other internal blinds, curtain fittings.
+  Awnings are explicitly **not** excluded — Construction.
+- **Security systems** (A.31): burglar alarms, CCTV, and public address
+  systems — but only when installed as a dedicated security *system*. A door
+  fitted with a lock, or fencing, isn't a "system" even though both deter
+  intruders, so fitting either stays Construction. CCTV installed for a
+  non-security purpose (e.g. traffic management) is Construction. Preparatory
+  groundwork for a security system (digging, erecting the posts CCTV will sit
+  on) is Construction even though installing the system itself is excluded.
+- **Telecoms/computer wiring through pre-existing ducting**: narrow — only
+  threading wiring through ducting that's already there. Installing
+  telecoms/electronic-communications infrastructure itself (cable TV,
+  telecoms distribution systems) is Construction (R1).
+- **Carpet fitting** (A.21, Statement of Practice 12 (1981)): the sole
+  exception among "finishing operations" — every other floor covering
+  (vinyl, linoleum, laminate wood) is Construction; carpet alone is Services.
+  If carpet fitting is part of a mixed contract, the *whole* contract still
+  comes within the scheme (R2/R12).
+
+Treat all five as Services even when they otherwise look like "installing a
+system in a building" (R3) — but check the narrower boundary in each case
+before applying the exclusion.
+*Source: CIS340, Appendix A.28–A.31 and Appendix C "Construction"/"Finishing
+operations" tables (primary).*
 
 ## Materials vs. labour
 
@@ -201,12 +229,23 @@ Services if this is a pure survey report").
    (R8: bare plant hire, no operator).
 
 7. **"Tower crane hire with operator, 4 weeks — £6,800"** → **Construction**
-   for the operator's labour portion (R8); reasoning should note the bare
-   hire cost within that figure isn't itself a CIS-taxable amount.
+   (R8: CIS340 lists "plant hire with operator for use on site" as a whole
+   included operation — classify the full line, not just a labour portion
+   within it).
 
 8. **"Installation of intruder alarm and CCTV, warehouse unit — £2,950"** →
-   **Services** (R10: named exclusion, even though it looks like a building
-   system installation).
+   **Services** (R10: named security-system exclusion, even though it looks
+   like a building system installation).
+
+8a. **"Installation of CCTV for traffic monitoring, site access road —
+   £1,800"** → **Construction** (R10: same equipment as example 8, but CCTV
+   installed for a non-security purpose — traffic management — isn't the
+   named exclusion; it's Construction).
+
+8b. **"Supply and erect security fencing around compound perimeter —
+   £3,600"** → **Construction** (R10: fencing deters intruders but isn't a
+   security *system* under A.31 — it's ordinary construction work, not the
+   named security-systems exclusion).
 
 9. **"Site security guarding, 6 weeks — £4,000"** → **Services** (R9:
    facilities/site-support, not construction work).
@@ -232,10 +271,23 @@ Services if this is a pure survey report").
     likely understating the labour portion — don't take the framing at face
     value.
 
+14. **"Traffic management services for site access road during resurfacing
+    works — £2,200"** → **Construction** (R1: CIS340 Appendix C lists "the
+    provision of traffic management services supplied to a contractor
+    carrying out construction operations" as included; contrast with traffic
+    management for *non*-construction operations, or bare traffic-management
+    equipment supplied but not placed into position, both of which are
+    Services).
+
+15. **"Supply and fit carpet tiles, 3rd floor office — £4,100"** →
+    **Services** (R10: carpet fitting is the sole named exception among
+    finishing operations — note in reasoning that vinyl, linoleum, or
+    laminate flooring on the same job would be Construction).
+
 ## Sources
 
 - [What is the Construction Industry Scheme?](https://www.gov.uk/what-is-the-construction-industry-scheme) — gov.uk overview, included/excluded work summary
-- [CIS340: guide for contractors and subcontractors](https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340) — the primary source guide; "operations within/not within the scheme" lists
+- [CIS340: guide for contractors and subcontractors](https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340) — the primary source guide, including Appendix A (scope of construction operations, A.1–A.31), Appendix B (Finance Act 2004 S74 text), and Appendix C (the full included/excluded operations tables, C.1–C.3). Verified directly against the source PDF (78 pages) on 2026-08-04 — this is what backs R1, R3–R5, R7–R10, and the mixed-contracts principle in R2.
 - [CISR14020 — scope of CIS](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14020) — mixed-contract / broad-scope principle (R2)
 - [CISR14220 — manufacture and delivery](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220) — manufacture/delivery vs. supply-and-fix (R5, R7)
 - [CISR14270 — professional work](https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14270) — advisory vs. execution/supervision test (R6)
@@ -244,13 +296,16 @@ Services if this is a pure survey report").
 
 ## Open items to verify before production use
 
-- **R8 (plant hire) and R10 (named exclusions)** are marked `secondary` —
-  sourced via AI-summarized search results of commentary sites, not a direct
-  read of the primary CIS340 text (the way R11/R11a were verified against the
-  CISR15060 PDF). Re-verify both against the actual CIS340 guide before this
-  doc is used beyond the POC, and flip their `verified` status to `primary`
-  in both this file and `cis_rules_index.json` once done.
-- No worked example yet for traffic management (CISR14305) — add once a
-  synthetic invoice surfaces it.
+- **CISR15060's "special cases" pointer** (page 4 of the PDF) references
+  separate, unverified guidance on how plant hire, land purchase, and
+  travel/accommodation costs are treated when paid "as materials" — this is
+  distinct from the scope question R8 answers (is plant hire Construction or
+  Services) and hasn't been checked. Don't assume R8's operator/no-operator
+  split says anything about materials-deduction treatment; treat as a gap
+  until the "information menu" pages it references are read.
 - Multi-trade invoices where the same supplier does both supply-only and
   supply-and-fix lines on one document haven't been stress-tested yet.
+- CISR14305 (traffic management, cited in the CISR manual index) hasn't been
+  read directly — R1/example 14's traffic-management treatment comes from
+  CIS340 Appendix C instead, which is sufficient for the POC but worth
+  cross-checking if traffic management line items turn out to be common.

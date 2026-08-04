@@ -17,8 +17,8 @@
       "title": "Scope test is broad and contract-level, not item-level",
       "category": "core-test",
       "source_type": "hmrc",
-      "source_name": "CISR14020",
-      "source_title": "The Scheme: construction operations: scope of CIS",
+      "source_name": "CISR14020 / CIS340 Appendix A.3-A.4",
+      "source_title": "The Scheme: construction operations: scope of CIS; CIS340 'Mixed contracts'",
       "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14020",
       "verified": "primary"
     },
@@ -78,9 +78,9 @@
       "category": "excluded",
       "source_type": "hmrc",
       "source_name": "CIS340",
-      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors — Appendix A.19, Appendix C 'Construction' table",
       "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
-      "verified": "secondary"
+      "verified": "primary"
     },
     {
       "id": "R9",
@@ -98,9 +98,9 @@
       "category": "excluded",
       "source_type": "hmrc",
       "source_name": "CIS340",
-      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors — Appendix A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
       "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
-      "verified": "secondary"
+      "verified": "primary"
     },
     {
       "id": "R11",
