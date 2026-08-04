@@ -1,0 +1,146 @@
+{
+  "_readme": "Machine-readable citation registry for cis_rules.md. classify.py should have the LLM output rule IDs it applied (e.g. [\"R6\", \"R11a\"]), never free-text citations — resolve the actual HMRC source/URL by looking the ID up here. Keep this file's ids/titles in sync with cis_rules.md by hand; there is no auto-generation step in the POC.",
+  "labels": ["Construction", "Services"],
+  "rules": [
+    {
+      "id": "R1",
+      "title": "Construction operations, broadly defined",
+      "category": "core-test",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "primary"
+    },
+    {
+      "id": "R2",
+      "title": "Scope test is broad and contract-level, not item-level",
+      "category": "core-test",
+      "source_type": "hmrc",
+      "source_name": "CISR14020",
+      "source_title": "The Scheme: construction operations: scope of CIS",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14020",
+      "verified": "primary"
+    },
+    {
+      "id": "R3",
+      "title": "Systems installation is Construction",
+      "category": "included",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "primary"
+    },
+    {
+      "id": "R4",
+      "title": "Site work and finishing is Construction",
+      "category": "included",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "primary"
+    },
+    {
+      "id": "R5",
+      "title": "Supply-and-fix is Construction",
+      "category": "included",
+      "source_type": "hmrc",
+      "source_name": "CISR14220",
+      "source_title": "The Scheme: construction operations: manufacture and delivery",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+      "verified": "primary"
+    },
+    {
+      "id": "R6",
+      "title": "Professional/consultancy services excluded only while purely advisory",
+      "category": "excluded",
+      "source_type": "hmrc",
+      "source_name": "CISR14270",
+      "source_title": "The Scheme: construction operations: professional work",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14270",
+      "verified": "primary"
+    },
+    {
+      "id": "R7",
+      "title": "Manufacture and off-site delivery excluded; installation is not",
+      "category": "excluded",
+      "source_type": "hmrc",
+      "source_name": "CISR14220",
+      "source_title": "The Scheme: construction operations: manufacture and delivery",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+      "verified": "primary"
+    },
+    {
+      "id": "R8",
+      "title": "Plant/equipment hire: operator presence is the switch",
+      "category": "excluded",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "secondary"
+    },
+    {
+      "id": "R9",
+      "title": "Facilities/site-support services excluded",
+      "category": "excluded",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "primary"
+    },
+    {
+      "id": "R10",
+      "title": "Specific named exclusions (signage, seating/blinds/shutters, alarms/CCTV/PA, telecoms wiring, carpet fitting)",
+      "category": "excluded",
+      "source_type": "hmrc",
+      "source_name": "CIS340",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+      "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+      "verified": "secondary"
+    },
+    {
+      "id": "R11",
+      "title": "Materials cost is carved out of the deduction, not out of the contract",
+      "category": "materials",
+      "source_type": "hmrc",
+      "source_name": "CISR15060",
+      "source_title": "The Scheme: payments: materials",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+      "verified": "primary"
+    },
+    {
+      "id": "R11a",
+      "title": "Treat 'materials only, installation free' claims with suspicion",
+      "category": "materials",
+      "source_type": "hmrc",
+      "source_name": "CISR15060",
+      "source_title": "The Scheme: payments: materials",
+      "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+      "verified": "primary"
+    },
+    {
+      "id": "R12",
+      "title": "An invoice can legitimately contain both labels",
+      "category": "mixed",
+      "source_type": "poc-method",
+      "source_name": "POC-METHOD",
+      "source_title": "Internal line-item classification protocol (not an HMRC citation)",
+      "source_url": null,
+      "verified": "n/a"
+    },
+    {
+      "id": "R13",
+      "title": "When wording is ambiguous, name what's missing rather than guessing silently",
+      "category": "mixed",
+      "source_type": "poc-method",
+      "source_name": "POC-METHOD",
+      "source_title": "Internal line-item classification protocol (not an HMRC citation)",
+      "source_url": null,
+      "verified": "n/a"
+    }
+  ]
+}
