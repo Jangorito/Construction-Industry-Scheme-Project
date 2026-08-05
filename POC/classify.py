@@ -140,18 +140,22 @@ wording is genuinely ambiguous, apply R13: give your best answer but name \
 in the reasoning what fact would change it, don't resolve it with false \
 confidence.
 
-Before settling on a label, check narrower rules first, don't jump straight \
-to a general inclusion rule like R1 or R3. Specifically: (1) is this line \
-one of R9's facilities/site-support exclusions or one of R10's five named \
-exclusions (signage, seating/blinds/shutters, security systems, telecoms \
-wiring, carpet fitting)? A line item whose description contains a word like \
-"services" is not automatically an R9 exclusion, check what the line \
-actually describes doing, not just its label. (2) Does the line's own \
-wording, or its place among this invoice's other lines, signal a mixed \
-contract (R2/R12)? A mixed-contract signal overrides a named R9/R10 \
-exclusion. Only fall back to a general inclusion rule once you've checked \
-both and found neither applies. When either check is genuinely close, say \
-so in the reasoning.
+Follow this order, and don't skip a step: (1) Check whether this line \
+matches one of R9's facilities/site-support exclusions or one of R10's \
+five named exclusions (signage, seating/blinds/shutters, security systems, \
+telecoms wiring, carpet fitting). A line item whose description contains a \
+word like "services" is not automatically an R9 exclusion, check what the \
+line actually describes doing, not just its label. (2) If it matches an \
+R9/R10 exclusion, that match is provisional, not final. Before you write \
+down Services, explicitly re-check for a mixed-contract override (R2/R12): \
+does the line's own wording, or its place among this invoice's other \
+lines, signal it's part of a bigger contract? If yes, the override wins \
+and the label is Construction, regardless of the R9/R10 match. Only \
+finalize Services once you've done this override check and found no such \
+signal, and state in the reasoning that you checked for one either way. \
+(3) Only fall back to a general inclusion rule like R1 or R3 once you've \
+confirmed, via step (1), that this line isn't an R9/R10 exclusion in the \
+first place.
 
 For every line item, cite the rule id(s) (e.g. "R6", "R11a") that justify \
 your answer. Only cite ids that appear in the rules doc below, never invent \
