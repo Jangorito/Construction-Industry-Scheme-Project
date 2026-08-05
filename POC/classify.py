@@ -8,7 +8,13 @@ What this script does, per invoice JSON in data/invoices/:
      puts those there for scoring only, the model must never see them).
   2. Sends the remaining line items (description, amount) plus the full text
      of cis_rules.md to the model, and asks for a Construction/Services
-     label, cited rule id(s), and a short plain English reasoning per line.
+     label, a confidence ("high"/"low"), cited rule id(s), and a short plain
+     English reasoning per line. Confidence is the model's own self report,
+     not a calibrated accuracy score, "high" doesn't guarantee correct. It's
+     meant for triage: which lines to have a human sanity check first, not a
+     number to certify anything on. Whether it's trustworthy enough for that
+     even is itself worth validating before this goes anywhere near
+     production, not assumed.
   3. The rule_ids field is constrained (via the request's JSON schema) to
      only the ids that actually exist in cis_rules_index.json, so the model
      cannot invent a citation that doesn't exist, this is the whole reason
@@ -106,13 +112,13 @@ def append_run_index(run_id: str, log_path: Path, run_output_dir: Path, args, st
             writer.writerow([
                 "run_id", "timestamp", "dry_run", "model", "invoices_dir",
                 "num_invoices", "num_line_items", "correct", "accuracy_pct",
-                "log_path", "output_dir",
+                "low_confidence_count", "log_path", "output_dir",
             ])
         pct = 100 * stats["correct"] / stats["total"] if stats["total"] else 0
         writer.writerow([
             run_id, datetime.now().isoformat(timespec="seconds"), args.dry_run, args.model,
             str(args.invoices_dir), stats["num_invoices"], stats["total"], stats["correct"],
-            f"{pct:.1f}", str(log_path), str(run_output_dir),
+            f"{pct:.1f}", len(stats["low_confidence"]), str(log_path), str(run_output_dir),
         ])
 
 
@@ -139,6 +145,15 @@ even when other lines on the same invoice have a different label. Where \
 wording is genuinely ambiguous, apply R13: give your best answer but name \
 in the reasoning what fact would change it, don't resolve it with false \
 confidence.
+
+Every line item also needs a confidence value: "high" or "low". Set "low" \
+whenever any of these apply: you're relying on R13 because the wording is \
+genuinely ambiguous, you had to make a judgment call about whether a \
+mixed-contract override applies rather than finding a clear signal either \
+way, or you considered two different rules that would give different \
+answers and picked one over the other. Otherwise set "high". Don't default \
+to "high" just because you were able to produce an answer, being able to \
+answer and being sure are different things.
 
 Follow this order, and don't skip a step: (1) Check whether this line \
 matches one of R9's facilities/site-support exclusions or one of R10's \
@@ -204,10 +219,12 @@ def build_messages(invoice: dict, rules_text: str) -> list:
 
 def build_response_schema(rule_ids: list) -> dict:
     # The response is constrained so "label" can only be one of the two
-    # allowed values, and "rule_ids" can only contain ids that exist in
-    # cis_rules_index.json. This is what actually stops the model from
-    # citing a source that doesn't exist: the enum makes an invalid id
-    # structurally impossible to return, not just discouraged by wording.
+    # allowed values, "confidence" can only be "high" or "low", and
+    # "rule_ids" can only contain ids that exist in cis_rules_index.json.
+    # This is what actually stops the model from citing a source that
+    # doesn't exist: the enum makes an invalid id structurally impossible to
+    # return, not just discouraged by wording. "confidence" is the model's
+    # own self report, not a validated score, see the module docstring.
     return {
         "type": "json_schema",
         "json_schema": {
@@ -223,13 +240,14 @@ def build_response_schema(rule_ids: list) -> dict:
                             "properties": {
                                 "line_id": {"type": "string"},
                                 "label": {"type": "string", "enum": ["Construction", "Services"]},
+                                "confidence": {"type": "string", "enum": ["high", "low"]},
                                 "rule_ids": {
                                     "type": "array",
                                     "items": {"type": "string", "enum": rule_ids},
                                 },
                                 "reasoning": {"type": "string"},
                             },
-                            "required": ["line_id", "label", "rule_ids", "reasoning"],
+                            "required": ["line_id", "label", "confidence", "rule_ids", "reasoning"],
                             "additionalProperties": False,
                         },
                     },
@@ -262,7 +280,9 @@ def dry_run_classify(invoice: dict) -> dict:
     # exercised end to end without pretending to test real classification
     # accuracy. The first line is given a bogus rule id that doesn't exist,
     # to prove resolve_citations() below actually catches an unresolvable
-    # id rather than silently trusting it.
+    # id rather than silently trusting it. Confidence alternates too, purely
+    # so a --dry-run has at least one of each value to exercise the low
+    # confidence reporting path below, not because it means anything here.
     line_items = []
     for i, li in enumerate(invoice["line_items"]):
         if i == 0:
@@ -272,6 +292,7 @@ def dry_run_classify(invoice: dict) -> dict:
         line_items.append({
             "line_id": li["line_id"],
             "label": "Construction" if i % 2 == 0 else "Services",
+            "confidence": "high" if i % 3 else "low",
             "rule_ids": rule_ids,
             "reasoning": note,
         })
@@ -330,6 +351,7 @@ def score_invoice(invoice: dict, model_output: dict, rules_by_id: dict) -> dict:
                 "description": li["description"],
                 "amount_gbp": li["amount_gbp"],
                 "predicted_label": None,
+                "predicted_confidence": None,
                 "predicted_rule_ids": [],
                 "reasoning": None,
                 "citations": [],
@@ -348,6 +370,7 @@ def score_invoice(invoice: dict, model_output: dict, rules_by_id: dict) -> dict:
             "description": li["description"],
             "amount_gbp": li["amount_gbp"],
             "predicted_label": predicted["label"],
+            "predicted_confidence": predicted["confidence"],
             "predicted_rule_ids": predicted["rule_ids"],
             "reasoning": predicted["reasoning"],
             "citations": citations,
@@ -385,15 +408,15 @@ def write_outputs(all_results: list, output_dir: Path) -> Path:
         writer = csv.writer(f)
         writer.writerow([
             "invoice_id", "scenario", "line_id", "description", "amount_gbp",
-            "predicted_label", "expected_label", "correct", "predicted_rule_ids",
-            "expected_rule_ids", "gap_flag", "reasoning", "error",
+            "predicted_label", "predicted_confidence", "expected_label", "correct",
+            "predicted_rule_ids", "expected_rule_ids", "gap_flag", "reasoning", "error",
         ])
         for result in all_results:
             for line in result["line_results"]:
                 writer.writerow([
                     result["invoice_id"], result["scenario"], line["line_id"],
                     line["description"], line["amount_gbp"], line["predicted_label"],
-                    line["expected_label"], line["correct"],
+                    line["predicted_confidence"], line["expected_label"], line["correct"],
                     "|".join(line["predicted_rule_ids"]), "|".join(line["expected_rule_ids"]),
                     line["gap_flag"], line["reasoning"], line["error"],
                 ])
@@ -404,14 +427,21 @@ def write_outputs(all_results: list, output_dir: Path) -> Path:
 def compute_stats(all_results: list) -> dict:
     # Walks every line result once and builds the numbers both the report
     # and the run index need: overall total/correct, the same broken down
-    # per scenario, and the full list of misclassified lines. Kept separate
-    # from log_report() below so main() can also pull "total" and "correct"
-    # straight out of this for the logs/index.csv row, instead of counting
-    # everything a second time.
+    # per scenario, the full list of misclassified lines, and separately
+    # the full list of lines the model itself flagged low confidence on.
+    # Those two lists overlap but aren't the same thing: a low confidence
+    # line can still have landed on the correct label, and that's exactly
+    # the case this is for, a human reviewing "what should I double check"
+    # wants both the ones that were wrong and the ones the model itself
+    # wasn't sure about, not just the ones scoring happens to catch. Kept
+    # separate from log_report() below so main() can also pull "total" and
+    # "correct" straight out of this for the logs/index.csv row, instead of
+    # counting everything a second time.
     total = 0
     correct = 0
     by_scenario = {}
     misses = []
+    low_confidence = []
 
     for result in all_results:
         scenario = result["scenario"]
@@ -424,6 +454,8 @@ def compute_stats(all_results: list) -> dict:
                 by_scenario[scenario]["correct"] += 1
             else:
                 misses.append((result["invoice_id"], line))
+            if line["predicted_confidence"] == "low":
+                low_confidence.append((result["invoice_id"], line))
 
     return {
         "num_invoices": len(all_results),
@@ -431,6 +463,7 @@ def compute_stats(all_results: list) -> dict:
         "correct": correct,
         "by_scenario": by_scenario,
         "misses": misses,
+        "low_confidence": low_confidence,
     }
 
 
@@ -468,6 +501,20 @@ def log_report(logger, stats: dict):
                 logger.info(f"    model reasoning: {line['reasoning']}")
     else:
         logger.info("No misclassifications.")
+
+    low_confidence = stats["low_confidence"]
+    if low_confidence:
+        logger.info(f"{len(low_confidence)} line(s) flagged low confidence by the model "
+                     "(review candidates regardless of whether they scored correct):")
+        for invoice_id, line in low_confidence:
+            correctness = "correct" if line["correct"] else "INCORRECT"
+            logger.info(f"  {invoice_id} / {line['line_id']} ({correctness})")
+            logger.info(f"    \"{line['description']}\"")
+            logger.info(f"    predicted: {line['predicted_label']} (rules: {line['predicted_rule_ids']})")
+            if line["reasoning"]:
+                logger.info(f"    model reasoning: {line['reasoning']}")
+    else:
+        logger.info("No lines flagged low confidence.")
 
 
 def main():
