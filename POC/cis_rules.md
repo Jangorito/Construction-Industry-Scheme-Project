@@ -161,16 +161,21 @@ Treat all five as Services even when they otherwise look like "installing a
 system in a building" (R3) — but check the narrower boundary in each case
 before applying the exclusion.
 
-**Before applying any of the five exclusions above, check for a
-mixed-contract override.** CIS340 A.4 states this for carpet fitting by
-name ("if carpet fitting is part of a mixed contract, then all the contract
-comes within the scheme"), but the underlying principle is R2/R12's general
-mixed-contract rule, and it applies to all five R10 exclusions, not just
-carpet. Look for the signal in the line item's own wording ("as part of,"
-"part of the wider... contract") or in the rest of the invoice (other lines
-from the same job that are clearly Construction) — either is enough to flip
-a would-be R10 exclusion to Construction. Only apply a straight R10
-exclusion once you've checked and found no such signal.
+**A match against any of the five exclusions above is provisional, not
+final, until you've checked for a mixed-contract override.** CIS340 A.4
+states this for carpet fitting by name ("if carpet fitting is part of a
+mixed contract, then all the contract comes within the scheme"), but the
+underlying principle is R2/R12's general mixed-contract rule, and it
+applies to all five R10 exclusions, not just carpet. Finding a named
+exclusion is not the end of the analysis, it's the point where you stop and
+re-check: does the line item's own wording ("as part of," "part of the
+wider... contract") or its place among the invoice's other lines (clearly
+Construction lines from the same job) signal it's part of a bigger
+contract? If yes, that override wins outright and replaces the exclusion,
+the label becomes Construction. Only let a named exclusion stand as your
+final answer once you've actually run this check and found nothing — don't
+let a correct-sounding exclusion feel "done" before the override check has
+had a real chance to overturn it.
 *Source: CIS340, Appendix A.4, A.28–A.31 and Appendix C "Construction"/
 "Finishing operations" tables (primary).*
 
