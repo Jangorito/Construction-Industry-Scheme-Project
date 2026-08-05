@@ -1,0 +1,63 @@
+16:43:04  Starting classify.py run 20260805-164304 (model=gpt-4o-mini, dry_run=False)
+16:43:06  Classifying INV-2026-0001 (clear_construction, 4 line items)...
+16:43:10  Classifying INV-2026-0002 (clear_construction, 5 line items)...
+16:43:14  Classifying INV-2026-0003 (clear_construction, 5 line items)...
+16:43:18  Classifying INV-2026-0004 (clear_services, 3 line items)...
+16:43:20  Classifying INV-2026-0005 (clear_services, 2 line items)...
+16:43:22  Classifying INV-2026-0006 (ambiguous_mixed, 6 line items)...
+16:43:26  Classifying INV-2026-0007 (ambiguous_mixed, 5 line items)...
+16:43:31  Classifying INV-2026-0008 (ambiguous_mixed, 6 line items)...
+16:43:35  Classifying INV-2026-0009 (ambiguous_mixed, 6 line items)...
+16:43:40  Classifying INV-2026-0010 (ambiguous_mixed, 5 line items)...
+16:43:45  Overall accuracy: 45/47 (95.7%)
+16:43:45    clear_construction: 14/14 (100.0%)
+16:43:45    clear_services: 5/5 (100.0%)
+16:43:45    ambiguous_mixed: 26/28 (92.9%)
+16:43:45  2 misclassified line(s):
+16:43:45    INV-2026-0009 / INV-2026-0009-L1
+16:43:45      "Supply and fit carpet tiles as part of wider office refurbishment contract"
+16:43:45      predicted: Services (rules: ['R10'])
+16:43:45      expected:  Construction (rules: ['R10', 'R2']) - Carpet fitting alone is excluded, but as part of a mixed contract the whole contract — and this line — comes within the scheme.
+16:43:45      model reasoning: This line item matches the named exclusion for carpet fitting (R10). However, it is part of a wider refurbishment contract, so I checked for a mixed-contract override but found no clear signal that it should be classified as Construction.
+16:43:45    INV-2026-0009 / INV-2026-0009-L3
+16:43:45      "Consultancy — remedial works"
+16:43:45      predicted: Services (rules: ['R6'])
+16:43:45      expected:  Construction (rules: ['R6', 'R13']) - 'Consultancy' suggests advisory (R6→Services) but 'remedial works' suggests hands-on execution — resolved toward Construction per R13; flag the ambiguity in reasoning.
+16:43:45      model reasoning: This line describes consultancy work, which is excluded under R6 as it is purely advisory. I considered whether it could be part of a mixed contract but found no indication that it relates to construction work.
+16:43:45  8 line(s) flagged low confidence by the model (review candidates regardless of whether they scored correct):
+16:43:45    INV-2026-0007 / INV-2026-0007-L2 (correct)
+16:43:45      "Supply of 30 fire doors, delivered to site (materials only)"
+16:43:45      predicted: Services (rules: ['R7', 'R11'])
+16:43:45      model reasoning: This line item describes the supply of fire doors with no installation obligation, which falls under the manufacture/delivery exclusion. However, I checked for a mixed-contract override and found no signals indicating it is part of a larger construction contract.
+16:43:45    INV-2026-0007 / INV-2026-0007-L4 (correct)
+16:43:45      "Installation of louvered security shutters, shopfront"
+16:43:45      predicted: Services (rules: ['R10'])
+16:43:45      model reasoning: The installation of louvered security shutters is a named exclusion under security systems. I checked for a mixed-contract override but found no signals indicating it is part of a larger construction contract.
+16:43:45    INV-2026-0008 / INV-2026-0008-L6 (correct)
+16:43:45      "Supply of boiler and full heating system (installation included at no extra charge)"
+16:43:45      predicted: Construction (rules: ['R5', 'R11a'])
+16:43:45      model reasoning: This line item includes installation described as free, which is a pattern that raises suspicion about the classification; however, it is still classified as Construction due to the supply-and-fit nature.
+16:43:45    INV-2026-0009 / INV-2026-0009-L1 (INCORRECT)
+16:43:45      "Supply and fit carpet tiles as part of wider office refurbishment contract"
+16:43:45      predicted: Services (rules: ['R10'])
+16:43:45      model reasoning: This line item matches the named exclusion for carpet fitting (R10). However, it is part of a wider refurbishment contract, so I checked for a mixed-contract override but found no clear signal that it should be classified as Construction.
+16:43:45    INV-2026-0009 / INV-2026-0009-L2 (correct)
+16:43:45      "Supply and fit carpet tiles, open-plan office"
+16:43:45      predicted: Services (rules: ['R10'])
+16:43:45      model reasoning: Similar to the first line, this is also for carpet fitting, which is a named exclusion (R10). I checked for a mixed-contract override but did not find a clear signal indicating it should be classified as Construction.
+16:43:45    INV-2026-0009 / INV-2026-0009-L3 (INCORRECT)
+16:43:45      "Consultancy — remedial works"
+16:43:45      predicted: Services (rules: ['R6'])
+16:43:45      model reasoning: This line describes consultancy work, which is excluded under R6 as it is purely advisory. I considered whether it could be part of a mixed contract but found no indication that it relates to construction work.
+16:43:45    INV-2026-0010 / INV-2026-0010-L2 (correct)
+16:43:45      "Installation of louvered security shutters, shopfront"
+16:43:45      predicted: Services (rules: ['R10'])
+16:43:45      model reasoning: Installation of louvered security shutters falls under the named exclusion for security systems, but I checked for a mixed-contract override and found no indication that this is part of a larger construction project.
+16:43:45    INV-2026-0010 / INV-2026-0010-L3 (correct)
+16:43:45      "Tree felling and landscaping in the ordinary course of estate management (no development project)"
+16:43:45      predicted: Services (rules: ['R9'])
+16:43:45      model reasoning: Tree felling and landscaping in the ordinary course of estate management does not relate to a construction project, but I checked for a mixed-contract override and found no indication that this is part of a larger construction contract.
+16:43:45  Per-invoice results written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-164304
+16:43:45  Flat summary written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-164304\results_summary.csv
+16:43:45  This run's log: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\classify_20260805-164304.log
+16:43:45  All runs' index: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\index.csv

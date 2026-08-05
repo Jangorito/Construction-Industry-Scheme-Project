@@ -1,0 +1,152 @@
+{
+  "invoice_id": "INV-2026-0010",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Oakfield General Contracting Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0010-L1",
+      "description": "Subcontractor accommodation costs, 3 months on-site",
+      "amount_gbp": 2653.35,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R11c"
+      ],
+      "reasoning": "Subcontractor accommodation costs are part of the taxable contract payment, as they are incurred on behalf of the subcontractor while on-site.",
+      "citations": [
+        {
+          "rule_id": "R11c",
+          "resolved": true,
+          "source_name": "CISR15080",
+          "source_title": "The Scheme: contract payments: travel, subsistence and accommodation",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15080",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R11c"
+      ],
+      "expected_note": "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0010-L2",
+      "description": "Installation of louvered security shutters, shopfront",
+      "amount_gbp": 4175.05,
+      "predicted_label": "Services",
+      "predicted_confidence": "low",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "Installation of louvered security shutters falls under the named exclusion for security systems, but I checked for a mixed-contract override and found no indication that this is part of a larger construction project.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Shutters ARE the named exclusion, unlike the awning case above.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0010-L3",
+      "description": "Tree felling and landscaping in the ordinary course of estate management (no development project)",
+      "amount_gbp": 2622.21,
+      "predicted_label": "Services",
+      "predicted_confidence": "low",
+      "predicted_rule_ids": [
+        "R9"
+      ],
+      "reasoning": "Tree felling and landscaping in the ordinary course of estate management does not relate to a construction project, but I checked for a mixed-contract override and found no indication that this is part of a larger construction contract.",
+      "citations": [
+        {
+          "rule_id": "R9",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R4"
+      ],
+      "expected_note": "Not yet a dedicated rule \u2014 CIS340 A.21 distinguishes forestry/estate management (excluded) from development-linked tree felling (included). Promote to a rule if this trips up classify.py.",
+      "gap_flag": true,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0010-L4",
+      "description": "Supply and install retractable awning, shopfront",
+      "amount_gbp": 2444.48,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R5"
+      ],
+      "reasoning": "Supply and install of a retractable awning is a supply-and-fix operation, which qualifies as Construction.",
+      "citations": [
+        {
+          "rule_id": "R5",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Awnings are explicitly NOT excluded, unlike blinds/shutters next to them in the rule.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0010-L5",
+      "description": "Site clearance and earth-moving ahead of construction",
+      "amount_gbp": 5065.05,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Site clearance and earth-moving ahead of construction are considered construction operations as they prepare the site for building work.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R4"
+      ],
+      "expected_note": "Preparatory works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}
