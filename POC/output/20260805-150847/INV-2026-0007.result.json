@@ -1,0 +1,175 @@
+{
+  "invoice_id": "INV-2026-0007",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Riverline Build & Fit-Out Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0007-L1",
+      "description": "Erection of scaffolding for roof works, 2 weeks",
+      "amount_gbp": 2805.47,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "reasoning": "Erection of scaffolding for roof works is a construction operation as it involves site work necessary for the roof construction.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R8"
+      ],
+      "expected_note": "Erection/dismantling labour is integral works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0007-L2",
+      "description": "Supply of 30 fire doors, delivered to site (materials only)",
+      "amount_gbp": 3524.53,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R7",
+        "R11"
+      ],
+      "reasoning": "This line item is for the supply of fire doors delivered to site without installation, classifying it as Services under the manufacture/delivery exclusion.",
+      "citations": [
+        {
+          "rule_id": "R7",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R7"
+      ],
+      "expected_note": "Manufacture/delivery only, no installation obligation on this line.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0007-L3",
+      "description": "Supply of boiler and full heating system (installation included at no extra charge)",
+      "amount_gbp": 8911.67,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R5",
+        "R11a"
+      ],
+      "reasoning": "The supply of a boiler and heating system includes installation, which qualifies it as Construction, but the description suggests the installation is included at no extra charge, indicating a potential misstatement of the labour portion.",
+      "citations": [
+        {
+          "rule_id": "R5",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11a",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R5",
+        "R11a"
+      ],
+      "expected_note": "'Free installation' framing is a known dodge \u2014 flag as likely understating the labour value.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0007-L4",
+      "description": "Installation of louvered security shutters, shopfront",
+      "amount_gbp": 3457.18,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "Installation of louvered security shutters falls under the named exclusion for security systems, classifying it as Services.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Shutters ARE the named exclusion, unlike the awning case above.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0007-L5",
+      "description": "Subcontractor accommodation costs, 6 weeks on-site",
+      "amount_gbp": 2895.94,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R11c"
+      ],
+      "reasoning": "Subcontractor accommodation costs are part of the taxable contract payment and classified as Construction, not as Services.",
+      "citations": [
+        {
+          "rule_id": "R11c",
+          "resolved": true,
+          "source_name": "CISR15080",
+          "source_title": "The Scheme: contract payments: travel, subsistence and accommodation",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15080",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R11c"
+      ],
+      "expected_note": "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}
