@@ -1,0 +1,10 @@
+14:22:23  Starting classify.py run 20260805-142223 (model=gpt-4o-mini, dry_run=False)
+14:22:24  Classifying INV-2026-0001 (clear_construction, 4 line items)...
+14:22:29  Classifying INV-2026-0002 (clear_construction, 5 line items)...
+14:22:32  Overall accuracy: 9/9 (100.0%)
+14:22:32    clear_construction: 9/9 (100.0%)
+14:22:32  No misclassifications.
+14:22:32  Per-invoice results written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-142223
+14:22:32  Flat summary written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-142223\results_summary.csv
+14:22:32  This run's log: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\classify_20260805-142223.log
+14:22:32  All runs' index: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\index.csv
