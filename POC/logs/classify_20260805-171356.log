@@ -1,0 +1,67 @@
+17:13:56  Starting classify.py run 20260805-171356 (model=gpt-4o-mini, dry_run=False)
+17:13:57  Classifying INV-2026-0001 (clear_construction, 4 line items)...
+17:14:03  Classifying INV-2026-0002 (clear_construction, 5 line items)...
+17:14:07  Classifying INV-2026-0003 (clear_construction, 5 line items)...
+17:14:11  Classifying INV-2026-0004 (clear_services, 3 line items)...
+17:14:16  Classifying INV-2026-0005 (clear_services, 2 line items)...
+17:14:19  Classifying INV-2026-0006 (ambiguous_mixed, 6 line items)...
+17:14:25  Classifying INV-2026-0007 (ambiguous_mixed, 5 line items)...
+17:14:30  Classifying INV-2026-0008 (ambiguous_mixed, 6 line items)...
+17:14:36  Classifying INV-2026-0009 (ambiguous_mixed, 6 line items)...
+17:14:42  Classifying INV-2026-0010 (ambiguous_mixed, 5 line items)...
+17:14:52  Overall accuracy: 45/47 (95.7%)
+17:14:52    clear_construction: 14/14 (100.0%)
+17:14:52    clear_services: 5/5 (100.0%)
+17:14:52    ambiguous_mixed: 26/28 (92.9%)
+17:14:52  2 misclassified line(s):
+17:14:52    INV-2026-0009 / INV-2026-0009-L1
+17:14:52      "Supply and fit carpet tiles as part of wider office refurbishment contract"
+17:14:52      predicted: Services (rules: ['R10'])
+17:14:52      expected:  Construction (rules: ['R10', 'R2']) - Carpet fitting alone is excluded, but as part of a mixed contract the whole contract — and this line — comes within the scheme.
+17:14:52      model reasoning: This line item is for carpet fitting, which is a named exclusion under R10. However, since there are other construction-related items on the invoice, it could be part of a mixed contract, which would override the exclusion. I checked other lines and found the supply and erect security fencing (L4) and installation and repair of glazing (L5) are clearly Construction.
+17:14:52    INV-2026-0009 / INV-2026-0009-L3
+17:14:52      "Consultancy — remedial works"
+17:14:52      predicted: Services (rules: ['R6'])
+17:14:52      expected:  Construction (rules: ['R6', 'R13']) - 'Consultancy' suggests advisory (R6→Services) but 'remedial works' suggests hands-on execution — resolved toward Construction per R13; flag the ambiguity in reasoning.
+17:14:52      model reasoning: This line item describes consultancy for remedial works, which is purely advisory and falls under R6. However, if it were to include execution or hands-on work, it could be classified as Construction. The ambiguity lies in whether the consultancy involves any execution.
+17:14:52  9 line(s) flagged low confidence by the model (review candidates regardless of whether they scored correct):
+17:14:52    INV-2026-0006 / INV-2026-0006-L2 (correct)
+17:14:52      "Hire of barge, contractor to provide own crew"
+17:14:52      predicted: Services (rules: ['R8'])
+17:14:52      model reasoning: The hire of a barge without an operator is classified as Services under R8. However, if the contractor provided their own crew, it could potentially be Construction, but this is not specified.
+17:14:52    INV-2026-0007 / INV-2026-0007-L2 (correct)
+17:14:52      "Supply of 30 fire doors, delivered to site (materials only)"
+17:14:52      predicted: Services (rules: ['R7', 'R11'])
+17:14:52      model reasoning: This line item describes the supply of fire doors with no installation obligation, which falls under the manufacture/delivery exclusion. However, if there were other construction lines on the invoice, it could be classified as Construction due to a mixed contract.
+17:14:52    INV-2026-0007 / INV-2026-0007-L4 (correct)
+17:14:52      "Installation of louvered security shutters, shopfront"
+17:14:52      predicted: Services (rules: ['R10'])
+17:14:52      model reasoning: The installation of louvered security shutters is classified as Services because it falls under the named exclusion for security systems. If there were other construction lines on the invoice, this could be overridden.
+17:14:52    INV-2026-0008 / INV-2026-0008-L6 (correct)
+17:14:52      "Supply of boiler and full heating system (installation included at no extra charge)"
+17:14:52      predicted: Construction (rules: ['R5', 'R11a'])
+17:14:52      model reasoning: This line item includes the supply and installation of a heating system, but the description suggests that installation is included at no extra charge, which raises suspicion about the allocation of costs. However, it is still classified as Construction due to the installation element.
+17:14:52    INV-2026-0009 / INV-2026-0009-L1 (INCORRECT)
+17:14:52      "Supply and fit carpet tiles as part of wider office refurbishment contract"
+17:14:52      predicted: Services (rules: ['R10'])
+17:14:52      model reasoning: This line item is for carpet fitting, which is a named exclusion under R10. However, since there are other construction-related items on the invoice, it could be part of a mixed contract, which would override the exclusion. I checked other lines and found the supply and erect security fencing (L4) and installation and repair of glazing (L5) are clearly Construction.
+17:14:52    INV-2026-0009 / INV-2026-0009-L2 (correct)
+17:14:52      "Supply and fit carpet tiles, open-plan office"
+17:14:52      predicted: Services (rules: ['R10'])
+17:14:52      model reasoning: Similar to line L1, this line item is for carpet fitting, which is a named exclusion under R10. The mixed contract override applies here as well, since there are other construction-related items on the invoice.
+17:14:52    INV-2026-0009 / INV-2026-0009-L3 (INCORRECT)
+17:14:52      "Consultancy — remedial works"
+17:14:52      predicted: Services (rules: ['R6'])
+17:14:52      model reasoning: This line item describes consultancy for remedial works, which is purely advisory and falls under R6. However, if it were to include execution or hands-on work, it could be classified as Construction. The ambiguity lies in whether the consultancy involves any execution.
+17:14:52    INV-2026-0010 / INV-2026-0010-L2 (correct)
+17:14:52      "Installation of louvered security shutters, shopfront"
+17:14:52      predicted: Services (rules: ['R10'])
+17:14:52      model reasoning: Installation of louvered security shutters falls under the named exclusion for security systems, but this classification is provisional pending the mixed-contract override check.
+17:14:52    INV-2026-0010 / INV-2026-0010-L3 (correct)
+17:14:52      "Tree felling and landscaping in the ordinary course of estate management (no development project)"
+17:14:52      predicted: Services (rules: ['R9'])
+17:14:52      model reasoning: Tree felling and landscaping in the ordinary course of estate management does not relate to a construction project, thus classified as Services, but this is provisional pending the mixed-contract override check.
+17:14:52  Per-invoice results written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-171356
+17:14:52  Flat summary written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-171356\results_summary.csv
+17:14:52  This run's log: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\classify_20260805-171356.log
+17:14:52  All runs' index: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\index.csv

@@ -1,0 +1,181 @@
+{
+  "invoice_id": "INV-2026-0006",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Thornfield Contractors Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0006-L1",
+      "description": "Running of site canteen facility, 1 month",
+      "amount_gbp": 2878.05,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R9"
+      ],
+      "reasoning": "Running a site canteen facility is classified as a facility/site-support service, which is excluded from CIS under R9.",
+      "citations": [
+        {
+          "rule_id": "R9",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R9"
+      ],
+      "expected_note": "Site facilities running \u2014 excluded.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0006-L2",
+      "description": "Hire of barge, contractor to provide own crew",
+      "amount_gbp": 4423.04,
+      "predicted_label": "Services",
+      "predicted_confidence": "low",
+      "predicted_rule_ids": [
+        "R8"
+      ],
+      "reasoning": "The hire of a barge without an operator is classified as Services under R8. However, if the contractor provided their own crew, it could potentially be Construction, but this is not specified.",
+      "citations": [
+        {
+          "rule_id": "R8",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.19, Appendix C 'Construction' table",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R8"
+      ],
+      "expected_note": "Bare vessel hire with the contractor's own crew = plant hire without operator.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0006-L3",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5115.17,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Supply and erecting security fencing is considered Construction work as it involves physical installation on site.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0006-L4",
+      "description": "Supply and install retractable awning, shopfront",
+      "amount_gbp": 3138.56,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Supply and installation of a retractable awning is classified as Construction since it involves installation work.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Awnings are explicitly NOT excluded, unlike blinds/shutters next to them in the rule.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0006-L5",
+      "description": "Demolition of existing outbuilding prior to new build",
+      "amount_gbp": 8183.91,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Demolition of an existing outbuilding is classified as Construction work as it involves dismantling a structure.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1"
+      ],
+      "expected_note": "Demolition is a named included operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0006-L6",
+      "description": "Erection of scaffolding for roof works, 3 weeks",
+      "amount_gbp": 3495.35,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Erection of scaffolding for roof works is classified as Construction as it is integral to the construction process.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R8"
+      ],
+      "expected_note": "Erection/dismantling labour is integral works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}

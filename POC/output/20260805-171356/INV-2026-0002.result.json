@@ -1,0 +1,198 @@
+{
+  "invoice_id": "INV-2026-0002",
+  "scenario": "clear_construction",
+  "supplier": "BrightSpark M&E Contractors",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0002-L1",
+      "description": "Install air conditioning system, warehouse unit 4",
+      "amount_gbp": 2977.12,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1",
+        "R3"
+      ],
+      "reasoning": "This line item describes the installation of an air conditioning system, which is classified as Construction under R3 for system installation in a building.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R3",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R3"
+      ],
+      "expected_note": "Complete system installation in a building.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0002-L2",
+      "description": "Erection of scaffolding for roof works, 4 weeks",
+      "amount_gbp": 3170.89,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "reasoning": "Erection of scaffolding is classified as Construction under R4, as it is integral to the construction process.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R8"
+      ],
+      "expected_note": "Erection/dismantling labour is integral works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0002-L3",
+      "description": "Painting and decorating, internal walls and ceilings, office suite",
+      "amount_gbp": 2428.91,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "reasoning": "Painting and decorating internal walls and ceilings is classified as Construction under R4, as it is part of the finishing work in a construction project.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R4"
+      ],
+      "expected_note": "Painting/decorating explicitly included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0002-L4",
+      "description": "Site clearance and earth-moving ahead of construction",
+      "amount_gbp": 7012.59,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "reasoning": "Site clearance and earth-moving are classified as Construction under R1, as they are preparatory works necessary for construction.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R4"
+      ],
+      "expected_note": "Preparatory works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0002-L5",
+      "description": "Preparation and laying of foundations, Plot 4",
+      "amount_gbp": 12772.42,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "reasoning": "Preparation and laying of foundations is classified as Construction under R1, as it is a fundamental construction operation.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "expected_note": "Site preparation/construction \u2014 core included operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}
