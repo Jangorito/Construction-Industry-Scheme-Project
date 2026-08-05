@@ -1,0 +1,124 @@
+{
+  "invoice_id": "INV-2026-0001",
+  "scenario": "clear_construction",
+  "supplier": "Ashcroft Building Services Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0001-L1",
+      "description": "Erection of scaffolding for roof works, 3 weeks",
+      "amount_gbp": 1967.65,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "The erection of scaffolding is a construction operation directly related to the roof works, which falls under the scope of construction activities as defined in R1.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R8"
+      ],
+      "expected_note": "Erection/dismantling labour is integral works \u2014 included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0001-L2",
+      "description": "Preparation and laying of foundations, Plot 4",
+      "amount_gbp": 12612.57,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Preparation and laying of foundations is a core construction activity, clearly defined as construction work under R1.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1",
+        "R4"
+      ],
+      "expected_note": "Site preparation/construction \u2014 core included operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0001-L3",
+      "description": "Install air conditioning system, 2nd floor office",
+      "amount_gbp": 5755.46,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R3"
+      ],
+      "reasoning": "Installing an air conditioning system is classified as construction work since it involves the installation of a system within a building, as per R3.",
+      "citations": [
+        {
+          "rule_id": "R3",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R3"
+      ],
+      "expected_note": "Complete system installation in a building.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0001-L4",
+      "description": "Painting and decorating, internal walls and ceilings, office suite",
+      "amount_gbp": 4326.58,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R4"
+      ],
+      "reasoning": "Painting and decorating internal walls and ceilings is considered construction work as it is part of the finishing operations during construction, according to R4.",
+      "citations": [
+        {
+          "rule_id": "R4",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R4"
+      ],
+      "expected_note": "Painting/decorating explicitly included.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}

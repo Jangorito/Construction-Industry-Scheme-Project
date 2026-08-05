@@ -1,0 +1,201 @@
+{
+  "invoice_id": "INV-2026-0009",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Camden Bridge Construction Group Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0009-L1",
+      "description": "Supply and fit carpet tiles as part of wider office refurbishment contract",
+      "amount_gbp": 4377.46,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R10",
+        "R12"
+      ],
+      "reasoning": "This line item describes the supply and fitting of carpet tiles, which falls under the named exclusion for carpet fitting (R10). However, since there are other construction-related line items on the invoice, this line is classified as Construction due to the mixed-contract override (R12).",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R12",
+          "resolved": true,
+          "source_name": "POC-METHOD",
+          "source_title": "Internal line-item classification protocol (not an HMRC citation)",
+          "source_url": null,
+          "verified": "n/a"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10",
+        "R2"
+      ],
+      "expected_note": "Carpet fitting alone is excluded, but as part of a mixed contract the whole contract \u2014 and this line \u2014 comes within the scheme.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0009-L2",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 3285.26,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R10",
+        "R12"
+      ],
+      "reasoning": "Similar to the first line, this item involves the supply and fitting of carpet tiles, which is a named exclusion (R10). However, the presence of other construction-related items on the invoice allows for a mixed-contract override, classifying this line as Construction (R12).",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R12",
+          "resolved": true,
+          "source_name": "POC-METHOD",
+          "source_title": "Internal line-item classification protocol (not an HMRC citation)",
+          "source_url": null,
+          "verified": "n/a"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Carpet fitting is the sole excluded finishing operation.",
+      "gap_flag": false,
+      "correct": false,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0009-L3",
+      "description": "Consultancy \u2014 remedial works",
+      "amount_gbp": 3570.2,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R6"
+      ],
+      "reasoning": "This line describes consultancy for remedial works, which is purely advisory and does not involve execution (R6). Therefore, it is classified as Services.",
+      "citations": [
+        {
+          "rule_id": "R6",
+          "resolved": true,
+          "source_name": "CISR14270",
+          "source_title": "The Scheme: construction operations: professional work",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14270",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R6",
+        "R13"
+      ],
+      "expected_note": "'Consultancy' suggests advisory (R6\u2192Services) but 'remedial works' suggests hands-on execution \u2014 resolved toward Construction per R13; flag the ambiguity in reasoning.",
+      "gap_flag": false,
+      "correct": false,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0009-L4",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5216.68,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "The supply and erection of security fencing is not a named exclusion and is considered construction work (R1). Thus, this line is classified as Construction.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0009-L5",
+      "description": "Installation and repair of glazing, warehouse windows",
+      "amount_gbp": 3543.31,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "This line item involves the installation and repair of glazing, which is a construction operation (R1). Therefore, it is classified as Construction.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1"
+      ],
+      "expected_note": "Installation of glazing is a listed included operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0009-L6",
+      "description": "Subcontractor accommodation costs, 6 weeks on-site",
+      "amount_gbp": 3470.87,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R11c"
+      ],
+      "reasoning": "Subcontractor accommodation costs are part of the taxable contract payment and are classified as Construction (R11c).",
+      "citations": [
+        {
+          "rule_id": "R11c",
+          "resolved": true,
+          "source_name": "CISR15080",
+          "source_title": "The Scheme: contract payments: travel, subsistence and accommodation",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15080",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R11c"
+      ],
+      "expected_note": "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}

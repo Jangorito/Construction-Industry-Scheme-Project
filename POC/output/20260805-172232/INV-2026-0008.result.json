@@ -1,0 +1,201 @@
+{
+  "invoice_id": "INV-2026-0008",
+  "scenario": "ambiguous_mixed",
+  "supplier": "Camden Bridge Construction Group Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0008-L1",
+      "description": "Materials: 14 tonnes ready-mix concrete, delivered",
+      "amount_gbp": 1420.4,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R7",
+        "R11"
+      ],
+      "reasoning": "This line item describes the delivery of ready-mix concrete without any installation obligation, which falls under the manufacture and delivery exclusion (R7). Therefore, it is classified as Services.",
+      "citations": [
+        {
+          "rule_id": "R7",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R7",
+        "R11"
+      ],
+      "expected_note": "Standalone delivery on this invoice, no laying/installation obligation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0008-L2",
+      "description": "Installation of CCTV for traffic monitoring, site access road",
+      "amount_gbp": 2773.8,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "The installation of CCTV for traffic monitoring is considered Construction as it supports construction operations (R1).",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "CCTV for a non-security purpose isn't the named security-systems exclusion.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0008-L3",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 3328.69,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "Carpet fitting is a named exclusion under R10, so this line is classified as Services. However, if it were part of a mixed contract with other construction work, it could be overridden to Construction, but that is not the case here.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Carpet fitting is the sole excluded finishing operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0008-L4",
+      "description": "Concrete pumping service, wet concrete distribution around site",
+      "amount_gbp": 2215.06,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "Concrete pumping service involves the distribution of wet concrete around the site, which is a construction operation (R1).",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R7"
+      ],
+      "expected_note": "Third-party pumping is a site service, not a delivery \u2014 contrasts with plain chute delivery.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0008-L5",
+      "description": "Supply and erect security fencing around site compound perimeter",
+      "amount_gbp": 5353.04,
+      "predicted_label": "Construction",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "The supply and erection of security fencing is considered Construction as it is not a named exclusion under R10 and is part of the construction work.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Fencing deters intruders but isn't a security 'system' \u2014 ordinary construction.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0008-L6",
+      "description": "Supply of boiler and full heating system (installation included at no extra charge)",
+      "amount_gbp": 10613.68,
+      "predicted_label": "Construction",
+      "predicted_confidence": "low",
+      "predicted_rule_ids": [
+        "R5",
+        "R11a"
+      ],
+      "reasoning": "This line item describes a supply and installation of a heating system, which is classified as Construction due to the installation element (R5). However, the framing suggests the installation is free, which is a pattern that raises suspicion (R11a).",
+      "citations": [
+        {
+          "rule_id": "R5",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11a",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R5",
+        "R11a"
+      ],
+      "expected_note": "'Free installation' framing is a known dodge \u2014 flag as likely understating the labour value.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}
