@@ -40,6 +40,16 @@ bridges, harbours, power lines, pipelines, reservoirs, sewers, industrial
 plant). Site preparation, finishing, and integral/preparatory work (e.g.
 scaffolding erected as part of a build) all count. This is the default
 "Construction" bucket.
+
+**Traffic management is Construction, not an R9 exclusion.** CIS340
+Appendix C names "the provision of traffic management services supplied to
+a contractor carrying out construction operations" as included. Don't let
+the word "services" in the name pull this toward R9's facilities/site-support
+exclusions (canteens, guarding, medical) — what matters is what the line
+item actually describes doing, and traffic management in support of a
+construction contract is itself part of that contract. (Traffic management
+for a *non*-construction operation, or bare equipment supplied but not
+placed into position, is the case that's genuinely excluded.)
 *Source: CIS340 (primary).*
 
 **R2 — The scope test is broad and contract-level, not item-level.** HMRC's
@@ -146,14 +156,23 @@ each narrower than the plain description suggests:
 - **Carpet fitting** (A.21, Statement of Practice 12 (1981)): the sole
   exception among "finishing operations" — every other floor covering
   (vinyl, linoleum, laminate wood) is Construction; carpet alone is Services.
-  If carpet fitting is part of a mixed contract, the *whole* contract still
-  comes within the scheme (R2/R12).
 
 Treat all five as Services even when they otherwise look like "installing a
 system in a building" (R3) — but check the narrower boundary in each case
 before applying the exclusion.
-*Source: CIS340, Appendix A.28–A.31 and Appendix C "Construction"/"Finishing
-operations" tables (primary).*
+
+**Before applying any of the five exclusions above, check for a
+mixed-contract override.** CIS340 A.4 states this for carpet fitting by
+name ("if carpet fitting is part of a mixed contract, then all the contract
+comes within the scheme"), but the underlying principle is R2/R12's general
+mixed-contract rule, and it applies to all five R10 exclusions, not just
+carpet. Look for the signal in the line item's own wording ("as part of,"
+"part of the wider... contract") or in the rest of the invoice (other lines
+from the same job that are clearly Construction) — either is enough to flip
+a would-be R10 exclusion to Construction. Only apply a straight R10
+exclusion once you've checked and found no such signal.
+*Source: CIS340, Appendix A.4, A.28–A.31 and Appendix C "Construction"/
+"Finishing operations" tables (primary).*
 
 ## Materials vs. labour
 
