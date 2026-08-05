@@ -1,0 +1,65 @@
+{
+  "invoice_id": "INV-2026-0005",
+  "scenario": "clear_services",
+  "supplier": "Solace Security Systems Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0005-L1",
+      "description": "Supply and fit carpet tiles, open-plan office",
+      "amount_gbp": 4665.77,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "The line item describes the supply and fitting of carpet tiles, which falls under the named exclusion for carpet fitting (R10). I checked for a mixed-contract override but found no wording indicating this is part of a larger construction contract. Therefore, it is classified as Services.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Carpet fitting is the sole excluded finishing operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0005-L2",
+      "description": "Structural survey and written assessment report (no remedial works)",
+      "amount_gbp": 1283.81,
+      "predicted_label": "Services",
+      "predicted_confidence": "high",
+      "predicted_rule_ids": [
+        "R6"
+      ],
+      "reasoning": "This line item involves a structural survey and a written assessment report, which is purely advisory work without any execution or remedial action involved (R6). Therefore, it is classified as Services.",
+      "citations": [
+        {
+          "rule_id": "R6",
+          "resolved": true,
+          "source_name": "CISR14270",
+          "source_title": "The Scheme: construction operations: professional work",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14270",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R6"
+      ],
+      "expected_note": "Consultative/advisory only.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}

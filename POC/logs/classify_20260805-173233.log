@@ -1,3 +1,35 @@
 17:32:33  Starting classify.py run 20260805-173233 (model=gpt-4o-mini, dry_run=False)
 17:32:34  Classifying INV-2026-0001 (clear_construction, 4 line items)...
 17:32:38  Classifying INV-2026-0002 (clear_construction, 5 line items)...
+17:32:43  Classifying INV-2026-0003 (clear_construction, 5 line items)...
+17:32:47  Classifying INV-2026-0004 (clear_services, 3 line items)...
+17:32:51  Classifying INV-2026-0005 (clear_services, 2 line items)...
+17:32:53  Classifying INV-2026-0006 (ambiguous_mixed, 6 line items)...
+17:32:59  Classifying INV-2026-0007 (ambiguous_mixed, 5 line items)...
+17:33:04  Classifying INV-2026-0008 (ambiguous_mixed, 6 line items)...
+17:33:09  Classifying INV-2026-0009 (ambiguous_mixed, 6 line items)...
+17:33:15  Classifying INV-2026-0010 (ambiguous_mixed, 5 line items)...
+17:33:19  Overall accuracy: 45/47 (95.7%)
+17:33:19    clear_construction: 14/14 (100.0%)
+17:33:19    clear_services: 5/5 (100.0%)
+17:33:19    ambiguous_mixed: 26/28 (92.9%)
+17:33:19  2 misclassified line(s):
+17:33:19    INV-2026-0009 / INV-2026-0009-L3
+17:33:19      "Consultancy — remedial works"
+17:33:19      predicted: Services (rules: ['R6'])
+17:33:19      expected:  Construction (rules: ['R6', 'R13']) - 'Consultancy' suggests advisory (R6→Services) but 'remedial works' suggests hands-on execution — resolved toward Construction per R13; flag the ambiguity in reasoning.
+17:33:19      model reasoning: This line item describes consultancy for remedial works, which falls under R6 as it is purely advisory. There is no indication of execution or hands-on work, so it is classified as Services.
+17:33:19    INV-2026-0010 / INV-2026-0010-L2
+17:33:19      "Installation of louvered security shutters, shopfront"
+17:33:19      predicted: Construction (rules: ['R1'])
+17:33:19      expected:  Services (rules: ['R10']) - Shutters ARE the named exclusion, unlike the awning case above.
+17:33:19      model reasoning: The installation of louvered security shutters is considered a construction operation, as it involves the installation of a system in a building. This aligns with R1, which broadly defines construction operations.
+17:33:19  1 line(s) flagged low confidence by the model (review candidates regardless of whether they scored correct):
+17:33:19    INV-2026-0008 / INV-2026-0008-L6 (correct)
+17:33:19      "Supply of boiler and full heating system (installation included at no extra charge)"
+17:33:19      predicted: Construction (rules: ['R5', 'R11a'])
+17:33:19      model reasoning: This line item describes a supply and installation of a heating system, which is a construction operation (R5). However, the framing suggests that installation is included at no extra charge, which is a pattern that raises suspicion (R11a). Despite this, the overall operation is still classified as Construction due to the installation obligation.
+17:33:19  Per-invoice results written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-173233
+17:33:19  Flat summary written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-173233\results_summary.csv
+17:33:19  This run's log: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\classify_20260805-173233.log
+17:33:19  All runs' index: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\index.csv
