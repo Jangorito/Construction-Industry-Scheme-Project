@@ -162,15 +162,18 @@ telecoms wiring, carpet fitting). A line item whose description contains a \
 word like "services" is not automatically an R9 exclusion, check what the \
 line actually describes doing, not just its label. (2) If it matches an \
 R9/R10 exclusion, that match is provisional, not final. Before you write \
-down Services, explicitly re-check for a mixed-contract override (R2/R12): \
-does the line's own wording, or its place among this invoice's other \
-lines, signal it's part of a bigger contract? If yes, the override wins \
-and the label is Construction, regardless of the R9/R10 match. Only \
-finalize Services once you've done this override check and found no such \
-signal, and state in the reasoning that you checked for one either way. \
-(3) Only fall back to a general inclusion rule like R1 or R3 once you've \
-confirmed, via step (1), that this line isn't an R9/R10 exclusion in the \
-first place.
+down Services, run this concrete mixed-contract override test (R2/R12): \
+look at every other line item on this invoice. If at least one other line \
+is clearly Construction, that alone is sufficient evidence of a mixed \
+contract, full stop, the override wins and this line's label is \
+Construction too, regardless of the R9/R10 match. Don't also require the \
+flagged line's own wording to independently prove it, one clearly \
+Construction sibling line is enough by itself. Only finalize Services if \
+you've checked every other line on the invoice and none of them are \
+clearly Construction. State in the reasoning which other line items you \
+checked against, not just that you checked. (3) Only fall back to a \
+general inclusion rule like R1 or R3 once you've confirmed, via step (1), \
+that this line isn't an R9/R10 exclusion in the first place.
 
 For every line item, cite the rule id(s) (e.g. "R6", "R11a") that justify \
 your answer. Only cite ids that appear in the rules doc below, never invent \
