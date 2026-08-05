@@ -137,7 +137,21 @@ Every line item must get exactly one label: "Construction" (CIS-relevant) or \
 "Services" (non-CIS). Classify each line item independently, per rule R12, \
 even when other lines on the same invoice have a different label. Where \
 wording is genuinely ambiguous, apply R13: give your best answer but name \
-in the reasoning what fact would change it.
+in the reasoning what fact would change it, don't resolve it with false \
+confidence.
+
+Before settling on a label, check narrower rules first, don't jump straight \
+to a general inclusion rule like R1 or R3. Specifically: (1) is this line \
+one of R9's facilities/site-support exclusions or one of R10's five named \
+exclusions (signage, seating/blinds/shutters, security systems, telecoms \
+wiring, carpet fitting)? A line item whose description contains a word like \
+"services" is not automatically an R9 exclusion, check what the line \
+actually describes doing, not just its label. (2) Does the line's own \
+wording, or its place among this invoice's other lines, signal a mixed \
+contract (R2/R12)? A mixed-contract signal overrides a named R9/R10 \
+exclusion. Only fall back to a general inclusion rule once you've checked \
+both and found neither applies. When either check is genuinely close, say \
+so in the reasoning.
 
 For every line item, cite the rule id(s) (e.g. "R6", "R11a") that justify \
 your answer. Only cite ids that appear in the rules doc below, never invent \
