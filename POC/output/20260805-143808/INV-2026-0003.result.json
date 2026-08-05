@@ -1,0 +1,166 @@
+{
+  "invoice_id": "INV-2026-0003",
+  "scenario": "clear_construction",
+  "supplier": "BrightSpark M&E Contractors",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0003-L1",
+      "description": "Groundworks labour and materials, concrete foundations, fixed price",
+      "amount_gbp": 11879.38,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R1",
+        "R11"
+      ],
+      "reasoning": "This line item includes both labour and materials for concrete foundations, which are part of construction operations.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1",
+        "R11"
+      ],
+      "expected_note": "Whole line is one construction operation; materials sub-amount is excluded from the deduction, not from the classification.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0003-L2",
+      "description": "Construction, repair and resurfacing of access road including white-lining",
+      "amount_gbp": 21722.45,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R1"
+      ],
+      "reasoning": "The description indicates construction and repair of an access road, which falls under construction operations.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1"
+      ],
+      "expected_note": "Named included operation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0003-L3",
+      "description": "Provision of traffic management services during resurfacing works",
+      "amount_gbp": 1700.71,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R9"
+      ],
+      "reasoning": "Traffic management services are classified as site-support services, which are excluded from construction work.",
+      "citations": [
+        {
+          "rule_id": "R9",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R1"
+      ],
+      "expected_note": "Traffic management supplied to a contractor carrying out construction ops is included.",
+      "gap_flag": false,
+      "correct": false,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0003-L4",
+      "description": "Supply and fit 30 fire doors, including ironmongery",
+      "amount_gbp": 4077.37,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R5"
+      ],
+      "reasoning": "This line item involves the supply and fitting of fire doors, which qualifies as a supply-and-fix operation.",
+      "citations": [
+        {
+          "rule_id": "R5",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R5"
+      ],
+      "expected_note": "Supply-and-fix.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0003-L5",
+      "description": "Installation of drainage and sanitation pipework, new build",
+      "amount_gbp": 6723.36,
+      "predicted_label": "Construction",
+      "predicted_rule_ids": [
+        "R1",
+        "R3"
+      ],
+      "reasoning": "The installation of drainage and sanitation pipework is a construction operation, as it involves the installation of systems in a new build.",
+      "citations": [
+        {
+          "rule_id": "R1",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R3",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Construction",
+      "expected_rule_ids": [
+        "R3"
+      ],
+      "expected_note": "System installation.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}

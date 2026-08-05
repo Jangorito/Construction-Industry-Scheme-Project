@@ -1,0 +1,40 @@
+14:38:08  Starting classify.py run 20260805-143808 (model=gpt-4o-mini, dry_run=False)
+14:38:10  Classifying INV-2026-0001 (clear_construction, 4 line items)...
+14:38:13  Classifying INV-2026-0002 (clear_construction, 5 line items)...
+14:38:17  Classifying INV-2026-0003 (clear_construction, 5 line items)...
+14:38:21  Classifying INV-2026-0004 (clear_services, 3 line items)...
+14:38:24  Classifying INV-2026-0005 (clear_services, 2 line items)...
+14:38:26  Classifying INV-2026-0006 (ambiguous_mixed, 6 line items)...
+14:38:30  Classifying INV-2026-0007 (ambiguous_mixed, 5 line items)...
+14:38:34  Classifying INV-2026-0008 (ambiguous_mixed, 6 line items)...
+14:38:38  Classifying INV-2026-0009 (ambiguous_mixed, 6 line items)...
+14:38:43  Classifying INV-2026-0010 (ambiguous_mixed, 5 line items)...
+14:38:46  Overall accuracy: 43/47 (91.5%)
+14:38:46    clear_construction: 13/14 (92.9%)
+14:38:46    clear_services: 5/5 (100.0%)
+14:38:46    ambiguous_mixed: 25/28 (89.3%)
+14:38:46  4 misclassified line(s):
+14:38:46    INV-2026-0003 / INV-2026-0003-L3
+14:38:46      "Provision of traffic management services during resurfacing works"
+14:38:46      predicted: Services (rules: ['R9'])
+14:38:46      expected:  Construction (rules: ['R1']) - Traffic management supplied to a contractor carrying out construction ops is included.
+14:38:46      model reasoning: Traffic management services are classified as site-support services, which are excluded from construction work.
+14:38:46    INV-2026-0009 / INV-2026-0009-L1
+14:38:46      "Supply and fit carpet tiles as part of wider office refurbishment contract"
+14:38:46      predicted: Services (rules: ['R10'])
+14:38:46      expected:  Construction (rules: ['R10', 'R2']) - Carpet fitting alone is excluded, but as part of a mixed contract the whole contract — and this line — comes within the scheme.
+14:38:46      model reasoning: Carpet fitting is the sole named exception among finishing operations, thus classified as Services.
+14:38:46    INV-2026-0009 / INV-2026-0009-L3
+14:38:46      "Consultancy — remedial works"
+14:38:46      predicted: Services (rules: ['R6'])
+14:38:46      expected:  Construction (rules: ['R6', 'R13']) - 'Consultancy' suggests advisory (R6→Services) but 'remedial works' suggests hands-on execution — resolved toward Construction per R13; flag the ambiguity in reasoning.
+14:38:46      model reasoning: Consultancy for remedial works is purely advisory and does not involve execution, thus classified as Services.
+14:38:46    INV-2026-0010 / INV-2026-0010-L2
+14:38:46      "Installation of louvered security shutters, shopfront"
+14:38:46      predicted: Construction (rules: ['R1'])
+14:38:46      expected:  Services (rules: ['R10']) - Shutters ARE the named exclusion, unlike the awning case above.
+14:38:46      model reasoning: Installation of louvered security shutters is considered construction work as it involves the installation of a system in a building.
+14:38:46  Per-invoice results written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-143808
+14:38:46  Flat summary written to: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\output\20260805-143808\results_summary.csv
+14:38:46  This run's log: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\classify_20260805-143808.log
+14:38:46  All runs' index: C:\Users\Jango\OneDrive - The University of Nottingham\Documents\Construction Industry Scheme Project\POC\logs\index.csv

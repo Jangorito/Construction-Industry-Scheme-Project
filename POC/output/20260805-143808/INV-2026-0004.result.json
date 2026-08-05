@@ -1,0 +1,101 @@
+{
+  "invoice_id": "INV-2026-0004",
+  "scenario": "clear_services",
+  "supplier": "Solace Security Systems Ltd",
+  "line_results": [
+    {
+      "line_id": "INV-2026-0004-L1",
+      "description": "Delivery of ready-mix concrete, 15 tonnes, no laying obligation",
+      "amount_gbp": 1545.68,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R7",
+        "R11"
+      ],
+      "reasoning": "This line item is for the delivery of ready-mix concrete without any laying obligation, which classifies it as Services under R7.",
+      "citations": [
+        {
+          "rule_id": "R7",
+          "resolved": true,
+          "source_name": "CISR14220",
+          "source_title": "The Scheme: construction operations: manufacture and delivery",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr14220",
+          "verified": "primary"
+        },
+        {
+          "rule_id": "R11",
+          "resolved": true,
+          "source_name": "CISR15060",
+          "source_title": "The Scheme: payments: materials",
+          "source_url": "https://www.gov.uk/hmrc-internal-manuals/construction-industry-scheme-reform/cisr15060",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R7",
+        "R11"
+      ],
+      "expected_note": "Delivery only.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0004-L2",
+      "description": "Sign-writing and installation of shop signboard",
+      "amount_gbp": 2254.72,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "Sign-writing and installation of a shop signboard falls under the specific named exclusion for signage, classifying it as Services according to R10.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Named exclusion \u2014 signage.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    },
+    {
+      "line_id": "INV-2026-0004-L3",
+      "description": "Installation of venetian blinds, office windows",
+      "amount_gbp": 668.76,
+      "predicted_label": "Services",
+      "predicted_rule_ids": [
+        "R10"
+      ],
+      "reasoning": "Installation of venetian blinds is explicitly excluded from construction operations, classifying it as Services under R10.",
+      "citations": [
+        {
+          "rule_id": "R10",
+          "resolved": true,
+          "source_name": "CIS340",
+          "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors \u2014 Appendix A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+          "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
+          "verified": "primary"
+        }
+      ],
+      "expected_label": "Services",
+      "expected_rule_ids": [
+        "R10"
+      ],
+      "expected_note": "Named exclusion \u2014 blinds.",
+      "gap_flag": false,
+      "correct": true,
+      "error": null
+    }
+  ]
+}
