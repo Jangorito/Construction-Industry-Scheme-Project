@@ -168,14 +168,16 @@ mixed contract, then all the contract comes within the scheme"), but the
 underlying principle is R2/R12's general mixed-contract rule, and it
 applies to all five R10 exclusions, not just carpet. Finding a named
 exclusion is not the end of the analysis, it's the point where you stop and
-re-check: does the line item's own wording ("as part of," "part of the
-wider... contract") or its place among the invoice's other lines (clearly
-Construction lines from the same job) signal it's part of a bigger
-contract? If yes, that override wins outright and replaces the exclusion,
-the label becomes Construction. Only let a named exclusion stand as your
-final answer once you've actually run this check and found nothing — don't
-let a correct-sounding exclusion feel "done" before the override check has
-had a real chance to overturn it.
+re-check, using this concrete test: look at every other line item on the
+same invoice. If at least one of them is clearly Construction, that alone
+is sufficient evidence of a mixed contract — the override fires and this
+line becomes Construction too, on the strength of its neighbours alone.
+Don't also demand the flagged line's own wording independently prove it;
+one clearly-Construction sibling line is enough by itself. Only let a named
+exclusion stand as your final answer once you've checked every other line
+on the invoice and none of them are clearly Construction — don't let a
+correct-sounding exclusion feel "done" before the override check has had a
+real chance to overturn it.
 *Source: CIS340, Appendix A.4, A.28–A.31 and Appendix C "Construction"/
 "Finishing operations" tables (primary).*
 
