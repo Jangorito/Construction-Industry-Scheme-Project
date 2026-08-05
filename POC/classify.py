@@ -7,12 +7,15 @@ What this script does, per invoice JSON in data/invoices/:
   1. Strips out the "_ground_truth" answer key fields (generate_invoices.py
      puts those there for scoring only, the model must never see them).
   2. Sends the remaining line items (description, amount) plus the full text
-     of cis_rules.md to the model, and asks for a Construction/Services
-     label, a confidence ("high"/"low"), cited rule id(s), and a short plain
-     English reasoning per line. Confidence is the model's own self report,
-     not a calibrated accuracy score, "high" doesn't guarantee correct. It's
-     meant for triage: which lines to have a human sanity check first, not a
-     number to certify anything on. Whether it's trustworthy enough for that
+     of cis_rules.md to the model, and asks for, per line item and in this
+     order, a short plain English reasoning, cited rule id(s), a confidence
+     ("high"/"low"), then finally a Construction/Services label. Reasoning
+     is asked for first and label last on purpose, see the comment on
+     build_response_schema() below, not just for readability. Confidence is
+     the model's own self report, not a calibrated accuracy score, "high"
+     doesn't guarantee correct. It's meant for triage: which lines to have a
+     human sanity check first, not a number to certify anything on. Whether
+     it's trustworthy enough for that
      even is itself worth validating before this goes anywhere near
      production, not assumed.
   3. The rule_ids field is constrained (via the request's JSON schema) to
@@ -162,23 +165,30 @@ telecoms wiring, carpet fitting). A line item whose description contains a \
 word like "services" is not automatically an R9 exclusion, check what the \
 line actually describes doing, not just its label. (2) If it matches an \
 R9/R10 exclusion, that match is provisional, not final. Before you write \
-down Services, run this concrete mixed-contract override test (R2/R12): \
-look at every other line item on this invoice. If at least one other line \
-is clearly Construction, that alone is sufficient evidence of a mixed \
-contract, full stop, the override wins and this line's label is \
-Construction too, regardless of the R9/R10 match. Don't also require the \
-flagged line's own wording to independently prove it, one clearly \
-Construction sibling line is enough by itself. Only finalize Services if \
-you've checked every other line on the invoice and none of them are \
-clearly Construction. State in the reasoning which other line items you \
-checked against, not just that you checked. (3) Only fall back to a \
-general inclusion rule like R1 or R3 once you've confirmed, via step (1), \
-that this line isn't an R9/R10 exclusion in the first place.
+down Services, check for a mixed-contract override (R2/R12), but the bar \
+is this: the flagged line's own wording must itself signal it's part of a \
+bigger contract (phrases like "as part of," "part of the wider... \
+contract," or similar). A line with no such wording of its own does not \
+get the override just because other Construction lines happen to sit on \
+the same invoice, one invoice can bundle several unrelated jobs from the \
+same supplier, sharing an invoice is not the same as sharing a contract. \
+When the line's own wording does carry that signal, then treat other \
+clearly-Construction lines on the invoice as corroborating evidence that \
+reinforces the override, not as a substitute for it. If the line's own \
+wording carries the signal, the override wins and the label is \
+Construction, regardless of the R9/R10 match. Only finalize Services once \
+you've checked for that self-referential signal in the line's own wording \
+and found none, and state in the reasoning what you checked. (3) Only fall \
+back to a general inclusion rule like R1 or R3 once you've confirmed, via \
+step (1), that this line isn't an R9/R10 exclusion in the first place.
 
-For every line item, cite the rule id(s) (e.g. "R6", "R11a") that justify \
-your answer. Only cite ids that appear in the rules doc below, never invent \
-one. Keep each reasoning to 1-3 plain English sentences, suitable to show \
-a client.
+For every line item, write your reasoning first, before deciding the \
+label. Work through steps (1) to (3) above in the reasoning itself, then \
+let the label be whatever that reasoning actually concluded, don't decide \
+the label first and write reasoning to match it afterward. Cite the rule \
+id(s) (e.g. "R6", "R11a") that justify your answer. Only cite ids that \
+appear in the rules doc below, never invent one. Keep each reasoning to \
+1-3 plain English sentences, suitable to show a client.
 
 === CIS CLASSIFICATION RULES ===
 {rules_text}

@@ -168,16 +168,20 @@ mixed contract, then all the contract comes within the scheme"), but the
 underlying principle is R2/R12's general mixed-contract rule, and it
 applies to all five R10 exclusions, not just carpet. Finding a named
 exclusion is not the end of the analysis, it's the point where you stop and
-re-check, using this concrete test: look at every other line item on the
-same invoice. If at least one of them is clearly Construction, that alone
-is sufficient evidence of a mixed contract — the override fires and this
-line becomes Construction too, on the strength of its neighbours alone.
-Don't also demand the flagged line's own wording independently prove it;
-one clearly-Construction sibling line is enough by itself. Only let a named
-exclusion stand as your final answer once you've checked every other line
-on the invoice and none of them are clearly Construction — don't let a
-correct-sounding exclusion feel "done" before the override check has had a
-real chance to overturn it.
+re-check — but the bar for the override is the *flagged line's own
+wording* showing it's part of a bigger contract ("as part of," "part of
+the wider... contract," or similar), not merely sharing an invoice with
+unrelated Construction lines. One invoice can bundle several unrelated
+jobs from the same supplier — sharing an invoice is not the same as
+sharing a contract. When the line's own wording does carry that signal,
+other clearly-Construction lines on the same invoice count as
+*corroborating* evidence that reinforces the override, not as a
+substitute for it on their own. Only let a named exclusion stand as your
+final answer once you've checked the line's own wording for that
+self-referential signal and found none — don't let a correct-sounding
+exclusion feel "done" before the override check has had a real chance to
+overturn it, and don't let an unrelated Construction line elsewhere on the
+invoice flip an exclusion that has no such signal of its own.
 *Source: CIS340, Appendix A.4, A.28–A.31 and Appendix C "Construction"/
 "Finishing operations" tables (primary).*
 
