@@ -1,6 +1,6 @@
 # CIS Invoice Classification POC — Results Summary
 
-**Status: complete.** All four deliverables from `CIS_POC_BRIEF.md` are done, tested against a real LLM, and the results are reproducible. This doc summarises what was built, what the numbers say, and — deliberately — where it still gets things wrong.
+**Status: complete.** All four deliverables from `CIS_POC_BRIEF.md` are done, tested against a real LLM across seven live runs, and the results are reproducible. This doc summarises what was built, what the numbers say, how the iteration actually went (including a run where a fix made things worse before it made them better), and — deliberately — where it still gets things wrong.
 
 ## What this was meant to prove
 
@@ -13,18 +13,21 @@ Per the brief: given a synthetic invoice, can an LLM (1) classify each line item
 | [`POC/cis_rules.md`](POC/cis_rules.md) | 17 classification rules, 15 of them verified directly against primary HMRC source text (the CIS340 guide and the CISR14xxx/15xxx reform manual, not secondary commentary), each with a stable ID (`R1`, `R11a`, …) for citation |
 | [`POC/cis_rules_index.json`](POC/cis_rules_index.json) | The machine-readable version of the same rules, mapping each ID to its real HMRC source, name, and URL |
 | [`POC/generate_invoices.py`](POC/generate_invoices.py) | Generates synthetic invoices from 47 hand-built line-item templates, spanning clear-construction, clear-services, and deliberately ambiguous/edge-case scenarios |
-| [`POC/classify.py`](POC/classify.py) | Sends invoices to `gpt-4o-mini`, gets back a label, cited rules, a confidence flag, and plain-English reasoning per line item, logs every run permanently |
+| [`POC/classify.py`](POC/classify.py) | Sends invoices to `gpt-4o-mini`, gets back reasoning, cited rules, a confidence flag, and a label per line item, logs every run permanently |
 
-**Test data**: 10 synthetic invoices, 47 line items total (33 Construction / 14 Services by design), split across three scenario types — 14 "clear construction," 5 "clear services," and 28 "ambiguous/mixed" lines built specifically to stress-test the sharpest edges of the rules (named exclusions with narrow carve-outs, plant hire with/without an operator, materials-vs-labour traps, mixed-contract overrides).
+**Test data**: 10 synthetic invoices, 47 line items total (33 Construction / 14 Services by design), split across three scenario types — 14 "clear construction," 5 "clear services," and 28 "ambiguous/mixed" lines built specifically to stress-test the sharpest edges of the rules.
 
-## Results
+## How the iteration actually went
 
-| Run | Accuracy | Notes |
+Seven live runs, not a straight line to a final number — including one where a fix made things measurably worse before a follow-up fix made them better. That's included deliberately; it's a more honest picture of what testing an LLM classifier against real edge cases looks like than a single clean number would be.
+
+| Stage | Accuracy | What changed |
 |---|---|---|
-| Initial full run | 43/47 (91.5%) | First live test against real HMRC-sourced rules |
-| After fixing 3 diagnosed failures | 45/47 (95.7%) | See "what got fixed" below |
-| Confirmation re-run | 45/47 (95.7%) | Same result, stable |
-| With confidence flagging added | 45/47 (95.7%) | Same accuracy, plus a new signal — see below |
+| 1. Initial run | 91.5% (43/47) | First live test against the HMRC-sourced rules |
+| 2. Rule/prompt fixes | 95.7% (45/47) | Diagnosed and fixed two failures from run 1: traffic management was being confused with an unrelated exclusion, and a named exclusion (security shutters) was being skipped in favour of a general rule. A third failure (a mixed-contract override not firing) was identified but only partly fixed |
+| 3. Confidence flag added | 95.7% (45/47) | No accuracy change; added a self-reported high/low confidence signal per line, see below |
+| 4. Over-corrected the override | 93.6% (44/47) | Fixed the run-1 mixed-contract failure directly, but the fix was too broad — see "the regression" below |
+| 5. Refined the override, fixed a schema bug | 95.7% (45/47) | Narrowed the override to require the right evidence, and fixed a genuinely structural issue in how the model's output was requested, see below |
 
 **Current breakdown by scenario** (latest run):
 
@@ -34,30 +37,26 @@ Per the brief: given a synthetic invoice, can an LLM (1) classify each line item
 | Clear services | 5/5 (100%) |
 | Ambiguous/mixed | 26/28 (92.9%) |
 
-The ambiguous bucket is deliberately the hardest — it's built from the narrowest, most easily-confused boundaries in the rules (e.g. an awning is Construction but a shutter right next to it in the same rule is Services; a security fence is Construction but a security *system* is Services). Scoring over 90% there, with the two remaining misses fully understood, is a real result, not a coin flip.
+The ambiguous bucket is deliberately the hardest — built from the narrowest, most easily-confused boundaries in the rules (an awning is Construction but a shutter right next to it in the same rule is Services; a security fence is Construction but a security *system* is Services). Scoring over 90% there, with both remaining misses fully understood (see below), is a real result.
 
-### What got fixed between the first and second run
+### The regression, and what it taught us
 
-Three specific failures were diagnosed from the first run's reasoning text and fixed at the source:
+Stage 4 is worth walking through because it's the most useful thing to come out of this testing. One invoice deliberately contains two near-identical carpet-fitting lines: a plain one (should be Services) and one whose own wording says it's "part of a wider office refurbishment contract" (should flip to Construction, per HMRC's mixed-contract rule). The first fix told the model "if any other line on this invoice is clearly Construction, that's enough evidence on its own to override an exclusion." That fixed the second carpet line — but broke the first one, because the *plain* carpet line also happened to share an invoice with unrelated Construction work. One invoice can bundle several unrelated jobs from the same supplier; sharing an invoice isn't the same as sharing a contract, and the instruction had stopped requiring any actual connection between the flagged line and its neighbours. Accuracy dropped to 93.6% as a direct, measurable consequence.
 
-1. **Traffic management services** were being misread as an excluded "site-support service" (confusing the word "services" in the name with an unrelated exclusion). Fixed by adding the fact directly into the rules doc rather than leaving it in a worked example only.
-2. **Louvered security shutters** were being classified as a general "system installation" instead of checking the specific named exclusion list first. Fixed by adding an explicit instruction to check narrow, specific rules before defaulting to a general one.
-3. A **mixed-contract override** (where a carpet-fitting line explicitly says it's "part of a wider... contract") wasn't reliably flipping the classification. Restructured the rule and the prompt so a named exclusion is treated as *provisional* until the override has actually been checked, not just a live possibility that can be skipped past.
+The fix: require the *flagged line's own wording* to signal it's part of a bigger contract, and treat other Construction lines on the invoice as supporting evidence for that signal, not a replacement for it. Re-tested, both carpet lines are now classified correctly — the exact distinction the test case was built to check.
 
-Two of those three fixes fully resolved the failure. The third (mixed-contract override) improved but didn't fully close — see below.
+While diagnosing this, we also found a separate, structural bug: the request asked the model for its answer (`label`) before its reasoning. These models generate output left to right and never revise an earlier field once later ones are written, so in one run the model's own reasoning explicitly worked out that the override should apply — and the label, already committed to before that reasoning was generated, still said Services. Reordering the request so reasoning comes first and the label last removed this failure mode entirely: the label can no longer contradict analysis it was generated too early to benefit from.
 
-### Where it currently fails (the honest part)
+### Where it currently fails
 
-Two of 47 line items are still misclassified, and both are now precisely diagnosed rather than mysterious:
+Two of 47 line items are still misclassified in the latest run, and neither is a mystery:
 
-1. **"Supply and fit carpet tiles as part of wider office refurbishment contract"** → the model correctly identifies carpet fitting as a named exclusion, and does run the required mixed-contract check, but doesn't weight the other three clearly-Construction line items on the *same invoice* as strong enough evidence to override the exclusion. It's evaluating the line largely on its own wording rather than cross-referencing its neighbours.
-2. **"Consultancy — remedial works"** → this was deliberately built as an ambiguous test case. "Consultancy" reads as advisory (excluded), "remedial works" reads as hands-on execution (included). The model picks the advisory reading; our answer key picks the other. Both are defensible — this is closer to a genuine judgment call than a model error, and it's useful to know the tool doesn't currently flag its own indecision on cases like this as clearly as it should.
+1. **"Consultancy — remedial works"** → deliberately built as an ambiguous test case. "Consultancy" reads as advisory (excluded), "remedial works" reads as hands-on execution (included). The model picks the advisory reading; our answer key picks the other. Both are defensible — this is closer to a genuine judgment call than a model error.
+2. **A security-shutters line** → misclassified in one invoice, but the *identical line text* is correctly classified in a different invoice in the same run. Same wording, same rules, same request, different answer depending on what else was on the invoice. That's not a gap in the rules or the prompt, it's the model being non-deterministic on a genuinely borderline case — and no amount of further prompt tuning is likely to fix something that isn't consistent in the first place. This is exactly what a confidence flag and human review step are for, not something to chase with more instructions.
 
 ### Confidence flagging
 
-Every classification also comes with a self-reported `high`/`low` confidence flag. Tested against the same 47-line batch: **it caught both real errors** — a reviewer filtering to just the 8 lines flagged low-confidence would have seen 100% of the mistakes while reading only 17% of the invoice.
-
-The honest caveat: 6 of those 8 flagged lines were actually correct. The model tends to flag "low confidence" whenever it runs the mandatory mixed-contract check, not only when that check was genuinely close — so right now the flag means "the model did its due diligence here," not "the model was truly unsure." For a compliance tool, over-flagging is the safer failure mode (nothing real gets missed), but it's not yet a precise signal, and that's worth knowing before it's relied on for anything beyond triage.
+Every classification also carries a self-reported `high`/`low` confidence flag. Its usefulness varied noticeably across runs: in one run it caught 100% of the real errors while flagging only 17% of the invoice for review; in another, it caught none. That instability is itself informative and consistent with everything else observed here — the flag currently reflects whether the model narrated an override-check in its reasoning, not necessarily whether it was actually unsure. It's a genuinely useful triage signal (worth having), but not yet a calibrated one (not yet worth certifying anything on). That distinction matters most once this becomes a production, audit-facing feature.
 
 ### Every classification is citable to a real source
 
@@ -77,6 +76,6 @@ This was a specific design goal, not an afterthought: the model can only cite ru
 
 ## Suggested next steps
 
-1. **Present this to Mark** as evidence the classification approach works, using this doc plus a couple of the more interesting log excerpts (the carpet-mixed and shutters-vs-awning contrasts are good concrete examples of the tool reasoning correctly on genuinely subtle cases).
+1. **Present this to Mark** as evidence the classification approach works — the regression-and-fix story in particular is good, concrete evidence of a rigorous test process, not just a single accuracy number.
 2. **Move to the visual prototype** per the two-stage plan in the wider project brief — Summary Dashboard, Invoice Grid, Invoice Detail views — now that the underlying reasoning is validated.
-3. Longer-term, once there's real invoice volume to test against: add OCR, expand the synthetic invoice set, and consider tightening the confidence flag's precision if the review workload from over-flagging becomes a real cost.
+3. Longer-term: add OCR once there's real invoice volume to test against, expand the synthetic invoice set, and consider whether the confidence flag needs calibrating (or whether sampling a borderline line multiple times and taking a majority vote is a better answer to model non-determinism than further prompt tuning) before it's relied on in production.
