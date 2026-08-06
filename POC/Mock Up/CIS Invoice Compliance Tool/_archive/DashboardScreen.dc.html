@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="background: var(--color-bg); color: var(--color-text); min-height: 100%;">
+  <div class="nav">
+    <div class="nav-brand">CIS Ledger</div>
+    <a href="#" aria-current="page">Dashboard</a>
+    <a href="#">Invoices</a>
+    <a href="#">Settings</a>
+    <button class="btn btn-primary" style="margin-left: auto;">
+      <sc-if value="{{ isLucide }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;width:15px;height:15px;background-color:currentColor;-webkit-mask-image:url(https://unpkg.com/lucide-static/icons/upload.svg);mask-image:url(https://unpkg.com/lucide-static/icons/upload.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span></sc-if>
+      <sc-if value="{{ isPhosphor }}" hint-placeholder-val="{{ false }}"><i class="ph ph-upload-simple"></i></sc-if>
+      New scan
+    </button>
+  </div>
+
+  <div style="padding: var(--space-8) var(--space-8) var(--space-6);">
+
+    <div class="{{ cardClass }}" style="position: relative; padding: var(--space-6); margin-bottom: var(--space-6); flex-direction: row; align-items: center; gap: var(--space-6);">
+      <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+      <div style="flex: 1;">
+        <div class="card-kicker">HMRC CIS EXPOSURE — THIS QUARTER</div>
+        <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 56px; line-height: 1; margin: var(--space-2) 0;">
+          68<span style="font-size: 32px;">%</span> <span style="font-size: 20px; font-weight: 400; opacity: 0.7;">of invoiced value is construction spend</span>
+        </div>
+        <div class="card-body" style="opacity: 0.65;">£193,560 of £284,650 total invoiced classified as CIS-relevant construction spend across 8 processed invoices.</div>
+      </div>
+      <div style="width: 168px; height: 168px; border-radius: 50%; background: conic-gradient(var(--color-accent-600) 0% 68%, var(--color-neutral-300) 68% 100%); display: flex; align-items: center; justify-content: center; flex: none;">
+        <div style="width: 118px; height: 118px; border-radius: 50%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">68%</div>
+          <div style="font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.6;">construction</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
+      <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="3">
+        <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4);">
+          <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+          <div class="card-kicker">{{ m.kicker }}</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 30px; margin: var(--space-1) 0;">{{ m.value }}</div>
+          <div class="card-meta">{{ m.note }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4);">
+        <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+        <div class="card-title" style="margin-bottom: var(--space-3);">Spend breakdown</div>
+        <div style="display: flex; align-items: center; gap: var(--space-4);">
+          <div style="width: 108px; height: 108px; border-radius: 50%; background: conic-gradient(var(--color-accent-600) 0% 68%, var(--color-neutral-300) 68% 100%); flex: none;"></div>
+          <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-accent-600); flex: none;"></span>Construction — 68%</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-neutral-300); flex: none;"></span>Services — 32%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4);">
+        <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+        <div class="card-title" style="margin-bottom: var(--space-3);">Monthly trend — construction vs. services</div>
+        <div style="display: flex; align-items: flex-end; gap: var(--space-6); height: 140px; padding: 0 var(--space-2);">
+          <sc-for list="{{ trend }}" as="t" hint-placeholder-count="3">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-2); flex: 1;">
+              <div style="display: flex; flex-direction: column-reverse; width: 44px; height: 108px;">
+                <div style="width: 100%; background: var(--color-accent-600); height: {{ t.consH }}px;"></div>
+                <div style="width: 100%; background: var(--color-neutral-300); height: {{ t.servH }}px;"></div>
+              </div>
+              <div style="font-size: 11px; opacity: 0.65;">{{ t.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4); flex-direction: row; align-items: center; gap: var(--space-3);">
+        <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+        <div>
+          <sc-if value="{{ isLucide }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;width:20px;height:20px;background-color:var(--color-accent);-webkit-mask-image:url(https://unpkg.com/lucide-static/icons/percent.svg);mask-image:url(https://unpkg.com/lucide-static/icons/percent.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span></sc-if>
+          <sc-if value="{{ isPhosphor }}" hint-placeholder-val="{{ false }}"><i class="ph ph-percent" style="font-size:20px;color:var(--color-accent)"></i></sc-if>
+        </div>
+        <div>
+          <div class="card-kicker">EST. CIS DEDUCTION OWED</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">£38,712</div>
+          <div class="card-meta">20% standard rate on construction spend</div>
+        </div>
+      </div>
+      <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4); flex-direction: row; align-items: center; gap: var(--space-3);">
+        <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+        <div>
+          <sc-if value="{{ isLucide }}" hint-placeholder-val="{{ false }}"><span style="display:inline-block;width:20px;height:20px;background-color:var(--color-accent);-webkit-mask-image:url(https://unpkg.com/lucide-static/icons/alert-triangle.svg);mask-image:url(https://unpkg.com/lucide-static/icons/alert-triangle.svg);-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;"></span></sc-if>
+          <sc-if value="{{ isPhosphor }}" hint-placeholder-val="{{ false }}"><i class="ph ph-warning" style="font-size:20px;color:var(--color-accent)"></i></sc-if>
+        </div>
+        <div>
+          <div class="card-kicker">LOW-CONFIDENCE CLASSIFICATIONS</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">3 this week</div>
+          <div class="card-meta">Below 65% AI confidence — needs review</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="{{ cardClass }}" style="position: relative; padding: var(--space-4);">
+      <sc-if value="{{ isIndustry }}" hint-placeholder-val="{{ false }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i></sc-if>
+      <div class="card-title" style="margin-bottom: var(--space-3);">Needs review</div>
+      <table class="table">
+        <thead>
+          <tr><th>Supplier</th><th>Invoice date</th><th>Total value</th><th>AI confidence</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="4">
+            <tr>
+              <td>{{ r.supplier }}</td>
+              <td>{{ r.date }}</td>
+              <td>{{ r.value }}</td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 60px; height: 5px; background: var(--color-neutral-300); flex: none;">
+                    <div style="height: 100%; background: var(--color-accent-600); width: {{ r.confidence }}%;"></div>
+                  </div>
+                  <span style="font-size: 12px; opacity: 0.7;">{{ r.confidence }}%</span>
+                </div>
+              </td>
+              <td><span class="tag tag-outline">{{ r.status }}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1100}}">
+class Component extends DCLogic {
+  renderVals() {
+    const scope = this.props.scope || 'ds-modernist';
+    const iconSet = this.props.iconSet || 'lucide';
+    const isIndustry = scope === 'ds-industry';
+    return {
+      isIndustry,
+      cardClass: isIndustry ? 'card blueprint' : 'card',
+      isLucide: iconSet === 'lucide' || iconSet === 'lucide-thin',
+      isPhosphor: iconSet === 'phosphor',
+      lucideStroke: iconSet === 'lucide-thin' ? '1.5' : '2',
+      metrics: [
+        { kicker: 'TOTAL INVOICED VALUE', value: '£284,650', note: '8 invoices this quarter' },
+        { kicker: 'CONSTRUCTION SPEND', value: '£193,560', note: '68% of total — CIS relevant' },
+        { kicker: 'SERVICES SPEND', value: '£91,090', note: '32% of total — non-CIS' },
+      ],
+      trend: [
+        { label: 'May', consH: 58, servH: 22 },
+        { label: 'Jun', consH: 64, servH: 30 },
+        { label: 'Jul', consH: 72, servH: 39 },
+      ],
+      reviewRows: [
+        { supplier: 'Orion Scaffolding Ltd', date: '18 Jul 2026', value: '£18,420', confidence: 54, status: 'Needs review' },
+        { supplier: 'Kestrel Groundworks', date: '09 Jul 2026', value: '£24,900', confidence: 62, status: 'Needs review' },
+        { supplier: 'Milltown Electrical', date: '22 Jul 2026', value: '£11,275', confidence: 47, status: 'Flagged' },
+        { supplier: 'Ashford Roofing Co', date: '15 Jul 2026', value: '£15,980', confidence: 58, status: 'Needs review' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>
