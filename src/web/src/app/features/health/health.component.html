@@ -1,0 +1,8 @@
+<main>
+  <h1>CIS Compliance Tool</h1>
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  } @else {
+    <p>API status: {{ status() }}</p>
+  }
+</main>

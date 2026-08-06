@@ -3,3 +3,12 @@
 __pycache__/
 *.pyc
 key.txt
+
+# .NET (src/api)
+src/api/**/bin/
+src/api/**/obj/
+
+# Angular (src/web)
+src/web/node_modules/
+src/web/dist/
+src/web/.angular/
