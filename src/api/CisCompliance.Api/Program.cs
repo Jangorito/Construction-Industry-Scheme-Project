@@ -1,3 +1,7 @@
+using CisCompliance.Core.Abstractions;
+using CisCompliance.Core.Classification;
+using CisCompliance.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCisComplianceInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
+builder.Services.AddScoped<IClassificationService, ClassificationService>();
 
 const string AngularDevCorsPolicy = "AngularDev";
 builder.Services.AddCors(options =>

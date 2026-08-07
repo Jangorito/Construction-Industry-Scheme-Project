@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>5e0602ee-b5b3-4e8e-b333-9e39b2c7ed08</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,18 @@
   <ItemGroup>
     <ProjectReference Include="..\CisCompliance.Core\CisCompliance.Core.csproj" />
     <ProjectReference Include="..\CisCompliance.Infrastructure\CisCompliance.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- These files are already picked up as Content by the SDK's default
+         glob, Update (not Include) just adds the copy-to-output metadata
+         without declaring a duplicate item. -->
+    <Content Update="Data\cis_rules.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="Data\cis_rules_index.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
