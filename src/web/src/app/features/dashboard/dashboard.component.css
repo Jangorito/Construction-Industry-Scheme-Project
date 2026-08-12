@@ -1,0 +1,231 @@
+.dashboard-page {
+  padding: var(--space-8);
+}
+
+.hero-card {
+  position: relative;
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-stat {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 56px;
+  line-height: 1;
+  margin: var(--space-2) 0;
+}
+
+.hero-stat-pct {
+  font-size: 32px;
+}
+
+.hero-stat-note {
+  font-size: 20px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.hero-body {
+  opacity: 0.65;
+}
+
+.donut {
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.donut-inner {
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-pct {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 26px;
+}
+
+.donut-label {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.metric-card {
+  position: relative;
+  padding: var(--space-4);
+}
+
+.metric-value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 30px;
+  margin: var(--space-1) 0;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.breakdown-card, .trend-card {
+  position: relative;
+  padding: var(--space-4);
+}
+
+.breakdown-title {
+  margin-bottom: var(--space-3);
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.breakdown-donut {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.breakdown-legend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+}
+
+.legend-construction {
+  background: var(--color-accent-600);
+}
+
+.legend-services {
+  background: var(--color-neutral-300);
+}
+
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-6);
+  height: 140px;
+  padding: 0 var(--space-2);
+}
+
+.trend-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+/* 108px is the fixed reference height buildDashboardAggregates() scales
+   bar segments against, keep these in sync if this ever changes. */
+.trend-bar {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 44px;
+  height: 108px;
+}
+
+.trend-seg {
+  width: 100%;
+}
+
+.trend-construction {
+  background: var(--color-accent-600);
+}
+
+.trend-services {
+  background: var(--color-neutral-300);
+}
+
+.trend-label {
+  font-size: 11px;
+  opacity: 0.65;
+}
+
+.stat-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.stat-card {
+  position: relative;
+  padding: var(--space-4);
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.stat-icn {
+  width: 22px;
+  height: 22px;
+  background-color: var(--color-accent);
+}
+
+.stat-value {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 26px;
+}
+
+.review-table-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.view-all-link {
+  margin-left: auto;
+  font-size: 13px;
+}
+
+.clickable-row {
+  cursor: pointer;
+}

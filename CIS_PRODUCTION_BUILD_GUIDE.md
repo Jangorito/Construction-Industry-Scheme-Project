@@ -12,17 +12,19 @@ The POC proved the *idea* works: an LLM can classify UK invoice line items for C
 
 Two things are true about this phase, and worth holding in your head as you read the rest of this doc:
 
-1. **This is a portfolio project**, not a PwC deliverable — so "production" here means "built the way a real team would build it," not "actually deployed and load-bearing for a client." That's why the architecture (layering, tests, dependency injection) is more deliberate than a weekend script would need.
-2. **We're partway through.** Two things are done and verified: the project skeleton, and the actual classification logic. Two things aren't started: the Angular UI (still just a health-check placeholder page) and persistence (there's no database — a request comes in, gets classified, and the result goes straight back out, nothing is saved).
+1. **This is a portfolio project**, not a PwC deliverable — so "production" here means "built the way a real team would build it," not "actually deployed and load-bearing for a client." That's why the architecture (layering, tests, dependency injection, real routing) is more deliberate than a weekend script would need.
+2. **We're partway through.** Three things are done and verified: the project skeleton, the actual classification logic, and now the Angular UI. Two things aren't started: persistence (there's no database — a classify request comes in, gets classified, and the result goes straight back out, nothing is saved) and OCR.
 
 ```
 POC (done, validated)
    -> Production scaffold (done)
-        -> Classification logic port (done)  <-- you are here
-             -> Angular UI port              <-- not started
-             -> Persistence / DB             <-- not started, undecided
-             -> OCR (PDF -> invoice JSON)     <-- deliberately deferred
+        -> Classification logic port (done)
+             -> Angular UI port (done)  <-- you are here
+                  -> Persistence / DB             <-- not started, undecided
+                  -> OCR (PDF -> invoice JSON)     <-- deliberately deferred
 ```
+
+The Angular UI has one deliberate compromise worth understanding up front, since it shapes a lot of the file list in section 4.7: there's no database yet, so the Dashboard/Grid/Detail views are seeded with real POC-validated invoices in memory (exactly like the original HTML mockup was), but the **Upload flow is genuinely live** — it makes a real `POST /api/classify` call, not a simulation. This was a deliberate choice (not an oversight) so the app looks fully populated on load *and* proves the real integration works, without needing to build a database first. Section 3.4 traces exactly how that live call works, end to end.
 
 ---
 
@@ -42,7 +44,7 @@ Construction Industry Scheme Project/
     │   ├── CisCompliance.Core/           the actual classification logic — no external dependencies
     │   ├── CisCompliance.Infrastructure/ talks to OpenAI and the filesystem
     │   └── CisCompliance.Tests/          xUnit tests for Core + Infrastructure
-    └── web/                    the Angular workspace (still just a health-check page so far)
+    └── web/                    the Angular workspace — Dashboard, Grid, Detail, Upload, all live
 ```
 
 ---
@@ -107,6 +109,38 @@ Keep this diagram in mind while reading section 4 — every file below has a spe
 ### 3.3 Why `CisCompliance.Tests` doesn't need a real API key
 
 Because `ClassificationService` only depends on the two `Core` interfaces, the tests can hand it **fakes** instead of the real file-reading/OpenAI-calling implementations (`TestDoubles/FakeRulesRepository.cs`, `TestDoubles/FakeClassificationModelClient.cs`). A fake just returns canned data instantly. That's what lets `ClassificationServiceTests.cs` exercise the *whole* orchestration logic — deserializing a model response, mapping to enums, resolving citations — without a network call, an API key, or non-determinism. Only `Infrastructure`'s own code needs the real thing, and it isn't unit tested against a live API (that's what the manual `curl` verification was for).
+
+### 3.4 The Upload flow, traced end to end
+
+This is the one place the Angular app and the C# API genuinely talk to each other over HTTP (everywhere else in the UI reads from in-memory seed data). Worth tracing in full, because it's the proof that the whole stack — Angular signals, HTTP, ASP.NET Core, the classification logic from section 3.2, and back — actually works together, not just in isolation:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Upload as UploadComponent
+    participant Store as InvoiceStore (core/state)
+    participant Api as ClassifyApiService (core/services)
+    participant Ctrl as ClassifyController.cs
+    participant Svc as ClassificationService.cs (Core, see 3.2)
+
+    User->>Upload: click "Process invoices"
+    Upload->>Store: processInvoices()
+    Store->>Store: clamp(queuedFiles.length, 1, pool.length) invoices taken from UPLOAD_POOL
+    loop one call per taken invoice
+        Store->>Api: classify(toClassifyRequest(raw))
+        Api->>Ctrl: POST /api/classify
+        Ctrl->>Svc: ClassifyAsync(request)
+        Svc-->>Ctrl: InvoiceClassificationResult (real OpenAI call happens here)
+        Ctrl-->>Api: 200 OK JSON
+        Api-->>Store: ClassifyResponse
+        Store->>Store: mergeClassification(raw, response) -> full Invoice
+    end
+    Store->>Store: append successes to invoices signal, remove from pool, record failures separately
+    Store-->>Upload: batchResults() signal updates
+    Upload-->>User: real result (or a real per-invoice error) rendered, no fake delay
+```
+
+The `UPLOAD_POOL` (`core/data/upload-pool.ts`) holds 2 real, not-yet-classified POC invoices — the same ones (`INV-2026-0009`, `INV-2026-0010`) used for this exact purpose in the original HTML mockup. Each `classify()` call is wrapped in its own error handler, so if one invoice's OpenAI call fails, the rest of the batch still succeeds — a failed invoice just stays in the pool for a retry on the next click, rather than losing the whole batch.
 
 ---
 
@@ -208,28 +242,76 @@ Everything here is allowed to know about OpenAI, the filesystem, and configurati
 
 ### 4.7 `src/web` — the Angular workspace
 
-Still just the health-check proof-of-life from the scaffold phase — nothing here has been touched by the classification port. Listed for completeness, since it's still part of "what exists after the POC":
+The scaffold phase's health-check placeholder is gone (`features/health/` was deleted once it had served its purpose — its only job, proving the API is reachable, is now subsumed by the real Upload flow). What's here now is the full 4-view app: Dashboard, Grid, Detail, Upload, all standalone components using Angular signals for state, ported from `POC/Mock Up/CIS Invoice Compliance Tool/CIS Compliance Tool-standalone.html` — treated as a precise behavioral spec, not something eyeballed and approximated. Three small, deliberate bug fixes were made along the way rather than silently reproduced: the mockup's "Reference" grid column never actually sorted anything (dead code) — fixed; the monthly trend chart's bar-height formula scaled against the wrong constant, under-filling its own container — fixed; a detail-view URL for an unknown invoice id blanked the page — fixed with a route guard that redirects to the grid instead.
+
+**`core/models/`** — TypeScript shapes, no logic.
+
+| File | What it represents |
+|---|---|
+| `invoice.model.ts` | `Invoice`/`InvoiceLine`, the display-ready shape every view reads from. `overridden`/`overrideReason` are session-only, never sent anywhere. |
+| `classify-api.model.ts` | Mirrors `CisCompliance.Core.Models` (`ClassifyRequest`/`ClassifyResponse`/`RuleCitationDto`/etc.) property for property, camelCase. Keeping this a direct mirror means a backend contract drift is a TypeScript compile error here, not a silent runtime mismatch — same defensive idea as the C# side's `ModelResponseDto`. |
+| `unclassified-invoice.model.ts` | The "not yet processed" shape used by the upload pool — real line items, no classification/confidence/citation/reasoning yet, since that only exists once the real API has answered. |
+
+**`core/data/`** — static seed fixtures, real data, not invented.
+
+| File | What it holds |
+|---|---|
+| `seed-invoices.ts` | The 8 invoices from the mockup's `RAW_INVOICES`, ported with their real descriptions/amounts/citations/reasoning intact — genuine output from a validated POC run. Shown immediately on load for Dashboard/Grid/Detail. |
+| `upload-pool.ts` | The 2 real, not-yet-classified invoices from `POC/data/invoices/INV-2026-0009.json` and `INV-2026-0010.json` (stripped of their POC-only `_ground_truth` blocks). This is what Upload actually sends to the live API. |
+
+**`core/services/` and `core/utils/`** — the logic layer, deliberately framework-light so it's easy to unit test later.
+
+| File | What it does |
+|---|---|
+| `classify-api.service.ts` | Thin `HttpClient` wrapper around `POST /api/classify`. No error handling here on purpose — that's a state concern, handled by whoever calls it. |
+| `invoice-calculations.ts` | `computeInvoice()` — a direct port of the mockup's status-derivation logic (see the box below), plus `buildDashboardAggregates()` (the hero stat, the monthly trend bars, the "needs review" table) and `buildGridRows()` (search + status filter + sort, applied in that order). All pure functions, no Angular dependency, so they don't need a running app to test. |
+| `classification-mapper.ts` | `toClassifyRequest()` (pool invoice → API request), `mergeClassification()` (API response, merged back onto the original request's line items by `lineId`, since the response itself doesn't echo back description/amount), `joinCitations()` (turns resolved citations into one display string, e.g. `"R10 (CIS340), R12 (POC-METHOD)"`), `extractErrorMessage()` (reads the RFC7807 `detail`/`title` off a failed response). |
+
+> **`computeInvoice()` status logic**, ported exactly from the mockup: an invoice's status is `Reviewed` if *any* line has been manually overridden (this short-circuits everything else), else `Flagged` if 2+ lines are low-confidence, else `Needs review` if exactly 1 is, else `Reviewed`. Separately, the "AI confidence" badge (`confidenceSummary`) is computed purely from the low-confidence count, independent of status or overrides — so an invoice can legitimately show status `Reviewed` (because someone corrected a line) while its confidence badge still reads `"1 flagged"` (because the correction didn't touch the low-confidence line). That disagreement is real, ported faithfully, not a bug.
+
+**`core/state/invoice-store.ts`** — the one piece of shared state the whole app reads from, `@Injectable({ providedIn: 'root' })`. Holds the invoice list, the upload pool/queue/processing state, and search/filter/sort/editing UI state as private `signal()`s, exposed as `computed()`/`.asReadonly()`. This is the direct Angular-signals equivalent of the mockup's "flat state object, derived values recomputed fresh every render" pattern. `processInvoices()` is the only method that does real async work — see section 3.4 for its full trace.
+
+**`core/guards/invoice-exists.guard.ts`** — a functional `CanActivateFn` that checks a `/invoices/:id` route's id against the store before letting the route activate, redirecting to `/invoices` if it doesn't resolve. This is the fix for the mockup's blank-page-on-unknown-id edge case, moved to the routing layer rather than handled inside the component.
+
+**`shared/pipes/`** — small, reusable display formatting, used across every view.
+
+| File | What it does |
+|---|---|
+| `gbp-currency.pipe.ts` (`\| gbp`) | `£1,968` style — rounds to the nearest pound, thousands separator. Replaces the mockup's manual `fmt()` string pre-formatting; numbers stay typed in the store, formatting happens at the template edge instead. |
+| `uk-date.pipe.ts` (`\| ukDate`) | `30 Jul 2026` style, same idea as above for dates. |
+
+**`features/`** — the 4 routed views, each a standalone component, lazy-loaded via `loadComponent` in `app.routes.ts`.
+
+| Component | Reads from the store | Notable behavior |
+|---|---|---|
+| `dashboard/` | `dashboardAggregates()` | Hero %-construction stat with a conic-gradient donut, 3 metric cards, a monthly stacked bar chart, an estimated CIS-deduction card, and a "needs review" table (first 4 non-Reviewed invoices). No local state of its own. |
+| `invoice-grid/` | `gridRows()`, `search()`, `statusFilter()`, `sortKey()`/`sortDir()` | Live search-as-you-type (no debounce, matching the mockup), a segmented status filter, sortable columns — including a working `ref` sort, the mockup's version of this was dead code. |
+| `invoice-detail/` | `computedInvoices()`, filtered to the routed `:id` | Reads the id via a signal input (`input.required<string>()`), bound automatically by the router's `withComponentInputBinding()`. Renders the override/edit form inline; only one line app-wide can be mid-edit at once, enforced structurally by the store's single `editing` signal, not by convention. Resets any stale edit state on `ngOnDestroy` so leaving mid-edit never bleeds into the next invoice viewed. |
+| `upload/` | `queuedFiles()`, `processing()`, `processDisabled()`, `processLabel()`, `batchResults()` | The file picker is cosmetic (captures file *names* only, exactly like the mockup — no real file content is read, that's future OCR work). "Process invoices" triggers the real live call traced in section 3.4. |
+
+**Shell and routing**
 
 | File | What changed | What it does |
 |---|---|---|
-| `src/app/app.routes.ts` | **Edited** | One route, `''`, pointing at `HealthComponent`. |
-| `src/app/app.config.ts` | **Edited** | Added `provideHttpClient()` so components can make HTTP calls. |
-| `src/app/app.html` | **Edited** | Stripped down to just `<router-outlet />` (was the Angular CLI's default marketing template). |
-| `src/app/core/config/app-config.ts` | **New** | Hardcoded `API_BASE_URL` pointing at the API's dev URL. Will need to become a proper environment-config setup once there's more than one endpoint to call. |
-| `src/app/features/health/health.component.ts` + `.html` | **New** | Calls `GET /api/health` on load and displays the result — proves CORS and the two dev servers can talk to each other. This whole `features/health/` folder is a placeholder; it'll be replaced by real feature folders (`dashboard/`, `invoices/`, `detail/`, `upload/`) when the mockup gets ported. |
+| `app.routes.ts` | **Edited** | Real routes now: `/dashboard`, `/invoices`, `/invoices/:id` (guarded), `/upload`, plus a catch-all redirect. The mockup had no URL state at all (a single `state.view` field), so this is a deliberate improvement, not a preservation of existing behavior — there was nothing to preserve. |
+| `app.config.ts` | **Edited** | Added `withComponentInputBinding()` to `provideRouter(...)` so `InvoiceDetailComponent` can receive its `:id` route param directly as a signal input. |
+| `app.html` / `app.ts` / `app.css` | **Edited** | Gained the persistent nav bar (brand + Upload/All-invoices links) that every one of the mockup's 4 views shared — this belongs at the shell level, not duplicated into each feature component. |
+| `app.spec.ts` | **Edited** | The Angular CLI's default test asserted on marketing-template text that no longer existed (stale since the scaffold phase, unrelated to this port) — fixed to check the real nav brand renders instead, while this file was already being touched. |
+| `styles.css` | **Edited** | `@import`s `styles/industry.css` as its first line (required — `@import` must precede other rules), carries over the mockup's few genuinely-global rules (body margin, link colors, the `.icn` mask-image helper), and adds one small deliberate token: `--color-danger`/`.tag-danger`, since none of `industry.css`'s 4 existing tag variants fit an upload-failure state. |
+| `styles/industry.css` | **New** | Byte-for-byte copy of the mockup's design system (CSS custom properties, the `.card`/`.tag`/`.btn`/`.table`/`.seg` component classes, the "blueprint" aesthetic with corner crosshair marks). Left untouched as a vendored file — new tokens go in `styles.css` instead, so a future re-sync with the mockup's CSS stays a clean diff. |
 
 ---
 
 ## 5. Where this leaves us
 
-Every file above exists to answer one of two questions:
+Every file above exists to answer one of three questions:
 
-- **"Can the skeleton run end to end?"** — answered by the scaffold (Program.cs wiring, the health check, CORS).
+- **"Can the skeleton run end to end?"** — answered by the scaffold (`Program.cs` wiring, the health check, CORS).
 - **"Does the skeleton actually do the real classification work, faithfully?"** — answered by everything in section 4.3/4.4/4.6, and confirmed by a live call reproducing the POC's exact (known) behaviour, including its one documented non-determinism case.
+- **"Can a person actually use this?"** — answered by section 4.7: a real 4-view Angular app, verified end to end in a browser (Dashboard's numbers matched the validated mockup exactly, Grid's search/filter/sort all work, Detail's override flow works, and Upload made a genuine `POST /api/classify` call that correctly told apart a tricky mixed-contract line from a plain one — the same case validated earlier in the POC).
 
 What's conspicuously **not** represented by any file yet:
-- A real UI beyond the health check (the mockup's 4 views still live only in `POC/Mock Up/`, not in `src/web`)
-- Any persistence — nothing submitted to `/api/classify` is saved anywhere
-- OCR — there's no path from a PDF to the JSON shape `ClassifyController` expects
+- **Persistence** — nothing submitted to `/api/classify` is saved anywhere; Dashboard/Grid/Detail's invoice list lives in the Angular app's memory for the session only (`core/data/seed-invoices.ts` + whatever Upload adds), reset on every page reload. This was a deliberate choice (see section 1) specifically because it keeps the eventual database addition small — a backend `GET /api/invoices` endpoint plus swapping one data-loading call in `InvoiceStore`, not a UI rework.
+- **OCR** — there's no path from a PDF to the JSON shape `ClassifyController` expects. The Upload view's file picker is still cosmetic (captures file names only).
 
-Those three are the next chapters, in roughly that order of priority, per the earlier discussion.
+Those two are the next chapters, in roughly that order of priority, per the earlier discussion.

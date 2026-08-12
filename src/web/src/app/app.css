@@ -1,0 +1,4 @@
+.nav-link-active {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}

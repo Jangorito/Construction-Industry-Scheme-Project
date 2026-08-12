@@ -1,0 +1,95 @@
+@if (entry(); as e) {
+  <div class="detail-page">
+    <div class="detail-header">
+      <div class="header-text">
+        <div class="card-kicker">{{ e.inv.ref }}</div>
+        <h1 class="header-title">{{ e.inv.supplier }}</h1>
+        <div class="header-meta">{{ e.inv.date | ukDate }} · {{ e.total | gbp }} total</div>
+      </div>
+      <span [class]="e.tagClass" class="status-badge">{{ e.status }}</span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="card blueprint doc-card">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="doc-placeholder duotone">
+          <span class="doc-placeholder-text">Drop scanned invoice — {{ e.inv.ref }}.pdf</span>
+        </div>
+        <div class="doc-caption">source document — {{ e.inv.ref }}.pdf</div>
+      </div>
+
+      <div class="detail-right">
+        <div class="card blueprint stat-strip">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div><div class="card-kicker">CONSTRUCTION</div><div class="stat-strip-value">{{ e.construction | gbp }}</div></div>
+          <div><div class="card-kicker">SERVICES</div><div class="stat-strip-value">{{ e.services | gbp }}</div></div>
+          <div><div class="card-kicker">AI CONFIDENCE</div><div class="stat-strip-value">{{ e.confidenceSummary }}</div></div>
+        </div>
+
+        <div class="card-title">Line items</div>
+
+        @for (line of e.inv.lines; track $index; let i = $index) {
+          <div class="card blueprint line-card">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div class="line-header">
+              <div class="line-header-text">
+                <div class="card-title line-description">{{ line.description }}</div>
+                <div class="card-meta">{{ line.amount | gbp }}</div>
+              </div>
+              <span [class]="classTagClass(line.classification)">{{ classLabel(line.classification) }}</span>
+            </div>
+            <div class="line-confidence-row">
+              <span [class]="confidenceTagClass(line.confidence)">{{ confidenceLabel(line.confidence) }}</span>
+            </div>
+            <div class="card-body line-reasoning">"{{ line.reasoning }}"</div>
+            <div class="card-meta line-citation">Cited: {{ line.citation }}</div>
+
+            @if (line.overridden) {
+              <div class="card-meta override-note">
+                Overridden to {{ classLabel(line.classification) }} — "{{ line.overrideReason }}"
+              </div>
+            }
+
+            @if (isEditing(i)) {
+              <div class="hr"></div>
+              <div class="field edit-field">
+                <label>Correct classification</label>
+                <div class="seg">
+                  <label class="seg-opt">
+                    <input type="radio" [name]="'edit-' + e.inv.id + '-' + i" style="display:none"
+                      [checked]="store.editDraft().classification === 'construction'"
+                      (change)="store.setEditClassification('construction')" />
+                    <span>Construction</span>
+                  </label>
+                  <label class="seg-opt">
+                    <input type="radio" [name]="'edit-' + e.inv.id + '-' + i" style="display:none"
+                      [checked]="store.editDraft().classification === 'services'"
+                      (change)="store.setEditClassification('services')" />
+                    <span>Services</span>
+                  </label>
+                </div>
+              </div>
+              <div class="field edit-field">
+                <label>Reason for correction (required)</label>
+                <textarea class="input" rows="2"
+                  placeholder="e.g. Confirmed with supplier — line is labour-only, not a hire."
+                  [value]="store.editDraft().reason"
+                  (input)="onReasonInput($event)"></textarea>
+              </div>
+              <div class="edit-actions">
+                <button class="btn btn-secondary" (click)="store.cancelEdit()">Cancel</button>
+                <button class="btn btn-primary" [disabled]="!store.editDraft().reason.trim()" (click)="store.saveEdit()">
+                  Save correction
+                </button>
+              </div>
+            } @else {
+              <button class="btn btn-secondary override-btn" (click)="startEdit(i, line.classification)">
+                Override classification
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

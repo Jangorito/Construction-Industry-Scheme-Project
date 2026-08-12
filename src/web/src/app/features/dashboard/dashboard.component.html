@@ -1,0 +1,122 @@
+@let a = store.dashboardAggregates();
+
+<div class="dashboard-page">
+
+  <div class="card blueprint hero-card">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="hero-text">
+      <div class="card-kicker">HMRC CIS EXPOSURE — THIS QUARTER</div>
+      <div class="hero-stat">
+        {{ a.pct }}<span class="hero-stat-pct">%</span>
+        <span class="hero-stat-note">of invoiced value is construction spend</span>
+      </div>
+      <div class="card-body hero-body">
+        {{ a.constructionAll | gbp }} of {{ a.totalAll | gbp }} total invoiced classified as CIS-relevant
+        construction spend across {{ a.invoiceCount }} processed invoices.
+      </div>
+    </div>
+    <div class="donut" [style.background]="donutGradient(a.pct)">
+      <div class="donut-inner">
+        <div class="donut-pct">{{ a.pct }}%</div>
+        <div class="donut-label">construction</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="metrics-grid">
+    <div class="card blueprint metric-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="card-kicker">TOTAL INVOICED VALUE</div>
+      <div class="metric-value">{{ a.totalAll | gbp }}</div>
+      <div class="card-meta">{{ a.invoiceCount }} invoices this quarter</div>
+    </div>
+    <div class="card blueprint metric-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="card-kicker">CONSTRUCTION SPEND</div>
+      <div class="metric-value">{{ a.constructionAll | gbp }}</div>
+      <div class="card-meta">{{ a.pct }}% of total — CIS relevant</div>
+    </div>
+    <div class="card blueprint metric-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="card-kicker">SERVICES SPEND</div>
+      <div class="metric-value">{{ a.servicesAll | gbp }}</div>
+      <div class="card-meta">{{ a.servicesPct }}% of total — non-CIS</div>
+    </div>
+  </div>
+
+  <div class="breakdown-grid">
+    <div class="card blueprint breakdown-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="card-title breakdown-title">Spend breakdown</div>
+      <div class="breakdown-row">
+        <div class="breakdown-donut" [style.background]="donutGradient(a.pct)"></div>
+        <div class="breakdown-legend">
+          <div class="legend-row"><span class="legend-swatch legend-construction"></span>Construction — {{ a.pct }}%</div>
+          <div class="legend-row"><span class="legend-swatch legend-services"></span>Services — {{ a.servicesPct }}%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blueprint trend-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="card-title breakdown-title">Monthly spend split — construction vs. services</div>
+      <div class="trend-chart">
+        @for (t of a.trend; track t.label) {
+          <div class="trend-col">
+            <div class="trend-bar">
+              <div class="trend-seg trend-services" [style.height.px]="t.servH"></div>
+              <div class="trend-seg trend-construction" [style.height.px]="t.consH"></div>
+            </div>
+            <div class="trend-label">{{ t.label }}</div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-cards-grid">
+    <div class="card blueprint stat-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="icn stat-icn" style="mask-image: url(https://unpkg.com/lucide-static/icons/percent.svg); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/percent.svg);"></div>
+      <div>
+        <div class="card-kicker">EST. CIS DEDUCTION OWED ({{ a.cisRatePercent }}% RATE)</div>
+        <div class="stat-value">{{ a.deductionGbp | gbp }}</div>
+        <div class="card-meta">{{ a.cisRatePercent }}% of construction spend — verified subcontractor rate</div>
+      </div>
+    </div>
+    <div class="card blueprint stat-card">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="icn stat-icn" style="mask-image: url(https://unpkg.com/lucide-static/icons/alert-triangle.svg); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/alert-triangle.svg);"></div>
+      <div>
+        <div class="card-kicker">LOW-CONFIDENCE CLASSIFICATIONS</div>
+        <div class="stat-value">{{ a.needsReviewCount }} this week</div>
+        <div class="card-meta">Flagged low confidence by the model — needs review</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card blueprint">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <div class="review-table-header">
+      <div class="card-title">Needs review</div>
+      <a routerLink="/invoices" class="view-all-link">View all invoices →</a>
+    </div>
+    <table class="table">
+      <thead>
+        <tr><th>Supplier</th><th>Invoice date</th><th>Total value</th><th>AI confidence</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        @for (r of a.reviewRows; track r.inv.id) {
+          <tr class="clickable-row" [routerLink]="['/invoices', r.inv.id]">
+            <td>{{ r.inv.supplier }}</td>
+            <td>{{ r.inv.date | ukDate }}</td>
+            <td>{{ r.total | gbp }}</td>
+            <td><span [class]="r.confidenceTagClass">{{ r.confidenceSummary }}</span></td>
+            <td><span [class]="r.tagClass">{{ r.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

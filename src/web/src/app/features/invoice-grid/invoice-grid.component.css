@@ -1,0 +1,45 @@
+.grid-page {
+  padding: var(--space-8);
+}
+
+.grid-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.grid-title {
+  margin: 0;
+  flex: 1;
+}
+
+.search-input {
+  width: 260px;
+}
+
+.grid-table-card {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.sortable-th {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sort-arrow {
+  opacity: 0.5;
+  font-size: 10px;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.grid-empty {
+  padding: var(--space-6);
+  text-align: center;
+  opacity: 0.6;
+}
