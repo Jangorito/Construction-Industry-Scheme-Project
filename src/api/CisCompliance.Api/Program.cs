@@ -1,6 +1,8 @@
 using CisCompliance.Core.Abstractions;
 using CisCompliance.Core.Classification;
 using CisCompliance.Infrastructure;
+using CisCompliance.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,16 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Applies pending migrations and seeds the 8 real POC invoices on first run,
+// so a fresh checkout is fully populated with nothing more than `dotnet run`,
+// no manual migration step required.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<CisComplianceDbContext>();
+    await db.Database.MigrateAsync();
+    await CisComplianceDbSeeder.SeedIfEmptyAsync(db, scope.ServiceProvider.GetRequiredService<IRulesRepository>());
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

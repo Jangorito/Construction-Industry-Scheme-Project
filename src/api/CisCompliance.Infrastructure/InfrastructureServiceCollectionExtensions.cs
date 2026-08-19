@@ -1,6 +1,8 @@
 using CisCompliance.Core.Abstractions;
 using CisCompliance.Infrastructure.OpenAi;
+using CisCompliance.Infrastructure.Persistence;
 using CisCompliance.Infrastructure.Rules;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -42,6 +44,11 @@ public static class InfrastructureServiceCollectionExtensions
 
         services.AddSingleton<IClassificationModelClient, OpenAiClassificationModelClient>();
         services.AddSingleton<IRulesRepository, FileRulesRepository>();
+
+        var connectionString = configuration.GetConnectionString("CisComplianceDb")
+            ?? throw new InvalidOperationException("ConnectionStrings:CisComplianceDb is not configured.");
+        services.AddDbContext<CisComplianceDbContext>(options => options.UseSqlServer(connectionString));
+        services.AddScoped<IInvoiceRepository, EfInvoiceRepository>();
 
         return services;
     }

@@ -38,6 +38,10 @@ export function mergeClassification(raw: UnclassifiedInvoice, response: Classify
       throw new Error(`Classification response is missing line item '${li.lineId}'.`);
     }
     return {
+      // Not cosmetic: this is what lets a just-uploaded invoice be
+      // overridden before any GET /api/invoices refetch, the id sent here
+      // is exactly what ClassifyController's SaveAsync persisted.
+      lineId: li.lineId,
       description: li.description,
       amount: li.amountGbp,
       classification: predicted.label.toLowerCase() as Classification,

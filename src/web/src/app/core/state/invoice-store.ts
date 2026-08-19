@@ -1,14 +1,17 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { catchError, forkJoin, map, of } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, tap } from 'rxjs';
 
-import { SEED_INVOICES, SeedInvoice } from '../data/seed-invoices';
 import { UPLOAD_POOL } from '../data/upload-pool';
+import { ApiLabel } from '../models/classify-api.model';
 import { Classification, Invoice, InvoiceStatus } from '../models/invoice.model';
+import { StoredInvoiceDto } from '../models/stored-invoice.model';
 import { UnclassifiedInvoice } from '../models/unclassified-invoice.model';
 import { ClassifyApiService } from '../services/classify-api.service';
+import { InvoiceApiService } from '../services/invoice-api.service';
 import { extractErrorMessage, mergeClassification, toClassifyRequest } from '../utils/classification-mapper';
 import { SortDir, SortKey, buildDashboardAggregates, buildGridRows, clamp, computeAll } from '../utils/invoice-calculations';
+import { toInvoice } from '../utils/stored-invoice-mapper';
 
 export interface EditDraft {
   classification: Classification;
@@ -28,13 +31,6 @@ function isSuccess(r: BatchResult): r is Extract<BatchResult, { outcome: 'succes
   return r.outcome === 'success';
 }
 
-function normalizeSeed(seed: SeedInvoice[]): Invoice[] {
-  return seed.map((inv) => ({
-    ...inv,
-    lines: inv.lines.map((l) => ({ ...l, overridden: false, overrideReason: '' })),
-  }));
-}
-
 // Single source of truth for the whole app: the invoice list, the upload
 // pool/queue, and UI state (search/filter/sort/editing). Mirrors the
 // mockup's "flat state, derived values recomputed fresh" pattern using
@@ -42,8 +38,14 @@ function normalizeSeed(seed: SeedInvoice[]): Invoice[] {
 @Injectable({ providedIn: 'root' })
 export class InvoiceStore {
   private readonly classifyApi = inject(ClassifyApiService);
+  private readonly invoiceApi = inject(InvoiceApiService);
 
-  private readonly invoicesSig = signal<Invoice[]>(normalizeSeed(SEED_INVOICES));
+  // Starts empty, populated by loadInvoices(). Never observed empty by a
+  // routed component: app.config.ts's provideAppInitializer awaits
+  // loadInvoices() once before the router activates any route.
+  private readonly invoicesSig = signal<Invoice[]>([]);
+  private readonly loadErrorSig = signal<string | null>(null);
+
   private readonly poolSig = signal<UnclassifiedInvoice[]>(UPLOAD_POOL);
   private readonly queuedFilesSig = signal<string[]>([]);
   private readonly processingSig = signal(false);
@@ -51,6 +53,8 @@ export class InvoiceStore {
 
   private readonly editingSig = signal<EditingTarget | null>(null);
   private readonly editDraftSig = signal<EditDraft>({ classification: 'construction', reason: '' });
+  private readonly savingSig = signal(false);
+  private readonly saveErrorSig = signal<string | null>(null);
 
   private readonly searchSig = signal('');
   private readonly statusFilterSig = signal<'all' | InvoiceStatus>('all');
@@ -62,6 +66,8 @@ export class InvoiceStore {
   readonly gridRows = computed(() =>
     buildGridRows(this.computedInvoices(), this.searchSig(), this.statusFilterSig(), this.sortKeySig(), this.sortDirSig()),
   );
+
+  readonly loadError = this.loadErrorSig.asReadonly();
 
   readonly pool = this.poolSig.asReadonly();
   readonly queuedFiles = this.queuedFilesSig.asReadonly();
@@ -78,10 +84,29 @@ export class InvoiceStore {
 
   readonly editing = this.editingSig.asReadonly();
   readonly editDraft = this.editDraftSig.asReadonly();
+  readonly saving = this.savingSig.asReadonly();
+  readonly saveError = this.saveErrorSig.asReadonly();
   readonly search = this.searchSig.asReadonly();
   readonly statusFilter = this.statusFilterSig.asReadonly();
   readonly sortKey = this.sortKeySig.asReadonly();
   readonly sortDir = this.sortDirSig.asReadonly();
+
+  // Called once from app.config.ts's provideAppInitializer. Swallows its
+  // own errors and resolves to an empty list rather than propagating, so a
+  // down API boots an empty-but-usable app instead of a permanently blank
+  // screen.
+  loadInvoices(): Observable<StoredInvoiceDto[]> {
+    return this.invoiceApi.getAll().pipe(
+      tap((dtos) => {
+        this.invoicesSig.set(dtos.map(toInvoice));
+        this.loadErrorSig.set(null);
+      }),
+      catchError((err: HttpErrorResponse) => {
+        this.loadErrorSig.set(extractErrorMessage(err));
+        return of([]);
+      }),
+    );
+  }
 
   setSearch(value: string): void {
     this.searchSig.set(value);
@@ -112,7 +137,7 @@ export class InvoiceStore {
   // Takes clamp(queuedFiles, 1, pool.length) invoices off the pool and
   // classifies each with a real API call. Each call's failure is caught
   // independently so one bad invoice never sinks the whole batch, failures
-  // stay in the pool for a retry on the next click, successes are appended
+  // stay in the pool for a retry on the next click, successes get appended
   // to the invoice list and removed from the pool.
   processInvoices(): void {
     const pool = this.poolSig();
@@ -145,6 +170,7 @@ export class InvoiceStore {
   startEdit(invoiceId: string, lineIndex: number, current: Classification): void {
     this.editingSig.set({ invoiceId, lineIndex });
     this.editDraftSig.set({ classification: current, reason: '' });
+    this.saveErrorSig.set(null);
   }
 
   setEditClassification(classification: Classification): void {
@@ -157,28 +183,38 @@ export class InvoiceStore {
 
   cancelEdit(): void {
     this.editingSig.set(null);
+    this.saveErrorSig.set(null);
   }
 
+  // Persists the override via PATCH rather than mutating local state
+  // directly, so a correction survives a reload. editingSig is deliberately
+  // left open on failure so the user's draft survives a retry.
   saveEdit(): void {
     const editing = this.editingSig();
     const draft = this.editDraftSig();
-    if (!editing) return;
-    if (!draft.reason.trim()) return;
+    if (!editing || !draft.reason.trim() || this.savingSig()) return;
 
-    this.invoicesSig.update((list) =>
-      list.map((inv) =>
-        inv.id !== editing.invoiceId
-          ? inv
-          : {
-              ...inv,
-              lines: inv.lines.map((l, i) =>
-                i !== editing.lineIndex
-                  ? l
-                  : { ...l, classification: draft.classification, overridden: true, overrideReason: draft.reason.trim() },
-              ),
-            },
-      ),
-    );
-    this.editingSig.set(null);
+    const invoice = this.invoicesSig().find((inv) => inv.id === editing.invoiceId);
+    const line = invoice?.lines[editing.lineIndex];
+    if (!invoice || !line) return;
+
+    const newLabel: ApiLabel = draft.classification === 'construction' ? 'Construction' : 'Services';
+    this.savingSig.set(true);
+    this.saveErrorSig.set(null);
+
+    // invoice.ref (not invoice.id) is the canonical uppercase invoice id
+    // the API expects, matching CisCompliance.Core's InvoiceId convention.
+    this.invoiceApi.overrideLine(invoice.ref, line.lineId, newLabel, draft.reason.trim()).subscribe({
+      next: (dto) => {
+        const updated = toInvoice(dto);
+        this.invoicesSig.update((list) => list.map((inv) => (inv.id === updated.id ? updated : inv)));
+        this.savingSig.set(false);
+        this.editingSig.set(null);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.savingSig.set(false);
+        this.saveErrorSig.set(extractErrorMessage(err));
+      },
+    });
   }
 }
