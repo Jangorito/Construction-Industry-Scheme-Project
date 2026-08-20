@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { ClassifyRequest, ClassifyResponse, ProblemDetails, RuleCitationDto } from '../models/classify-api.model';
+import { ExtractResponse } from '../models/extract-api.model';
 import { Classification, Confidence, Invoice } from '../models/invoice.model';
 import { UnclassifiedInvoice } from '../models/unclassified-invoice.model';
 
@@ -59,4 +60,27 @@ export function mergeClassification(raw: UnclassifiedInvoice, response: Classify
 export function extractErrorMessage(err: HttpErrorResponse): string {
   const problem = err.error as ProblemDetails | undefined;
   return problem?.detail ?? problem?.title ?? err.statusText ?? 'Classification failed.';
+}
+
+// A real invoice has no separate internal "ref" the way pool/seed data
+// does, ref is just set equal to the extracted invoiceId so the rest of
+// the pipeline (mergeClassification, display) can treat an extracted
+// invoice exactly like a pool one.
+export function toUnclassifiedInvoice(extracted: ExtractResponse): UnclassifiedInvoice {
+  return { ...extracted, ref: extracted.invoiceId };
+}
+
+// A display-only stand-in for a file whose extraction itself failed,
+// before any real invoice data exists to show. Never persisted, never
+// passed to classify() or mergeClassification(), it only feeds the
+// batch-results error row.
+export function failedExtractionPlaceholder(file: File): UnclassifiedInvoice {
+  return {
+    invoiceId: `EXTRACT-FAILED-${file.name}`,
+    ref: file.name,
+    supplier: file.name,
+    customer: '',
+    date: '',
+    lineItems: [],
+  };
 }

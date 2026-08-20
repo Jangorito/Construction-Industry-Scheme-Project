@@ -12,14 +12,14 @@
     <div class="card-meta">PDF, PNG or JPG — mixed real and AI-generated test invoices supported</div>
     <label class="btn btn-secondary choose-files-label">
       Choose files
-      <input type="file" multiple (change)="onFilesSelected($event)" class="hidden-file-input" />
+      <input type="file" multiple accept=".pdf,.png,.jpg,.jpeg" (change)="onFilesSelected($event)" class="hidden-file-input" />
     </label>
 
     @if (store.queuedFiles().length > 0) {
       <div class="queued-list">
-        @for (name of store.queuedFiles(); track name) {
+        @for (file of store.queuedFiles(); track file) {
           <div class="queued-row">
-            <span class="queued-name">{{ name }}</span>
+            <span class="queued-name">{{ file.name }}</span>
             <span class="card-meta">queued</span>
           </div>
         }

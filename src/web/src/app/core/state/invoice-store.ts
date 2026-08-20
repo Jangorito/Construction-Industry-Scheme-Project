@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { Observable, catchError, forkJoin, map, of, tap } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, switchMap, tap } from 'rxjs';
 
 import { UPLOAD_POOL } from '../data/upload-pool';
 import { ApiLabel } from '../models/classify-api.model';
@@ -8,9 +8,16 @@ import { Classification, Invoice, InvoiceStatus } from '../models/invoice.model'
 import { StoredInvoiceDto } from '../models/stored-invoice.model';
 import { UnclassifiedInvoice } from '../models/unclassified-invoice.model';
 import { ClassifyApiService } from '../services/classify-api.service';
+import { ExtractApiService } from '../services/extract-api.service';
 import { InvoiceApiService } from '../services/invoice-api.service';
-import { extractErrorMessage, mergeClassification, toClassifyRequest } from '../utils/classification-mapper';
-import { SortDir, SortKey, buildDashboardAggregates, buildGridRows, clamp, computeAll } from '../utils/invoice-calculations';
+import {
+  extractErrorMessage,
+  failedExtractionPlaceholder,
+  mergeClassification,
+  toClassifyRequest,
+  toUnclassifiedInvoice,
+} from '../utils/classification-mapper';
+import { SortDir, SortKey, buildDashboardAggregates, buildGridRows, computeAll } from '../utils/invoice-calculations';
 import { toInvoice } from '../utils/stored-invoice-mapper';
 
 export interface EditDraft {
@@ -38,6 +45,7 @@ function isSuccess(r: BatchResult): r is Extract<BatchResult, { outcome: 'succes
 @Injectable({ providedIn: 'root' })
 export class InvoiceStore {
   private readonly classifyApi = inject(ClassifyApiService);
+  private readonly extractApi = inject(ExtractApiService);
   private readonly invoiceApi = inject(InvoiceApiService);
 
   // Starts empty, populated by loadInvoices(). Never observed empty by a
@@ -47,7 +55,7 @@ export class InvoiceStore {
   private readonly loadErrorSig = signal<string | null>(null);
 
   private readonly poolSig = signal<UnclassifiedInvoice[]>(UPLOAD_POOL);
-  private readonly queuedFilesSig = signal<string[]>([]);
+  private readonly queuedFilesSig = signal<File[]>([]);
   private readonly processingSig = signal(false);
   private readonly batchResultsSig = signal<BatchResult[] | null>(null);
 
@@ -125,8 +133,8 @@ export class InvoiceStore {
     }
   }
 
-  setQueuedFiles(names: string[]): void {
-    this.queuedFilesSig.set(names);
+  setQueuedFiles(files: File[]): void {
+    this.queuedFilesSig.set(files);
     this.batchResultsSig.set(null);
   }
 
@@ -134,17 +142,67 @@ export class InvoiceStore {
     return this.invoicesSig().some((inv) => inv.id === id);
   }
 
-  // Takes clamp(queuedFiles, 1, pool.length) invoices off the pool and
-  // classifies each with a real API call. Each call's failure is caught
-  // independently so one bad invoice never sinks the whole batch, failures
-  // stay in the pool for a retry on the next click, successes get appended
-  // to the invoice list and removed from the pool.
+  // Dispatches to whichever source has real work to do: real files queued
+  // (extract each, then classify it) take priority over the sample pool,
+  // matching the confirmed design ("real upload is additive, not a
+  // replacement" — both paths stay available, this just decides which one
+  // a given click uses).
   processInvoices(): void {
-    const pool = this.poolSig();
-    if (this.processingSig() || pool.length === 0) return;
+    if (this.processingSig()) return;
+    const files = this.queuedFilesSig();
+    if (files.length > 0) {
+      this.processUploadedFiles(files);
+    } else {
+      this.processPoolInvoices();
+    }
+  }
 
-    const count = clamp(this.queuedFilesSig().length, 1, pool.length);
-    const taken = pool.slice(0, count);
+  // Per file: extract -> classify, chained with switchMap. A file's
+  // extraction failure is caught here (there's no UnclassifiedInvoice yet
+  // to attach the error to, so failedExtractionPlaceholder stands in for
+  // display); a file's classification failure is caught inside the chain,
+  // same per-item isolation the pool path already has. forkJoin combines
+  // every file's outcome so one bad file never sinks the batch.
+  private processUploadedFiles(files: File[]): void {
+    this.processingSig.set(true);
+
+    const calls = files.map((file) =>
+      this.extractApi.extract(file).pipe(
+        switchMap((extracted) => {
+          const raw = toUnclassifiedInvoice(extracted);
+          return this.classifyApi.classify(toClassifyRequest(raw)).pipe(
+            map((response): BatchResult => ({ outcome: 'success', raw, invoice: mergeClassification(raw, response) })),
+            catchError((err: HttpErrorResponse) =>
+              of<BatchResult>({ outcome: 'error', raw, message: extractErrorMessage(err) }),
+            ),
+          );
+        }),
+        catchError((err: HttpErrorResponse) =>
+          of<BatchResult>({ outcome: 'error', raw: failedExtractionPlaceholder(file), message: extractErrorMessage(err) }),
+        ),
+      ),
+    );
+
+    forkJoin(calls).subscribe((results) => {
+      const succeeded = results.filter(isSuccess);
+      this.invoicesSig.update((list) => [...list, ...succeeded.map((r) => r.invoice)]);
+      this.batchResultsSig.set(results);
+      this.queuedFilesSig.set([]);
+      this.processingSig.set(false);
+    });
+  }
+
+  // Unchanged behavior from before real upload existed: one pool invoice
+  // per click. The old batch-size expression, clamp(queuedFiles.length, 1,
+  // pool.length), depended on the queued-file *count* as a proxy signal;
+  // this method is now only ever reached with an empty queue (non-empty
+  // queues route to processUploadedFiles instead), so that expression
+  // always evaluated to 1 here regardless, simplified accordingly.
+  private processPoolInvoices(): void {
+    const pool = this.poolSig();
+    if (pool.length === 0) return;
+
+    const taken = pool.slice(0, 1);
     this.processingSig.set(true);
 
     const calls = taken.map((raw) =>

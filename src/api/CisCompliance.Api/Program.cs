@@ -1,5 +1,6 @@
 using CisCompliance.Core.Abstractions;
 using CisCompliance.Core.Classification;
+using CisCompliance.Core.Extraction;
 using CisCompliance.Infrastructure;
 using CisCompliance.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCisComplianceInfrastructure(builder.Configuration, builder.Environment.ContentRootPath);
 builder.Services.AddScoped<IClassificationService, ClassificationService>();
+builder.Services.AddScoped<IInvoiceExtractionService, InvoiceExtractionService>();
 
 const string AngularDevCorsPolicy = "AngularDev";
 builder.Services.AddCors(options =>

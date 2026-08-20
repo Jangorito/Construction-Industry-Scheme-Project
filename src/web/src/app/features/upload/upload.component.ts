@@ -15,13 +15,12 @@ import { GbpCurrencyPipe } from '../../shared/pipes/gbp-currency.pipe';
 export class UploadComponent {
   protected readonly store = inject(InvoiceStore);
 
-  // Cosmetic only, matching the mockup: captures file names for display,
-  // never reads file content. The pool invoices (not these files) are what
-  // actually get sent to the real API, see InvoiceStore.processInvoices().
+  // Real files now, not just names: if any are selected, processInvoices()
+  // sends each through /api/extract then /api/classify. With no files
+  // selected, the existing sample pool is used instead, unchanged.
   protected onFilesSelected(event: Event): void {
     const files = (event.target as HTMLInputElement).files;
-    const names = files ? Array.from(files).map((f) => f.name) : [];
-    this.store.setQueuedFiles(names);
+    this.store.setQueuedFiles(files ? Array.from(files) : []);
   }
 
   // computeInvoice() needs a full Invoice, batch results only carry the

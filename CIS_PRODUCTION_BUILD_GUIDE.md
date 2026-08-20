@@ -13,20 +13,22 @@ The POC proved the *idea* works: an LLM can classify UK invoice line items for C
 Two things are true about this phase, and worth holding in your head as you read the rest of this doc:
 
 1. **This is a portfolio project**, not a PwC deliverable — so "production" here means "built the way a real team would build it," not "actually deployed and load-bearing for a client." That's why the architecture (layering, tests, dependency injection, real routing, a real database) is more deliberate than a weekend script would need.
-2. **We're partway through.** Four things are done and verified: the project skeleton, the actual classification logic, the Angular UI, and now persistence. One thing isn't started: OCR.
+2. **Every phase from the original POC brief is now done and verified**: the project skeleton, the actual classification logic, the Angular UI, persistence, and — as of this pass — OCR. Nothing planned is left outstanding; what remains is polish and the two still-open questions for Mark (see section 5).
 
 ```
 POC (done, validated)
    -> Production scaffold (done)
         -> Classification logic port (done)
              -> Angular UI port (done)
-                  -> Persistence / DB (done)  <-- you are here
-                       -> OCR (PDF -> invoice JSON)     <-- deliberately deferred
+                  -> Persistence / DB (done)
+                       -> OCR (PDF -> invoice JSON) (done)  <-- you are here
 ```
 
 Persistence uses **SQL Server (Express edition)** via EF Core — a stakeholder-confirmed requirement (see the memory of Mark's answers to the project's open questions), not just a default. Two other requirements landed "for free" because the design already happened to satisfy them once they were confirmed: reasoning is stored permanently and retrievable (Mark's Q4), and classification stays strictly line-item level with no invoice-level rollup field (Mark's Q5).
 
 One design decision worth understanding up front, since it shapes a lot of the file list in section 4.7: Dashboard/Grid/Detail now load from `GET /api/invoices` instead of a static TS file — the old `seed-invoices.ts` is gone, its content ported into a C#-side database seeder instead. The **Upload flow was already genuinely live** before persistence existed (a real `POST /api/classify` call, not a simulation) — persistence didn't change that, it just means an uploaded invoice (and any manual override) now survives a page reload instead of vanishing. Section 3.4 traces the live Upload call; section 3.5 traces the override/persistence flow.
+
+OCR reuses the same OpenAI account and the same schema-constrained-output pattern already proven for classification — a vision-capable call to `gpt-4o-mini` (which already supports direct PDF input, confirmed before building this), not a second external service like Azure Document Intelligence. The sample pool (2 fixed invoices, no file needed) still works exactly as before, side by side with real file upload — real upload is additive, not a replacement. Section 3.6 traces the extract → classify chain.
 
 ---
 
@@ -44,7 +46,7 @@ Construction Industry Scheme Project/
     │   ├── CisCompliance.sln
     │   ├── CisCompliance.Api/            the web server — thin, HTTP-facing
     │   ├── CisCompliance.Core/           the actual classification logic — no external dependencies
-    │   ├── CisCompliance.Infrastructure/ talks to OpenAI, the filesystem, and now the database
+    │   ├── CisCompliance.Infrastructure/ talks to OpenAI (text and vision), the filesystem, and the database
     │   └── CisCompliance.Tests/          xUnit tests for Core + Infrastructure
     └── web/                    the Angular workspace — Dashboard, Grid, Detail, Upload, all live
 ```

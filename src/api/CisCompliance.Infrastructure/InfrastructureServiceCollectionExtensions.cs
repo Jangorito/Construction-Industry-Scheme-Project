@@ -43,6 +43,7 @@ public static class InfrastructureServiceCollectionExtensions
         });
 
         services.AddSingleton<IClassificationModelClient, OpenAiClassificationModelClient>();
+        services.AddSingleton<IExtractionModelClient, OpenAiExtractionModelClient>();
         services.AddSingleton<IRulesRepository, FileRulesRepository>();
 
         var connectionString = configuration.GetConnectionString("CisComplianceDb")
