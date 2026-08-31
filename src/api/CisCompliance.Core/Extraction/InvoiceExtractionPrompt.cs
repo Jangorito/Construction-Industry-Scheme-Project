@@ -10,7 +10,7 @@ public static class InvoiceExtractionPrompt
 
         For invoice_number, customer, and date: if the document does not clearly show a value, return null for that field rather than guessing or inventing one. This matters most for invoice_number, never fabricate a plausible-looking invoice number, a fabricated one that happens to match a real invoice's number would silently overwrite that real record.
 
-        For date specifically, only return a date you can actually read on the document (an invoice date, issue date, or similar). Do not use today's date or any other date as a substitute if none is printed.
+        For date specifically, only return a date you can actually read on the document (an invoice date, issue date, or similar). Do not use today's date or any other date as a substitute if none is printed. Always return it as ISO 8601, "YYYY-MM-DD", regardless of how it's formatted on the document (e.g. a UK-style "28/08/2026" must be returned as "2026-08-28").
 
         For supplier, extract the name of the company issuing the invoice (doing the work). For customer, extract the name of the company or person being billed, if shown.
 
