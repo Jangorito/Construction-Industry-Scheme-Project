@@ -5,7 +5,7 @@
   <div class="card blueprint hero-card">
     <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
     <div class="hero-text">
-      <div class="card-kicker">HMRC CIS EXPOSURE — THIS QUARTER</div>
+      <div class="card-kicker">HMRC CIS EXPOSURE, THIS QUARTER</div>
       <div class="hero-stat">
         {{ a.pct }}<span class="hero-stat-pct">%</span>
         <span class="hero-stat-note">of invoiced value is construction spend</span>
@@ -34,13 +34,13 @@
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div class="card-kicker">CONSTRUCTION SPEND</div>
       <div class="metric-value">{{ a.constructionAll | gbp }}</div>
-      <div class="card-meta">{{ a.pct }}% of total — CIS relevant</div>
+      <div class="card-meta">{{ a.pct }}% of total, CIS relevant</div>
     </div>
     <div class="card blueprint metric-card">
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div class="card-kicker">SERVICES SPEND</div>
       <div class="metric-value">{{ a.servicesAll | gbp }}</div>
-      <div class="card-meta">{{ a.servicesPct }}% of total — non-CIS</div>
+      <div class="card-meta">{{ a.servicesPct }}% of total, non-CIS</div>
     </div>
   </div>
 
@@ -51,15 +51,15 @@
       <div class="breakdown-row">
         <div class="breakdown-donut" [style.background]="donutGradient(a.pct)"></div>
         <div class="breakdown-legend">
-          <div class="legend-row"><span class="legend-swatch legend-construction"></span>Construction — {{ a.pct }}%</div>
-          <div class="legend-row"><span class="legend-swatch legend-services"></span>Services — {{ a.servicesPct }}%</div>
+          <div class="legend-row"><span class="legend-swatch legend-construction"></span>Construction, {{ a.pct }}%</div>
+          <div class="legend-row"><span class="legend-swatch legend-services"></span>Services, {{ a.servicesPct }}%</div>
         </div>
       </div>
     </div>
 
     <div class="card blueprint trend-card">
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-      <div class="card-title breakdown-title">Monthly spend split — construction vs. services</div>
+      <div class="card-title breakdown-title">Monthly spend split, construction vs. services</div>
       <div class="trend-chart">
         @for (t of a.trend; track t.label) {
           <div class="trend-col">
@@ -81,7 +81,7 @@
       <div>
         <div class="card-kicker">EST. CIS DEDUCTION OWED ({{ a.cisRatePercent }}% RATE)</div>
         <div class="stat-value">{{ a.deductionGbp | gbp }}</div>
-        <div class="card-meta">{{ a.cisRatePercent }}% of construction spend — verified subcontractor rate</div>
+        <div class="card-meta">{{ a.cisRatePercent }}% of construction spend, verified subcontractor rate</div>
       </div>
     </div>
     <div class="card blueprint stat-card">
@@ -90,7 +90,7 @@
       <div>
         <div class="card-kicker">LOW-CONFIDENCE CLASSIFICATIONS</div>
         <div class="stat-value">{{ a.needsReviewCount }} this week</div>
-        <div class="card-meta">Flagged low confidence by the model — needs review</div>
+        <div class="card-meta">Flagged low confidence by the model, needs review</div>
       </div>
     </div>
   </div>

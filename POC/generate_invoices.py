@@ -68,7 +68,7 @@ CLEAR_CONSTRUCTION = [
                       vars={"location": ["2nd floor office", "ground floor retail unit", "warehouse unit 4"]}),
     LineItemTemplate("cc_foundations", "Preparation and laying of foundations, {plot}",
                       (6000, 18000), "Construction", ["R1", "R4"],
-                      "Site preparation/construction — core included operation.",
+                      "Site preparation/construction, core included operation.",
                       vars={"plot": ["Plot 4", "Plot 9", "site block B"]}),
     LineItemTemplate("cc_demolition", "Demolition of existing outbuilding prior to new build",
                       (3000, 9000), "Construction", ["R1"],
@@ -85,13 +85,13 @@ CLEAR_CONSTRUCTION = [
                       vars={"n": ["20", "30", "40"]}),
     LineItemTemplate("cc_scaffold_erect", "Erection of scaffolding for roof works, {duration}",
                       (1800, 4200), "Construction", ["R8"],
-                      "Erection/dismantling labour is integral works — included.",
+                      "Erection/dismantling labour is integral works, included.",
                       vars={"duration": ["2 weeks", "3 weeks", "4 weeks"]}),
     LineItemTemplate("cc_drainage", "Installation of drainage and sanitation pipework, new build",
                       (4500, 11000), "Construction", ["R3"], "System installation."),
     LineItemTemplate("cc_lifts", "Installation of passenger lift per building specification",
                       (15000, 32000), "Construction", ["R1", "R3"],
-                      "Lifts/plant needed by the building spec — included."),
+                      "Lifts/plant needed by the building spec, included."),
     LineItemTemplate("cc_traffic_mgmt", "Provision of traffic management services during resurfacing works",
                       (1500, 3200), "Construction", ["R1"],
                       "Traffic management supplied to a contractor carrying out construction ops is included."),
@@ -106,7 +106,7 @@ CLEAR_CONSTRUCTION = [
     LineItemTemplate("cc_roads", "Construction, repair and resurfacing of access road including white-lining",
                       (8000, 22000), "Construction", ["R1"], "Named included operation."),
     LineItemTemplate("cc_siteclearance", "Site clearance and earth-moving ahead of construction",
-                      (4000, 9500), "Construction", ["R4"], "Preparatory works — included."),
+                      (4000, 9500), "Construction", ["R4"], "Preparatory works, included."),
     LineItemTemplate("cc_asbestos", "Removal of asbestos as part of building alteration works",
                       (5000, 12000), "Construction", ["R1"],
                       "Alteration example named directly in CIS340."),
@@ -131,7 +131,7 @@ CLEAR_SERVICES = [
                       (2500, 5500), "Services", ["R9"], "Facilities/site-support, named exclusion.",
                       vars={"duration": ["4 weeks", "6 weeks", "8 weeks"]}),
     LineItemTemplate("cs_canteen", "Running of site canteen facility, {duration}",
-                      (1800, 4200), "Services", ["R9"], "Site facilities running — excluded.",
+                      (1800, 4200), "Services", ["R9"], "Site facilities running, excluded.",
                       vars={"duration": ["1 month", "3 months"]}),
     LineItemTemplate("cs_alarm_cctv", "Installation of intruder alarm and CCTV, {location}",
                       (1800, 4200), "Services", ["R10"], "Named security-system exclusion.",
@@ -141,20 +141,20 @@ CLEAR_SERVICES = [
                       "Carpet fitting is the sole excluded finishing operation.",
                       vars={"location": ["3rd floor office", "reception area", "open-plan office"]}),
     LineItemTemplate("cs_signage", "Sign-writing and installation of shop signboard",
-                      (900, 2600), "Services", ["R10"], "Named exclusion — signage."),
+                      (900, 2600), "Services", ["R10"], "Named exclusion, signage."),
     LineItemTemplate("cs_seating", "Installation of fixed seating, staff break room",
-                      (1500, 3800), "Services", ["R10"], "Named exclusion — seating."),
+                      (1500, 3800), "Services", ["R10"], "Named exclusion, seating."),
     LineItemTemplate("cs_concrete_delivery", "Delivery of ready-mix concrete, {qty}, no laying obligation",
                       (900, 2200), "Services", ["R7", "R11"], "Delivery only.",
                       vars={"qty": ["8 tonnes", "12 tonnes", "15 tonnes"]}),
     LineItemTemplate("cs_telecoms_wiring", "Replacement of telecommunications wiring through existing ducting",
                       (700, 1800), "Services", ["R10"],
-                      "Narrow named exclusion — wiring through pre-existing ducting only."),
+                      "Narrow named exclusion, wiring through pre-existing ducting only."),
     LineItemTemplate("cs_scaffold_hire_only", "Hire of scaffolding equipment, {duration}, no erection or dismantling",
                       (800, 2000), "Services", ["R8"], "Supply-only, no labour.",
                       vars={"duration": ["2 weeks", "4 weeks"]}),
     LineItemTemplate("cs_blinds", "Installation of venetian blinds, office windows",
-                      (600, 1600), "Services", ["R10"], "Named exclusion — blinds."),
+                      (600, 1600), "Services", ["R10"], "Named exclusion, blinds."),
 ]
 
 # ---------------------------------------------------------------------------
@@ -175,11 +175,11 @@ AMBIGUOUS = [
                       "CCTV for a non-security purpose isn't the named security-systems exclusion."),
     LineItemTemplate("am_fencing", "Supply and erect security fencing around site compound perimeter",
                       (2200, 5500), "Construction", ["R10"],
-                      "Fencing deters intruders but isn't a security 'system' — ordinary construction."),
+                      "Fencing deters intruders but isn't a security 'system', ordinary construction."),
     LineItemTemplate("am_boiler_free_install", "Supply of boiler and full heating system "
                       "(installation included at no extra charge)",
                       (7000, 13000), "Construction", ["R5", "R11a"],
-                      "'Free installation' framing is a known dodge — flag as likely understating the labour value."),
+                      "'Free installation' framing is a known dodge, flag as likely understating the labour value."),
     LineItemTemplate("am_accommodation", "Subcontractor accommodation costs, {duration} on-site",
                       (1800, 4200), "Construction", ["R11c"],
                       "Travel/accommodation costs are part of the taxable payment, not a materials-style exclusion.",
@@ -193,15 +193,15 @@ AMBIGUOUS = [
                       vars={"location": ["shopfront", "warehouse loading bay"]}),
     LineItemTemplate("am_site_mgmt_fee", "Site management fee",
                       (2000, 6000), "Construction", ["R2", "R13"],
-                      "Thin wording — classified on inferred dominant purpose per R13; would flip with more context."),
-    LineItemTemplate("am_consultancy_remedial", "Consultancy — remedial works",
+                      "Thin wording, classified on inferred dominant purpose per R13; would flip with more context."),
+    LineItemTemplate("am_consultancy_remedial", "Consultancy, remedial works",
                       (1500, 4500), "Construction", ["R6", "R13"],
                       "'Consultancy' suggests advisory (R6→Services) but 'remedial works' suggests hands-on "
-                      "execution — resolved toward Construction per R13; flag the ambiguity in reasoning."),
+                      "execution, resolved toward Construction per R13; flag the ambiguity in reasoning."),
     LineItemTemplate("am_concrete_pump_op", "Concrete pumping service, wet concrete distribution around site",
                       (1200, 2800), "Construction", ["R7"],
-                      "Third-party pumping is a site service, not a delivery — contrasts with plain chute delivery."),
-    LineItemTemplate("am_kitchen_supply_fix", "Fitted kitchen — supply and install, including worktops "
+                      "Third-party pumping is a site service, not a delivery, contrasts with plain chute delivery."),
+    LineItemTemplate("am_kitchen_supply_fix", "Fitted kitchen, supply and install, including worktops "
                       "and appliances",
                       (9000, 15000), "Construction", ["R2", "R5"],
                       "Installation element pulls the whole contract into scope even though most value is goods."),
@@ -217,18 +217,18 @@ AMBIGUOUS = [
                       "Bare vessel hire with the contractor's own crew = plant hire without operator."),
     LineItemTemplate("am_carpet_mixed", "Supply and fit carpet tiles as part of wider office refurbishment contract",
                       (2000, 4500), "Construction", ["R10", "R2"],
-                      "Carpet fitting alone is excluded, but as part of a mixed contract the whole contract — "
-                      "and this line — comes within the scheme."),
+                      "Carpet fitting alone is excluded, but as part of a mixed contract the whole contract, "
+                      "and this line, comes within the scheme."),
     LineItemTemplate("am_forestry", "Tree felling and landscaping in the ordinary course of estate management "
                       "(no development project)",
                       (1200, 3000), "Services", ["R4"],
-                      "Not yet a dedicated rule — CIS340 A.21 distinguishes forestry/estate management "
+                      "Not yet a dedicated rule, CIS340 A.21 distinguishes forestry/estate management "
                       "(excluded) from development-linked tree felling (included). Promote to a rule if this "
                       "trips up classify.py.", gap=True),
     LineItemTemplate("am_forestry_dev", "Tree felling and site clearance as part of new housing development, "
                       "Plot {n}",
                       (2500, 6000), "Construction", ["R4"],
-                      "Same activity as the estate-management case above, but tied to a development project — "
+                      "Same activity as the estate-management case above, but tied to a development project, "
                       "included. Promote to a rule if this trips up classify.py.", gap=True,
                       vars={"n": ["7", "12", "B3"]}),
 ]

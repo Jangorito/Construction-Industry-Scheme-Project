@@ -8,7 +8,7 @@ subcontractor invoices and automatically classifies spend as "construction opera
 The key driver: firms moving into construction from adjacent sectors (e.g. asset management firms 
 diversifying into property/construction) often don't realise CIS applies to them until it becomes 
 a compliance problem. Rather than a purely internal invoice-processing tool, this is intended as 
-something PwC can offer out to clients — an automated way to flag CIS exposure, classify spend, 
+something PwC can offer out to clients, an automated way to flag CIS exposure, classify spend, 
 and produce an audit-ready reasoning trail, reducing the risk of clients missing deductions or 
 falling foul of HMRC without realising it.
 
@@ -36,8 +36,8 @@ graph TD
 1. Invoices are dropped into a front-end folder (synthetic/AI-generated invoices used for testing 
    and demoing initially, since real client data may not be available)
 2. User clicks a "process" button to trigger the pipeline
-3. System reads invoices via OCR (Optical Character Recognition) — likely Azure AI Document 
-   Intelligence, since it's built for structured documents like invoices — to extract text and 
+3. System reads invoices via OCR (Optical Character Recognition), likely Azure AI Document 
+   Intelligence, since it's built for structured documents like invoices, to extract text and 
    line items from PDFs/scanned documents
 4. Extracted data is parsed into structured fields (line item description, amount, supplier, date)
 5. Each line item is passed to an LLM (e.g. GPT via Azure OpenAI Service) with contextual prompting 
@@ -56,12 +56,12 @@ graph TD
 - Handles calls out to OCR and Azure OpenAI Service in sequence during processing
 
 ### OCR (Text Extraction)
-- Separate step from the AI reasoning layer — OCR extracts raw text/structure, it doesn't 
+- Separate step from the AI reasoning layer, OCR extracts raw text/structure, it doesn't 
   do any classification reasoning itself
 - Likely candidate: Azure AI Document Intelligence (formerly Form Recognizer), since it's 
   purpose-built for structured documents like invoices and can extract fields (line items, 
   amounts, supplier) more reliably than generic OCR
-- Runs before the AI reasoning layer in the pipeline — its output (clean structured text) 
+- Runs before the AI reasoning layer in the pipeline, its output (clean structured text) 
   is what gets fed into the LLM for classification
 
 ### AI / Reasoning Layer
@@ -88,7 +88,7 @@ graph TD
 
 ## Deliverables / Milestones
 - Initial deliverable: either a video walkthrough demonstrating requirements and proposed 
-  implementation, OR a written document covering the same — decide which format to lead with
+  implementation, OR a written document covering the same, decide which format to lead with
 - Presentation to the team: request approx. 1 hour slot, tentatively week commencing 17th or 24th
 - Local deployment for initial demo (not necessarily cloud-hosted for MVP/demo stage)
 
@@ -98,7 +98,7 @@ graph TD
 
 ## Open Questions for Mark
 2. What database technology does the firm standardise on (e.g. SQL Server, PostgreSQL, Cosmos DB)?
-4. What level of audit trail / explainability is required for HMRC compliance purposes — does the 
+4. What level of audit trail / explainability is required for HMRC compliance purposes, does the 
    reasoning text need to be stored permanently and retrievable, or is it just for internal review?
 5. Should classification happen at line-item level only, or does Mark also want invoice-level 
    overall classification (e.g. "mostly construction" vs "mostly services")?
@@ -111,10 +111,10 @@ graph TD
 ## Cost / Deployment Notes
 - Azure for Students offer: if enrolled as a full-time student at an accredited institution, 
   verification via school email unlocks $100 in Azure credits (12 months, no credit card required), 
-  including access to Azure OpenAI Service — likely sufficient to build and demo this prototype 
+  including access to Azure OpenAI Service, likely sufficient to build and demo this prototype 
   (OCR, blob storage, GPT calls) at low/no cost
 - Note: this offer is intended for educational/non-commercial use, so worth checking whether that's 
-  appropriate given this is ultimately for a client/employer project — may be fine for a personal 
+  appropriate given this is ultimately for a client/employer project, may be fine for a personal 
   proof-of-concept build, but flag if scaling beyond that
 - Once credits are used up (or if not eligible), Azure OpenAI moves to standard pay-as-you-go pricing
 

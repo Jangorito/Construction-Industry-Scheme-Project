@@ -7,7 +7,7 @@ namespace CisCompliance.Tests.Persistence;
 
 // Uses EF Core's InMemory provider, no real SQL Server touched, same
 // principle as the rest of this test suite (no real network/file/DB
-// dependency in any test) — a fresh, isolated database per test via a
+// dependency in any test), a fresh, isolated database per test via a
 // unique Guid name.
 public class EfInvoiceRepositoryTests
 {

@@ -43,7 +43,7 @@
     <div class="card blueprint" style="position: relative; padding: var(--space-6); margin-bottom: var(--space-6); flex-direction: row; align-items: center; gap: var(--space-6);">
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div style="flex: 1;">
-        <div class="card-kicker">HMRC CIS EXPOSURE — THIS QUARTER</div>
+        <div class="card-kicker">HMRC CIS EXPOSURE, THIS QUARTER</div>
         <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 56px; line-height: 1; margin: var(--space-2) 0;">
           {{ pct }}<span style="font-size: 32px;">%</span> <span style="font-size: 20px; font-weight: 400; opacity: 0.7;">of invoiced value is construction spend</span>
         </div>
@@ -75,15 +75,15 @@
         <div style="display: flex; align-items: center; gap: var(--space-4);">
           <div style="width: 108px; height: 108px; border-radius: 50%; background: {{ donutGradient }}; flex: none;"></div>
           <div style="display: flex; flex-direction: column; gap: var(--space-2);">
-            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-accent-600); flex: none;"></span>Construction — {{ pct }}%</div>
-            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-neutral-300); flex: none;"></span>Services — {{ servicesPct }}%</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-accent-600); flex: none;"></span>Construction, {{ pct }}%</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-neutral-300); flex: none;"></span>Services, {{ servicesPct }}%</div>
           </div>
         </div>
       </div>
 
       <div class="card blueprint" style="position: relative; padding: var(--space-4);">
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-        <div class="card-title" style="margin-bottom: var(--space-3);">Monthly spend split — construction vs. services</div>
+        <div class="card-title" style="margin-bottom: var(--space-3);">Monthly spend split, construction vs. services</div>
         <div style="display: flex; align-items: flex-end; gap: var(--space-6); height: 140px; padding: 0 var(--space-2);">
           <sc-for list="{{ trend }}" as="t" hint-placeholder-count="3">
             <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-2); flex: 1;">
@@ -105,7 +105,7 @@
         <div>
           <div class="card-kicker">EST. CIS DEDUCTION OWED ({{ cisRate }}% RATE)</div>
           <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ deductionDisplay }}</div>
-          <div class="card-meta">{{ cisRate }}% of construction spend — verified subcontractor rate</div>
+          <div class="card-meta">{{ cisRate }}% of construction spend, verified subcontractor rate</div>
         </div>
       </div>
       <div class="card blueprint" style="position: relative; padding: var(--space-4); flex-direction: row; align-items: center; gap: var(--space-3);">
@@ -114,7 +114,7 @@
         <div>
           <div class="card-kicker">LOW-CONFIDENCE CLASSIFICATIONS</div>
           <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ needsReviewCount }} this week</div>
-          <div class="card-meta">Flagged low confidence by the model — needs review</div>
+          <div class="card-meta">Flagged low confidence by the model, needs review</div>
         </div>
       </div>
     </div>
@@ -147,13 +147,13 @@
   <sc-if value="{{ isUpload }}" hint-placeholder-val="{{ false }}">
   <div style="padding: var(--space-8); max-width: 720px;">
     <h2 style="margin: 0 0 var(--space-2);">Upload invoices</h2>
-    <div class="card-meta" style="margin-bottom: var(--space-4);">Drop invoices into the ingest folder — the AI agent classifies each line item as construction spend or services before they land in the review queue.</div>
+    <div class="card-meta" style="margin-bottom: var(--space-4);">Drop invoices into the ingest folder, the AI agent classifies each line item as construction spend or services before they land in the review queue.</div>
 
     <div class="card blueprint" style="position: relative; padding: var(--space-6); align-items: center; text-align: center; gap: var(--space-3);">
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
       <div class="icn" style="width: 32px; height: 32px; background-color: var(--color-accent); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/upload-cloud.svg); mask-image: url(https://unpkg.com/lucide-static/icons/upload-cloud.svg);"></div>
       <div class="card-title">Select invoice files</div>
-      <div class="card-meta">PDF, PNG or JPG — mixed real and AI-generated test invoices supported</div>
+      <div class="card-meta">PDF, PNG or JPG, mixed real and AI-generated test invoices supported</div>
       <label class="btn btn-secondary" style="cursor: pointer;">
         Choose files
         <input type="file" multiple="{{ true }}" onChange="{{ onFilesSelected }}" style="display: none;">
@@ -254,9 +254,9 @@
       <div class="card blueprint" style="position: relative; padding: var(--space-3);">
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="duotone" style="width: 100%; aspect-ratio: 3/4;">
-          <image-slot id="{{ detail.ref }}-doc" shape="rect" placeholder="Drop scanned invoice — {{ detail.ref }}.pdf" style="width: 100%; height: 100%;"></image-slot>
+          <image-slot id="{{ detail.ref }}-doc" shape="rect" placeholder="Drop scanned invoice, {{ detail.ref }}.pdf" style="width: 100%; height: 100%;"></image-slot>
         </div>
-        <div style="font-family: monospace; font-size: 11px; opacity: 0.55; margin-top: var(--space-2); text-align: center;">source document — {{ detail.ref }}.pdf</div>
+        <div style="font-family: monospace; font-size: 11px; opacity: 0.55; margin-top: var(--space-2); text-align: center;">source document, {{ detail.ref }}.pdf</div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: var(--space-4);">
@@ -285,7 +285,7 @@
             <div class="card-meta" style="margin-top: var(--space-1); font-family: monospace; font-size: 11px;">Cited: {{ li.citation }}</div>
 
             <sc-if value="{{ li.overridden }}" hint-placeholder-val="{{ false }}">
-              <div class="card-meta" style="margin-top: var(--space-2); color: var(--color-accent-700);">Overridden to {{ li.classLabel }} — "{{ li.overrideReason }}"</div>
+              <div class="card-meta" style="margin-top: var(--space-2); color: var(--color-accent-700);">Overridden to {{ li.classLabel }}, "{{ li.overrideReason }}"</div>
             </sc-if>
 
             <sc-if value="{{ li.isEditing }}" hint-placeholder-val="{{ false }}">
@@ -299,7 +299,7 @@
               </div>
               <div class="field" style="margin-bottom: var(--space-2);">
                 <label>Reason for correction (required)</label>
-                <textarea class="input" rows="2" placeholder="e.g. Confirmed with supplier — line is labour-only, not a hire." value="{{ li.editReason }}" onChange="{{ li.setReason }}"></textarea>
+                <textarea class="input" rows="2" placeholder="e.g. Confirmed with supplier, line is labour-only, not a hire." value="{{ li.editReason }}" onChange="{{ li.setReason }}"></textarea>
               </div>
               <div style="display: flex; gap: var(--space-2); justify-content: flex-end;">
                 <button class="btn btn-secondary" onClick="{{ li.cancelEdit }}">Cancel</button>
@@ -327,7 +327,7 @@ const EXTRA_INVOICES = [
         reasoning: "This line item describes the supply and fitting of carpet tiles, which is a named exclusion under R10. However, it includes the phrase 'as part of wider office refurbishment contract', indicating it may be part of a mixed contract. Therefore, the mixed-contract override applies, and it should be classified as Construction." },
       { description: "Supply and fit carpet tiles, open-plan office", amount: 3285.26, classification: "services", confidence: "high", citation: "R10 (CIS340)",
         reasoning: "This line item also describes the supply and fitting of carpet tiles, which is a named exclusion under R10. There is no indication of it being part of a larger contract in the wording itself, so it does not qualify for the mixed-contract override. Therefore, it is classified as Services." },
-      { description: "Consultancy — remedial works", amount: 3570.2, classification: "services", confidence: "high", citation: "R6 (CISR14270)",
+      { description: "Consultancy, remedial works", amount: 3570.2, classification: "services", confidence: "high", citation: "R6 (CISR14270)",
         reasoning: "This line item describes consultancy for remedial works, which falls under R6 as it is purely advisory. There is no indication of execution or hands-on work, so it is classified as Services." },
       { description: "Supply and erect security fencing around site compound perimeter", amount: 5216.68, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
         reasoning: "This line item describes the supply and erection of security fencing, which is not classified as a security system under R10. Therefore, it is considered ordinary construction work and classified as Construction." },
@@ -494,7 +494,7 @@ class Component extends DCLogic {
   computeInvoice(inv) {
     // Confidence is a self-reported high/low flag per line (proven out in the
     // classification POC, see CIS_POC_RESULTS.md) rather than a fabricated
-    // precision percentage — real testing showed the model isn't calibrated
+    // precision percentage, real testing showed the model isn't calibrated
     // enough to trust a number like "87%", only a triage-worthy high/low
     // split. Status is derived from a plain count of low-confidence lines,
     // not a numeric threshold, for the same reason.
@@ -663,8 +663,8 @@ class Component extends DCLogic {
       donutGradient: `conic-gradient(var(--color-accent-600) 0% ${pct}%, var(--color-neutral-300) ${pct}% 100%)`,
       metrics: [
         { kicker: 'TOTAL INVOICED VALUE', value: this.fmt(totalAll), note: `${computed.length} invoices this quarter` },
-        { kicker: 'CONSTRUCTION SPEND', value: this.fmt(constructionAll), note: `${pct}% of total — CIS relevant` },
-        { kicker: 'SERVICES SPEND', value: this.fmt(servicesAll), note: `${100 - pct}% of total — non-CIS` },
+        { kicker: 'CONSTRUCTION SPEND', value: this.fmt(constructionAll), note: `${pct}% of total, CIS relevant` },
+        { kicker: 'SERVICES SPEND', value: this.fmt(servicesAll), note: `${100 - pct}% of total, non-CIS` },
       ],
       trend, cisRate, deductionDisplay: this.fmt(constructionAll * (cisRate / 100)),
       needsReviewCount, reviewRows,

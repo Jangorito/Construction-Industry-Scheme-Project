@@ -13,9 +13,9 @@
       <div class="card blueprint doc-card">
         <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
         <div class="doc-placeholder duotone">
-          <span class="doc-placeholder-text">Drop scanned invoice — {{ e.inv.ref }}.pdf</span>
+          <span class="doc-placeholder-text">Drop scanned invoice, {{ e.inv.ref }}.pdf</span>
         </div>
-        <div class="doc-caption">source document — {{ e.inv.ref }}.pdf</div>
+        <div class="doc-caption">source document, {{ e.inv.ref }}.pdf</div>
       </div>
 
       <div class="detail-right">
@@ -46,7 +46,7 @@
 
             @if (line.overridden) {
               <div class="card-meta override-note">
-                Overridden to {{ classLabel(line.classification) }} — "{{ line.overrideReason }}"
+                Overridden to {{ classLabel(line.classification) }}, "{{ line.overrideReason }}"
               </div>
             }
 
@@ -72,7 +72,7 @@
               <div class="field edit-field">
                 <label>Reason for correction (required)</label>
                 <textarea class="input" rows="2"
-                  placeholder="e.g. Confirmed with supplier — line is labour-only, not a hire."
+                  placeholder="e.g. Confirmed with supplier, line is labour-only, not a hire."
                   [value]="store.editDraft().reason"
                   (input)="onReasonInput($event)"></textarea>
               </div>

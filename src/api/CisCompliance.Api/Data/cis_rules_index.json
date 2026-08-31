@@ -1,5 +1,5 @@
 {
-  "_readme": "Machine-readable citation registry for cis_rules.md. classify.py should have the LLM output rule IDs it applied (e.g. [\"R6\", \"R11a\"]), never free-text citations — resolve the actual HMRC source/URL by looking the ID up here. Keep this file's ids/titles in sync with cis_rules.md by hand; there is no auto-generation step in the POC.",
+  "_readme": "Machine-readable citation registry for cis_rules.md. classify.py should have the LLM output rule IDs it applied (e.g. [\"R6\", \"R11a\"]), never free-text citations, resolve the actual HMRC source/URL by looking the ID up here. Keep this file's ids/titles in sync with cis_rules.md by hand; there is no auto-generation step in the POC.",
   "labels": ["Construction", "Services"],
   "rules": [
     {
@@ -78,7 +78,7 @@
       "category": "excluded",
       "source_type": "hmrc",
       "source_name": "CIS340",
-      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors — Appendix A.19, Appendix C 'Construction' table",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors, Appendix A.19, Appendix C 'Construction' table",
       "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
       "verified": "primary"
     },
@@ -98,7 +98,7 @@
       "category": "excluded",
       "source_type": "hmrc",
       "source_name": "CIS340",
-      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors — Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
+      "source_title": "Construction Industry Scheme: a guide for contractors and subcontractors, Appendix A.4, A.28-A.31, Appendix C 'Construction'/'Finishing operations' tables",
       "source_url": "https://www.gov.uk/government/publications/construction-industry-scheme-cis-340/construction-industry-scheme-a-guide-for-contractors-and-subcontractors-cis-340",
       "verified": "primary"
     },

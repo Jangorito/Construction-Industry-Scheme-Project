@@ -11,7 +11,7 @@ export const UPLOAD_POOL: UnclassifiedInvoice[] = [
     lineItems: [
       { lineId: 'INV-2026-0009-L1', description: 'Supply and fit carpet tiles as part of wider office refurbishment contract', amountGbp: 4377.46 },
       { lineId: 'INV-2026-0009-L2', description: 'Supply and fit carpet tiles, open-plan office', amountGbp: 3285.26 },
-      { lineId: 'INV-2026-0009-L3', description: 'Consultancy — remedial works', amountGbp: 3570.20 },
+      { lineId: 'INV-2026-0009-L3', description: 'Consultancy, remedial works', amountGbp: 3570.20 },
       { lineId: 'INV-2026-0009-L4', description: 'Supply and erect security fencing around site compound perimeter', amountGbp: 5216.68 },
       { lineId: 'INV-2026-0009-L5', description: 'Installation and repair of glazing, warehouse windows', amountGbp: 3543.31 },
       { lineId: 'INV-2026-0009-L6', description: 'Subcontractor accommodation costs, 6 weeks on-site', amountGbp: 3470.87 },

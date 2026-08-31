@@ -145,7 +145,7 @@ export class InvoiceStore {
   // Dispatches to whichever source has real work to do: real files queued
   // (extract each, then classify it) take priority over the sample pool,
   // matching the confirmed design ("real upload is additive, not a
-  // replacement" — both paths stay available, this just decides which one
+  // replacement", both paths stay available, this just decides which one
   // a given click uses).
   processInvoices(): void {
     if (this.processingSig()) return;
