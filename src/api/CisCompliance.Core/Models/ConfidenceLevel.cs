@@ -2,9 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace CisCompliance.Core.Models;
 
-// The model's own self report, not a calibrated accuracy score. "High"
-// doesn't guarantee correct, it's a triage signal for which lines a human
-// should sanity check first. See ClassificationPrompt for the exact rule.
+// Summary:
+// Enums of self-reported level of confidence the model has in a classification. 
+// It doesn't mean correct, but will show low if:
+//  - line item is ambiguous
+//  - if the mixed-contract override was used
+//  - two rules presented conflicting classifications
+// In these events the classification isn't wrong, the signal just prompts a human
+//  traige check. 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ConfidenceLevel
 {

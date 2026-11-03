@@ -1,5 +1,5 @@
 namespace CisCompliance.Core.Models;
 
-// AmountGbp is decimal, not double, because this is currency: decimal avoids
-// the binary floating point rounding that would otherwise creep into totals.
+// Summary:
+// Represents a single line item in an invoice, as submitted for classification.
 public sealed record InvoiceLineItemRequest(string LineId, string Description, decimal AmountGbp);

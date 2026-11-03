@@ -1,9 +1,14 @@
 namespace CisCompliance.Core.Models;
 
-// What IRulesRepository hands back: the rules doc text (folded into the
-// system prompt), the full list of ids the model is allowed to cite (used to
-// build the response schema's enum constraint), and a lookup from id to the
-// full rule definition (used to resolve a citation after the model answers).
+// Summary:
+// Everything the model needs to know about the rules, loaded from two rule files:
+// - cis_rules_index.json: the machine readable rule registry 
+// - cis_rules.md: the human readable rules document
+
+// - RulesText: the full text of the rules document (cis_rules.md)
+// - RuleIds: the full list of ids the model is allowed to cite (used to restrict the model's id output)
+// - RulesById: a dictionary mapping rule ids to the RuleDefinition for that rule
+
 public sealed record RulesData(
     string RulesText,
     IReadOnlyList<string> RuleIds,
