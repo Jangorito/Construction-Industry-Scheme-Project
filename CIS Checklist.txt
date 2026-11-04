@@ -1,0 +1,20 @@
+Backend (src/api)
+
+✅ Core/Models: enums: ClassificationLabel, ConfidenceLevel
+✅ Core/Models: records: RuleCitation, RuleDefinition, RulesData, InvoiceLineItemRequest, InvoiceClassificationRequest, LineItemClassification, InvoiceClassificationResult, StoredLineItemClassification, StoredInvoice, OverrideLineRequest
+Core/Exceptions + Core/Abstractions: the 2 exceptions, then the 6 interfaces
+Core/Classification: CitationResolver, ModelResponseDto, ClassificationSchemaBuilder, ClassificationPrompt, ClassificationService
+Core/Extraction: ExtractionResponseDto, InvoiceExtractionSchemaBuilder, InvoiceExtractionPrompt, InvoiceExtractionService
+Infrastructure/Rules: RulesRepositoryOptions, RulesIndexFileDto, FileRulesRepository (+ cis_rules_index.json)
+Infrastructure/OpenAi: OpenAiOptions, OpenAiClassificationModelClient, OpenAiExtractionModelClient
+Infrastructure/Persistence: the 3 entities, CisComplianceDbContext, EfInvoiceRepository, CisComplianceDbSeeder, InvoiceSeedData; skim the Migrations
+Wiring: InfrastructureServiceCollectionExtensions, Program.cs, appsettings.json
+Api/Controllers: Health, Invoices, Classify, Extract
+Tests: the TestDoubles, then the test classes
+
+Frontend (src/web/src/app)
+
+Bootstrap: main.ts, app.config.ts, app.ts/.html, app.routes.ts
+core/models, then core/services
+core/utils (mappers, invoice-calculations), core/state/invoice-store.ts, core/guards, shared/pipes
+features: invoice-grid, invoice-detail, dashboard, upload

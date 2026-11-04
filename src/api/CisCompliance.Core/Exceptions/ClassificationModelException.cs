@@ -1,9 +1,9 @@
 namespace CisCompliance.Core.Exceptions;
 
-// The one exception type the Api layer needs to know about. Infrastructure
-// wraps OpenAI SDK failures in this, and ClassificationService wraps
-// malformed or incomplete model output in this too, so a controller can
-// catch a single well known type without depending on the OpenAI SDK.
+// Summary:
+// Represents an exception thrown when the classification model fails, can be thrown 
+//  by the ClassificationService or the OpenAI SDK. If thrown by model it is wrapped
+//  in this exception type so API layer doesn't need to know model's exception types.
 public sealed class ClassificationModelException : Exception
 {
     public ClassificationModelException(string message) : base(message)
