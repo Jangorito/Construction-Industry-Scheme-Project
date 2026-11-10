@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="assets/industry.css">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; }
+    a { color: var(--color-accent); text-decoration: none; }
+    a:hover { color: var(--color-accent-700); }
+    .icn { display: inline-block; background-color: currentColor; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; flex: none; }
+  </style>
+</helmet>
+
+<div style="background: var(--color-bg); color: var(--color-text); min-height: 100vh;">
+
+  <div class="nav">
+    <div class="nav-brand">CIS Ledger</div>
+    <sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="1">
+      <sc-if value="{{ c.clickable }}" hint-placeholder-val="{{ false }}">
+        <a href="#" onClick="{{ c.onClick }}" style="font-size: 13px;">{{ c.label }}</a>
+        <span style="opacity: 0.4; font-size: 13px;">/</span>
+      </sc-if>
+      <sc-if value="{{ c.notClickable }}" hint-placeholder-val="{{ true }}">
+        <span style="opacity: 0.55; font-size: 13px;">{{ c.label }}</span>
+      </sc-if>
+    </sc-for>
+    <div style="margin-left: auto; display: flex; gap: var(--space-2);">
+      <button class="btn btn-secondary" onClick="{{ goUpload }}">Upload invoices</button>
+      <button class="btn btn-secondary" onClick="{{ goGrid }}">All invoices</button>
+    </div>
+  </div>
+
+  <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+  <div style="padding: var(--space-8);">
+
+    <div class="card blueprint" style="position: relative; padding: var(--space-6); margin-bottom: var(--space-6); flex-direction: row; align-items: center; gap: var(--space-6);">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="flex: 1;">
+        <div class="card-kicker">HMRC CIS EXPOSURE — THIS QUARTER</div>
+        <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 56px; line-height: 1; margin: var(--space-2) 0;">
+          {{ pct }}<span style="font-size: 32px;">%</span> <span style="font-size: 20px; font-weight: 400; opacity: 0.7;">of invoiced value is construction spend</span>
+        </div>
+        <div class="card-body" style="opacity: 0.65;">{{ constructionDisplay }} of {{ totalDisplay }} total invoiced classified as CIS-relevant construction spend across {{ invoiceCount }} processed invoices.</div>
+      </div>
+      <div style="width: 168px; height: 168px; border-radius: 50%; background: {{ donutGradient }}; display: flex; align-items: center; justify-content: center; flex: none;">
+        <div style="width: 118px; height: 118px; border-radius: 50%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ pct }}%</div>
+          <div style="font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.6;">construction</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
+      <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="3">
+        <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="card-kicker">{{ m.kicker }}</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 30px; margin: var(--space-1) 0;">{{ m.value }}</div>
+          <div class="card-meta">{{ m.note }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-title" style="margin-bottom: var(--space-3);">Spend breakdown</div>
+        <div style="display: flex; align-items: center; gap: var(--space-4);">
+          <div style="width: 108px; height: 108px; border-radius: 50%; background: {{ donutGradient }}; flex: none;"></div>
+          <div style="display: flex; flex-direction: column; gap: var(--space-2);">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-accent-600); flex: none;"></span>Construction — {{ pct }}%</div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;"><span style="width: 10px; height: 10px; background: var(--color-neutral-300); flex: none;"></span>Services — {{ servicesPct }}%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-title" style="margin-bottom: var(--space-3);">Monthly spend split — construction vs. services</div>
+        <div style="display: flex; align-items: flex-end; gap: var(--space-6); height: 140px; padding: 0 var(--space-2);">
+          <sc-for list="{{ trend }}" as="t" hint-placeholder-count="3">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: var(--space-2); flex: 1;">
+              <div style="display: flex; flex-direction: column-reverse; width: 44px; height: 108px;">
+                <div style="width: 100%; background: var(--color-accent-600); height: {{ t.consH }}px;"></div>
+                <div style="width: 100%; background: var(--color-neutral-300); height: {{ t.servH }}px;"></div>
+              </div>
+              <div style="font-size: 11px; opacity: 0.65;">{{ t.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div class="card blueprint" style="position: relative; padding: var(--space-4); flex-direction: row; align-items: center; gap: var(--space-3);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="icn" style="width: 22px; height: 22px; background-color: var(--color-accent); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/percent.svg); mask-image: url(https://unpkg.com/lucide-static/icons/percent.svg);"></div>
+        <div>
+          <div class="card-kicker">EST. CIS DEDUCTION OWED ({{ cisRate }}% RATE)</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ deductionDisplay }}</div>
+          <div class="card-meta">{{ cisRate }}% of construction spend — verified subcontractor rate</div>
+        </div>
+      </div>
+      <div class="card blueprint" style="position: relative; padding: var(--space-4); flex-direction: row; align-items: center; gap: var(--space-3);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="icn" style="width: 22px; height: 22px; background-color: var(--color-accent); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/alert-triangle.svg); mask-image: url(https://unpkg.com/lucide-static/icons/alert-triangle.svg);"></div>
+        <div>
+          <div class="card-kicker">LOW-CONFIDENCE CLASSIFICATIONS</div>
+          <div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 26px;">{{ needsReviewCount }} this week</div>
+          <div class="card-meta">Flagged low confidence by the model — needs review</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div style="display: flex; align-items: center; margin-bottom: var(--space-3);">
+        <div class="card-title">Needs review</div>
+        <a href="#" onClick="{{ goGrid }}" style="margin-left: auto; font-size: 13px;">View all invoices →</a>
+      </div>
+      <table class="table">
+        <thead><tr><th>Supplier</th><th>Invoice date</th><th>Total value</th><th>AI confidence</th><th>Status</th></tr></thead>
+        <tbody>
+          <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="4">
+            <tr style="cursor: pointer;" onClick="{{ r.open }}">
+              <td>{{ r.supplier }}</td>
+              <td>{{ r.dateDisplay }}</td>
+              <td>{{ r.totalDisplay }}</td>
+              <td><span class="{{ r.confidenceTagClass }}">{{ r.confidenceSummary }}</span></td>
+              <td><span class="{{ r.tagClass }}">{{ r.status }}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isUpload }}" hint-placeholder-val="{{ false }}">
+  <div style="padding: var(--space-8); max-width: 720px;">
+    <h2 style="margin: 0 0 var(--space-2);">Upload invoices</h2>
+    <div class="card-meta" style="margin-bottom: var(--space-4);">Drop invoices into the ingest folder — the AI agent classifies each line item as construction spend or services before they land in the review queue.</div>
+
+    <div class="card blueprint" style="position: relative; padding: var(--space-6); align-items: center; text-align: center; gap: var(--space-3);">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <div class="icn" style="width: 32px; height: 32px; background-color: var(--color-accent); -webkit-mask-image: url(https://unpkg.com/lucide-static/icons/upload-cloud.svg); mask-image: url(https://unpkg.com/lucide-static/icons/upload-cloud.svg);"></div>
+      <div class="card-title">Select invoice files</div>
+      <div class="card-meta">PDF, PNG or JPG — mixed real and AI-generated test invoices supported</div>
+      <label class="btn btn-secondary" style="cursor: pointer;">
+        Choose files
+        <input type="file" multiple="{{ true }}" onChange="{{ onFilesSelected }}" style="display: none;">
+      </label>
+
+      <sc-if value="{{ hasQueuedFiles }}" hint-placeholder-val="{{ false }}">
+        <div style="width: 100%; text-align: left; margin-top: var(--space-2);">
+          <sc-for list="{{ queuedFiles }}" as="qf" hint-placeholder-count="2">
+            <div style="display: flex; align-items: center; gap: var(--space-2); padding: 6px 0; border-bottom: 1px solid var(--color-divider); font-size: 13px;">
+              <span style="flex: 1;">{{ qf.name }}</span>
+              <span class="card-meta">queued</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <button class="btn btn-primary" style="margin-top: var(--space-3);" disabled="{{ processDisabled }}" onClick="{{ processInvoices }}">{{ processLabel }}</button>
+    </div>
+
+    <sc-if value="{{ hasProcessedBatch }}" hint-placeholder-val="{{ false }}">
+      <div class="card blueprint" style="position: relative; padding: var(--space-4); margin-top: var(--space-4);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="card-title" style="margin-bottom: var(--space-3);">{{ processedBatch.length }} invoice(s) processed</div>
+        <sc-for list="{{ processedBatch }}" as="pb" hint-placeholder-count="2">
+          <div style="display: flex; align-items: center; gap: var(--space-3); padding: 8px 0; border-bottom: 1px solid var(--color-divider);">
+            <div style="flex: 1;">
+              <div style="font-size: 14px;">{{ pb.supplier }}</div>
+              <div class="card-meta">{{ pb.ref }} · {{ pb.totalDisplay }} · {{ pb.confidenceSummary }} confidence</div>
+            </div>
+            <span class="{{ pb.tagClass }}">{{ pb.status }}</span>
+            <a href="#" onClick="{{ pb.open }}">Review →</a>
+          </div>
+        </sc-for>
+        <button class="btn btn-secondary" style="margin-top: var(--space-3);" onClick="{{ goGrid }}">Go to invoice grid</button>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isGrid }}" hint-placeholder-val="{{ false }}">
+  <div style="padding: var(--space-8);">
+    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4);">
+      <h2 style="margin: 0; flex: 1;">Invoices</h2>
+      <input class="input" style="width: 260px;" placeholder="Search supplier or reference…" value="{{ search }}" onChange="{{ onSearch }}">
+      <div class="seg">
+        <sc-for list="{{ statusFilters }}" as="sf" hint-placeholder-count="4">
+          <label class="seg-opt"><input type="radio" name="statusFilter" checked="{{ sf.checked }}" onChange="{{ sf.onSelect }}" style="display:none;"><span>{{ sf.label }}</span></label>
+        </sc-for>
+      </div>
+    </div>
+
+    <div class="card blueprint" style="position: relative; padding: 0; overflow: hidden;">
+      <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+      <table class="table">
+        <thead>
+          <tr>
+            <sc-for list="{{ columns }}" as="col" hint-placeholder-count="6">
+              <th style="cursor: pointer; user-select: none;" onClick="{{ col.onSort }}">{{ col.label }} <span style="opacity: 0.5; font-size: 10px;">{{ col.arrow }}</span></th>
+            </sc-for>
+            <th>AI confidence</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ gridRows }}" as="r" hint-placeholder-count="10">
+            <tr style="cursor: pointer;" onClick="{{ r.open }}">
+              <td>{{ r.supplier }}</td>
+              <td>{{ r.ref }}</td>
+              <td>{{ r.dateDisplay }}</td>
+              <td>{{ r.totalDisplay }}</td>
+              <td>{{ r.constructionDisplay }}</td>
+              <td>{{ r.servicesDisplay }}</td>
+              <td><span class="{{ r.confidenceTagClass }}">{{ r.confidenceSummary }}</span></td>
+              <td><span class="{{ r.tagClass }}">{{ r.status }}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{ gridEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: var(--space-6); text-align: center; opacity: 0.6;">No invoices match this filter.</div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+  <div style="padding: var(--space-8);">
+    <div style="display: flex; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-6);">
+      <div style="flex: 1;">
+        <div class="card-kicker">{{ detail.ref }}</div>
+        <h1 style="margin: 0 0 var(--space-1);">{{ detail.supplier }}</h1>
+        <div style="opacity: 0.65; font-size: 14px;">{{ detail.dateDisplay }} · {{ detail.totalDisplay }} total</div>
+      </div>
+      <span class="{{ detail.tagClass }}" style="font-size: 13px; padding: 6px 14px;">{{ detail.status }}</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 0.9fr 1.6fr; gap: var(--space-6); align-items: start;">
+      <div class="card blueprint" style="position: relative; padding: var(--space-3);">
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="duotone" style="width: 100%; aspect-ratio: 3/4;">
+          <image-slot id="{{ detail.ref }}-doc" shape="rect" placeholder="Drop scanned invoice — {{ detail.ref }}.pdf" style="width: 100%; height: 100%;"></image-slot>
+        </div>
+        <div style="font-family: monospace; font-size: 11px; opacity: 0.55; margin-top: var(--space-2); text-align: center;">source document — {{ detail.ref }}.pdf</div>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+        <div class="card blueprint" style="position: relative; padding: var(--space-4); flex-direction: row; gap: var(--space-6);">
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div><div class="card-kicker">CONSTRUCTION</div><div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px;">{{ detail.constructionDisplay }}</div></div>
+          <div><div class="card-kicker">SERVICES</div><div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px;">{{ detail.servicesDisplay }}</div></div>
+          <div><div class="card-kicker">AI CONFIDENCE</div><div style="font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: 22px;">{{ detail.confidenceSummary }}</div></div>
+        </div>
+
+        <div class="card-title">Line items</div>
+        <sc-for list="{{ detail.lines }}" as="li" hint-placeholder-count="3">
+          <div class="card blueprint" style="position: relative; padding: var(--space-4);">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);">
+              <div style="flex: 1;">
+                <div class="card-title" style="font-size: 16px;">{{ li.description }}</div>
+                <div class="card-meta">{{ li.amountDisplay }}</div>
+              </div>
+              <span class="{{ li.classTagClass }}">{{ li.classLabel }}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-2);">
+              <span class="{{ li.confidenceTagClass }}">{{ li.confidenceLabel }}</span>
+            </div>
+            <div class="card-body" style="font-style: italic;">"{{ li.reasoning }}"</div>
+            <div class="card-meta" style="margin-top: var(--space-1); font-family: monospace; font-size: 11px;">Cited: {{ li.citation }}</div>
+
+            <sc-if value="{{ li.overridden }}" hint-placeholder-val="{{ false }}">
+              <div class="card-meta" style="margin-top: var(--space-2); color: var(--color-accent-700);">Overridden to {{ li.classLabel }} — "{{ li.overrideReason }}"</div>
+            </sc-if>
+
+            <sc-if value="{{ li.isEditing }}" hint-placeholder-val="{{ false }}">
+              <div class="hr"></div>
+              <div class="field" style="margin-bottom: var(--space-2);">
+                <label>Correct classification</label>
+                <div class="seg">
+                  <label class="seg-opt"><input type="radio" name="{{ li.editGroupName }}" checked="{{ li.editIsConstruction }}" onChange="{{ li.setConstruction }}" style="display:none;"><span>Construction</span></label>
+                  <label class="seg-opt"><input type="radio" name="{{ li.editGroupName }}" checked="{{ li.editIsServices }}" onChange="{{ li.setServices }}" style="display:none;"><span>Services</span></label>
+                </div>
+              </div>
+              <div class="field" style="margin-bottom: var(--space-2);">
+                <label>Reason for correction (required)</label>
+                <textarea class="input" rows="2" placeholder="e.g. Confirmed with supplier — line is labour-only, not a hire." value="{{ li.editReason }}" onChange="{{ li.setReason }}"></textarea>
+              </div>
+              <div style="display: flex; gap: var(--space-2); justify-content: flex-end;">
+                <button class="btn btn-secondary" onClick="{{ li.cancelEdit }}">Cancel</button>
+                <button class="btn btn-primary" disabled="{{ li.saveDisabled }}" onClick="{{ li.saveEdit }}">Save correction</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ li.showOverrideBtn }}" hint-placeholder-val="{{ true }}">
+              <button class="btn btn-secondary" style="margin-top: var(--space-2);" onClick="{{ li.startEdit }}">Override classification</button>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;cisRate&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:20,&quot;options&quot;:[20,30],&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;CIS rules&quot;},&quot;requireOverrideReason&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;CIS rules&quot;}}">
+const EXTRA_INVOICES = [
+  { id: "inv-2026-0009", ref: "INV-2026-0009", supplier: "Camden Bridge Construction Group Ltd", date: "2026-05-29",
+    lines: [
+      { description: "Supply and fit carpet tiles as part of wider office refurbishment contract", amount: 4377.46, classification: "construction", confidence: "high", citation: "R10 (CIS340), R2 (CISR14020 / CIS340 Appendix A.3-A.4), R12 (POC-METHOD)",
+        reasoning: "This line item describes the supply and fitting of carpet tiles, which is a named exclusion under R10. However, it includes the phrase 'as part of wider office refurbishment contract', indicating it may be part of a mixed contract. Therefore, the mixed-contract override applies, and it should be classified as Construction." },
+      { description: "Supply and fit carpet tiles, open-plan office", amount: 3285.26, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "This line item also describes the supply and fitting of carpet tiles, which is a named exclusion under R10. There is no indication of it being part of a larger contract in the wording itself, so it does not qualify for the mixed-contract override. Therefore, it is classified as Services." },
+      { description: "Consultancy — remedial works", amount: 3570.2, classification: "services", confidence: "high", citation: "R6 (CISR14270)",
+        reasoning: "This line item describes consultancy for remedial works, which falls under R6 as it is purely advisory. There is no indication of execution or hands-on work, so it is classified as Services." },
+      { description: "Supply and erect security fencing around site compound perimeter", amount: 5216.68, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "This line item describes the supply and erection of security fencing, which is not classified as a security system under R10. Therefore, it is considered ordinary construction work and classified as Construction." },
+      { description: "Installation and repair of glazing, warehouse windows", amount: 3543.31, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "This line item describes the installation and repair of glazing, which is a construction operation as it involves work on a building. Therefore, it is classified as Construction under R1." },
+      { description: "Subcontractor accommodation costs, 6 weeks on-site", amount: 3470.87, classification: "construction", confidence: "high", citation: "R11c (CISR15080)",
+        reasoning: "This line item describes subcontractor accommodation costs, which are part of the overall contract payment and classified as Construction under R11c. They are not materials or services, but part of the taxable contract payment." },
+    ] },
+  { id: "inv-2026-0010", ref: "INV-2026-0010", supplier: "Oakfield General Contracting Ltd", date: "2026-06-13",
+    lines: [
+      { description: "Subcontractor accommodation costs, 3 months on-site", amount: 2653.35, classification: "construction", confidence: "high", citation: "R11c (CISR15080)",
+        reasoning: "Subcontractor accommodation costs are part of the overall contract payment and are fully subject to CIS deduction, not classified as Services. This falls under R11c, which states that such costs are part of the taxable contract payment." },
+      { description: "Installation of louvered security shutters, shopfront", amount: 4175.05, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "Louvered security shutters fall under R10's named exclusion for seating, blinds, and shutters, even though this looks like installing a system in a building. No mixed-contract signal in the wording, so the exclusion stands." },
+      { description: "Tree felling and landscaping in the ordinary course of estate management (no development project)", amount: 2622.21, classification: "services", confidence: "high", citation: "R9 (CIS340)",
+        reasoning: "Tree felling and landscaping described as part of ordinary estate management does not indicate a construction project, thus it does not meet the criteria for construction operations. This line is classified as Services under R9, as it does not relate to construction work." },
+      { description: "Supply and install retractable awning, shopfront", amount: 2444.48, classification: "construction", confidence: "high", citation: "R5 (CISR14220)",
+        reasoning: "The supply and installation of a retractable awning is a construction operation, as it involves both supply and fit under one contract. This is classified as Construction according to R5." },
+      { description: "Site clearance and earth-moving ahead of construction", amount: 5065.05, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Site clearance and earth-moving are preparatory works that are part of construction operations. This falls under R1, which includes site preparation as part of construction work." },
+    ] },
+];
+
+const RAW_INVOICES = [
+  { id: "inv-2026-0001", ref: "INV-2026-0001", supplier: "Ashcroft Building Services Ltd", date: "2026-07-30",
+    lines: [
+      { description: "Erection of scaffolding for roof works, 3 weeks", amount: 1967.65, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The line item describes the erection of scaffolding, which is integral to construction work. This falls under the scope of construction operations as per R1." },
+      { description: "Preparation and laying of foundations, Plot 4", amount: 12612.57, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The preparation and laying of foundations is a core construction activity, clearly defined under R1 as part of construction operations." },
+      { description: "Install air conditioning system, 2nd floor office", amount: 5755.46, classification: "construction", confidence: "high", citation: "R3 (CIS340)",
+        reasoning: "Installing an air conditioning system is classified as construction work since it involves the installation of a system within a building, as per R3." },
+      { description: "Painting and decorating, internal walls and ceilings, office suite", amount: 4326.58, classification: "construction", confidence: "high", citation: "R4 (CIS340)",
+        reasoning: "Painting and decorating internal walls and ceilings is considered construction work as it is part of the finishing operations during construction, according to R4." },
+    ] },
+  { id: "inv-2026-0002", ref: "INV-2026-0002", supplier: "BrightSpark M&E Contractors", date: "2026-05-22",
+    lines: [
+      { description: "Install air conditioning system, warehouse unit 4", amount: 2977.12, classification: "construction", confidence: "high", citation: "R3 (CIS340)",
+        reasoning: "This line describes the installation of an air conditioning system, which is classified as Construction under R3 because it involves installing a system in a building." },
+      { description: "Erection of scaffolding for roof works, 4 weeks", amount: 3170.89, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The erection of scaffolding is a construction operation as it is integral to the roof works, thus classified as Construction under R1." },
+      { description: "Painting and decorating, internal walls and ceilings, office suite", amount: 2428.91, classification: "construction", confidence: "high", citation: "R4 (CIS340)",
+        reasoning: "Painting and decorating internal walls and ceilings is considered site work and finishing, which falls under Construction as per R4." },
+      { description: "Site clearance and earth-moving ahead of construction", amount: 7012.59, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Site clearance and earth-moving are preparatory works that are part of construction operations, thus classified as Construction under R1." },
+      { description: "Preparation and laying of foundations, Plot 4", amount: 12772.42, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Preparation and laying of foundations is a core construction activity, classified as Construction under R1." },
+    ] },
+  { id: "inv-2026-0003", ref: "INV-2026-0003", supplier: "BrightSpark M&E Contractors", date: "2026-04-13",
+    lines: [
+      { description: "Groundworks labour and materials, concrete foundations, fixed price", amount: 11879.38, classification: "construction", confidence: "high", citation: "R1 (CIS340), R11 (CISR15060)",
+        reasoning: "This line item describes groundworks labour and materials for concrete foundations, which falls under construction operations as defined in R1. The entire line is part of a construction contract." },
+      { description: "Construction, repair and resurfacing of access road including white-lining", amount: 21722.45, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The description includes construction, repair, and resurfacing of an access road, which is clearly a construction operation as per R1. This line is classified as Construction." },
+      { description: "Provision of traffic management services during resurfacing works", amount: 1700.71, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "This line describes the provision of traffic management services during resurfacing works. According to R1, traffic management services supplied to a contractor carrying out construction operations are included, so this line is classified as Construction." },
+      { description: "Supply and fit 30 fire doors, including ironmongery", amount: 4077.37, classification: "construction", confidence: "high", citation: "R5 (CISR14220)",
+        reasoning: "The line item specifies supply and fit of fire doors, which is a supply-and-fix operation. This falls under R5, making it a construction operation. Therefore, it is classified as Construction." },
+      { description: "Installation of drainage and sanitation pipework, new build", amount: 6723.36, classification: "construction", confidence: "high", citation: "R3 (CIS340)",
+        reasoning: "This line describes the installation of drainage and sanitation pipework for a new build, which is a construction operation as per R3. Thus, it is classified as Construction." },
+    ] },
+  { id: "inv-2026-0004", ref: "INV-2026-0004", supplier: "Solace Security Systems Ltd", date: "2026-06-24",
+    lines: [
+      { description: "Delivery of ready-mix concrete, 15 tonnes, no laying obligation", amount: 1545.68, classification: "services", confidence: "high", citation: "R7 (CISR14220), R11 (CISR15060)",
+        reasoning: "This line item describes the delivery of ready-mix concrete without any laying obligation, which falls under the manufacture and delivery exclusion (R7). Since there is no installation obligation, it is classified as Services." },
+      { description: "Sign-writing and installation of shop signboard", amount: 2254.72, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "The description includes both sign-writing and installation of a shop signboard. However, sign-writing is a named exclusion under R10, and since there is no indication in the line's wording that it is part of a larger construction contract, it is classified as Services." },
+      { description: "Installation of venetian blinds, office windows", amount: 668.76, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "The installation of venetian blinds is a named exclusion under R10. The line does not indicate that it is part of a larger construction contract, so it is classified as Services." },
+    ] },
+  { id: "inv-2026-0005", ref: "INV-2026-0005", supplier: "Solace Security Systems Ltd", date: "2026-07-27",
+    lines: [
+      { description: "Supply and fit carpet tiles, open-plan office", amount: 4665.77, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "The line item describes the supply and fitting of carpet tiles, which falls under the named exclusion for carpet fitting (R10). I checked for a mixed-contract override but found no wording indicating this is part of a larger construction contract. Therefore, it is classified as Services." },
+      { description: "Structural survey and written assessment report (no remedial works)", amount: 1283.81, classification: "services", confidence: "high", citation: "R6 (CISR14270)",
+        reasoning: "This line item involves a structural survey and a written assessment report, which is purely advisory work without any execution or remedial action involved (R6). Therefore, it is classified as Services." },
+    ] },
+  { id: "inv-2026-0006", ref: "INV-2026-0006", supplier: "Thornfield Contractors Ltd", date: "2026-06-14",
+    lines: [
+      { description: "Running of site canteen facility, 1 month", amount: 2878.05, classification: "services", confidence: "high", citation: "R9 (CIS340)",
+        reasoning: "This line item describes the running of a site canteen facility, which is a facility/site-support service and therefore excluded under R9. There is no indication in the wording that this is part of a larger construction contract." },
+      { description: "Hire of barge, contractor to provide own crew", amount: 4423.04, classification: "services", confidence: "high", citation: "R8 (CIS340)",
+        reasoning: "The hire of a barge without a crew is classified as Services under R8, as it is bare plant hire without operator presence. There is no indication that this is part of a larger construction operation." },
+      { description: "Supply and erect security fencing around site compound perimeter", amount: 5115.17, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "This line item involves the supply and erection of security fencing, which is considered Construction work as it is not classified as a security system under R10. The erection of fencing is a construction operation." },
+      { description: "Supply and install retractable awning, shopfront", amount: 3138.56, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The supply and installation of a retractable awning is classified as Construction under R1, as it involves installation work. There is no indication that this is part of a larger contract that would change its classification." },
+      { description: "Demolition of existing outbuilding prior to new build", amount: 8183.91, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Demolition of an existing outbuilding is classified as Construction under R1, as it is a construction operation. There are no indications that this is part of a mixed contract that would alter its classification." },
+      { description: "Erection of scaffolding for roof works, 3 weeks", amount: 3495.35, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Erection of scaffolding for roof works is classified as Construction under R1, as it is integral to the construction process. There is no indication that this is part of a larger contract that would change its classification." },
+    ] },
+  { id: "inv-2026-0007", ref: "INV-2026-0007", supplier: "Riverline Build & Fit-Out Ltd", date: "2026-07-01",
+    lines: [
+      { description: "Erection of scaffolding for roof works, 2 weeks", amount: 2805.47, classification: "construction", confidence: "high", citation: "R1 (CIS340), R4 (CIS340)",
+        reasoning: "The erection of scaffolding is a construction operation directly related to the roof works, which falls under the scope of construction activities. Therefore, it is classified as Construction." },
+      { description: "Supply of 30 fire doors, delivered to site (materials only)", amount: 3524.53, classification: "services", confidence: "high", citation: "R7 (CISR14220), R11 (CISR15060)",
+        reasoning: "The supply of fire doors is classified as Services because it is a materials-only delivery with no installation obligation included in this line item, which aligns with the exclusion for manufacture and delivery without installation." },
+      { description: "Supply of boiler and full heating system (installation included at no extra charge)", amount: 8911.67, classification: "construction", confidence: "high", citation: "R1 (CIS340), R5 (CISR14220), R11a (CISR15060)",
+        reasoning: "Although the installation is described as included at no extra charge, this line item is still classified as Construction because it involves the supply and installation of a heating system, which is a construction operation." },
+      { description: "Installation of louvered security shutters, shopfront", amount: 3457.18, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "The installation of louvered security shutters is classified as Services because it falls under the named exclusion for security systems, which are not considered construction work under the CIS rules." },
+      { description: "Subcontractor accommodation costs, 6 weeks on-site", amount: 2895.94, classification: "construction", confidence: "high", citation: "R11c (CISR15080)",
+        reasoning: "Subcontractor accommodation costs are classified as Construction because they are part of the overall contract payment for the subcontractor's work on-site, and are fully subject to CIS deductions." },
+    ] },
+  { id: "inv-2026-0008", ref: "INV-2026-0008", supplier: "Camden Bridge Construction Group Ltd", date: "2026-05-27",
+    lines: [
+      { description: "Materials: 14 tonnes ready-mix concrete, delivered", amount: 1420.4, classification: "services", confidence: "high", citation: "R7 (CISR14220), R11 (CISR15060)",
+        reasoning: "This line item describes the delivery of ready-mix concrete without any installation obligation, which falls under the manufacture and delivery exclusion (R7). Therefore, it is classified as Services." },
+      { description: "Installation of CCTV for traffic monitoring, site access road", amount: 2773.8, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The installation of CCTV for traffic monitoring is considered Construction as it supports a construction operation (R1). This is not a named exclusion since it is for traffic monitoring, not security purposes." },
+      { description: "Supply and fit carpet tiles, open-plan office", amount: 3328.69, classification: "services", confidence: "high", citation: "R10 (CIS340)",
+        reasoning: "Carpet fitting is a named exclusion under R10, which states that it is classified as Services. The line does not indicate any mixed contract signal that would override this exclusion." },
+      { description: "Concrete pumping service, wet concrete distribution around site", amount: 2215.06, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "Concrete pumping service involves the distribution of wet concrete around the site, which is a construction operation (R1). This service is integral to the construction process, thus classified as Construction." },
+      { description: "Supply and erect security fencing around site compound perimeter", amount: 5353.04, classification: "construction", confidence: "high", citation: "R1 (CIS340)",
+        reasoning: "The supply and erection of security fencing is not classified as a security system under R10, but rather as ordinary construction work. Therefore, it is classified as Construction." },
+      { description: "Supply of boiler and full heating system (installation included at no extra charge)", amount: 10613.68, classification: "construction", confidence: "low", citation: "R5 (CISR14220), R11a (CISR15060)",
+        reasoning: "This line item describes a supply and installation of a heating system, which is a construction operation (R5). However, the framing suggests that installation is included at no extra charge, which is a pattern that raises suspicion (R11a). Despite this, the overall operation is still classified as Construction due to the installation obligation." },
+    ] },
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      view: 'dashboard', selectedId: null,
+      statusFilter: 'all', search: '',
+      sortKey: 'date', sortDir: 'desc',
+      invoices: RAW_INVOICES.map(inv => ({ ...inv, lines: inv.lines.map(l => ({ ...l, overridden: false, overrideReason: '' })) })),
+      editing: null,
+      editDraft: { classification: '', reason: '' },
+      pool: EXTRA_INVOICES.map(inv => ({ ...inv, lines: inv.lines.map(l => ({ ...l, overridden: false, overrideReason: '' })) })),
+      queuedFiles: [], processing: false, processedBatch: null,
+    };
+    this.goDashboard = () => this.setState({ view: 'dashboard' });
+    this.goGrid = () => this.setState({ view: 'grid', editing: null });
+    this.goUpload = () => this.setState({ view: 'upload', queuedFiles: [], processedBatch: null, processing: false });
+    this.onSearch = (e) => this.setState({ search: e.target.value });
+    this.onFilesSelected = (e) => {
+      const names = Array.from(e.target.files || []).map(f => ({ name: f.name }));
+      this.setState({ queuedFiles: names, processedBatch: null });
+    };
+    this.processInvoices = () => {
+      if (this.state.processing) return;
+      this.setState({ processing: true });
+      setTimeout(() => {
+        this.setState(s => {
+          const count = Math.min(Math.max(s.queuedFiles.length, 1), s.pool.length) || Math.min(2, s.pool.length);
+          const taken = s.pool.slice(0, count);
+          return {
+            invoices: [...s.invoices, ...taken],
+            pool: s.pool.slice(count),
+            processing: false, queuedFiles: [], processedBatch: taken,
+          };
+        });
+      }, 1400);
+    };
+  }
+
+  fmt(n) { return '£' + Math.round(n).toLocaleString('en-GB'); }
+  fmtDate(d) { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+
+  computeInvoice(inv) {
+    // Confidence is a self-reported high/low flag per line (proven out in the
+    // classification POC, see CIS_POC_RESULTS.md) rather than a fabricated
+    // precision percentage — real testing showed the model isn't calibrated
+    // enough to trust a number like "87%", only a triage-worthy high/low
+    // split. Status is derived from a plain count of low-confidence lines,
+    // not a numeric threshold, for the same reason.
+    const construction = inv.lines.filter(l => l.classification === 'construction').reduce((s, l) => s + l.amount, 0);
+    const services = inv.lines.filter(l => l.classification === 'services').reduce((s, l) => s + l.amount, 0);
+    const total = construction + services;
+    const lowConfidenceCount = inv.lines.filter(l => l.confidence === 'low').length;
+    const anyOverridden = inv.lines.some(l => l.overridden);
+    let status;
+    if (anyOverridden) status = 'Reviewed';
+    else if (lowConfidenceCount >= 2) status = 'Flagged';
+    else if (lowConfidenceCount === 1) status = 'Needs review';
+    else status = 'Reviewed';
+    const tagClass = status === 'Flagged' ? 'tag tag-accent' : status === 'Needs review' ? 'tag tag-outline' : 'tag tag-neutral';
+    const confidenceSummary = lowConfidenceCount === 0 ? 'All high' : `${lowConfidenceCount} flagged`;
+    const confidenceTagClass = lowConfidenceCount === 0 ? 'tag tag-neutral' : 'tag tag-accent';
+    return { construction, services, total, lowConfidenceCount, confidenceSummary, confidenceTagClass, status, tagClass };
+  }
+
+  openDetail(id) { this.setState({ view: 'detail', selectedId: id, editing: null }); }
+  toggleSort(key) {
+    this.setState(s => s.sortKey === key ? { sortDir: s.sortDir === 'asc' ? 'desc' : 'asc' } : { sortKey: key, sortDir: 'asc' });
+  }
+  setStatusFilter(v) { this.setState({ statusFilter: v }); }
+
+  startEdit(invoiceId, lineIndex, currentClass) {
+    this.setState({ editing: { invoiceId, lineIndex }, editDraft: { classification: currentClass, reason: '' } });
+  }
+  cancelEdit() { this.setState({ editing: null }); }
+  setEditDraft(patch) { this.setState(s => ({ editDraft: { ...s.editDraft, ...patch } })); }
+  saveEdit() {
+    const { editing, editDraft } = this.state;
+    if (!editing) return;
+    if ((this.props.requireOverrideReason ?? true) && !editDraft.reason.trim()) return;
+    this.setState(s => ({
+      invoices: s.invoices.map(inv => inv.id !== editing.invoiceId ? inv : {
+        ...inv,
+        lines: inv.lines.map((l, i) => i !== editing.lineIndex ? l : { ...l, classification: editDraft.classification, overridden: true, overrideReason: editDraft.reason.trim() }),
+      }),
+      editing: null,
+    }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const cisRate = this.props.cisRate ?? 20;
+    const requireReason = this.props.requireOverrideReason ?? true;
+
+    const computed = s.invoices.map(inv => ({ inv, ...this.computeInvoice(inv) }));
+    const totalAll = computed.reduce((a, c) => a + c.total, 0);
+    const constructionAll = computed.reduce((a, c) => a + c.construction, 0);
+    const servicesAll = totalAll - constructionAll;
+    const pct = totalAll ? Math.round((constructionAll / totalAll) * 100) : 0;
+    const needsReviewCount = computed.filter(c => c.status !== 'Reviewed').length;
+
+    const crumbs = [{ label: 'Dashboard', clickable: s.view !== 'dashboard', notClickable: s.view === 'dashboard', onClick: this.goDashboard }];
+    if (s.view === 'grid') crumbs.push({ label: 'Invoices', clickable: false, notClickable: true });
+    if (s.view === 'upload') crumbs.push({ label: 'Upload invoices', clickable: false, notClickable: true });
+    if (s.view === 'detail') {
+      crumbs.push({ label: 'Invoices', clickable: true, notClickable: false, onClick: this.goGrid });
+      const det = computed.find(c => c.inv.id === s.selectedId);
+      crumbs.push({ label: det ? det.inv.ref : '', clickable: false, notClickable: true });
+    }
+
+    // trend by month
+    const monthMap = {};
+    computed.forEach(c => {
+      const m = c.inv.date.slice(0, 7);
+      monthMap[m] = monthMap[m] || { cons: 0, serv: 0 };
+      monthMap[m].cons += c.construction; monthMap[m].serv += c.services;
+    });
+    const months = Object.keys(monthMap).sort();
+    const maxVal = Math.max(1, ...months.map(m => monthMap[m].cons + monthMap[m].serv));
+    const monthLabel = (m) => new Date(m + '-01T00:00:00').toLocaleDateString('en-GB', { month: 'short' });
+    const trend = months.map(m => ({
+      label: monthLabel(m),
+      consH: Math.round((monthMap[m].cons / maxVal) * 100),
+      servH: Math.round((monthMap[m].serv / maxVal) * 100),
+    }));
+
+    const reviewRows = computed.filter(c => c.status !== 'Reviewed').slice(0, 4).map(c => ({
+      supplier: c.inv.supplier, dateDisplay: this.fmtDate(c.inv.date), totalDisplay: this.fmt(c.total),
+      confidenceSummary: c.confidenceSummary, confidenceTagClass: c.confidenceTagClass, status: c.status, tagClass: c.tagClass,
+      open: () => this.openDetail(c.inv.id),
+    }));
+
+    // grid: filter/search/sort
+    let rows = computed.slice();
+    if (s.statusFilter !== 'all') rows = rows.filter(c => c.status === s.statusFilter);
+    if (s.search.trim()) {
+      const q = s.search.trim().toLowerCase();
+      rows = rows.filter(c => c.inv.supplier.toLowerCase().includes(q) || c.inv.ref.toLowerCase().includes(q));
+    }
+    const sortVal = (c) => ({ date: c.inv.date, supplier: c.inv.supplier, total: c.total, construction: c.construction, services: c.services }[s.sortKey]);
+    rows.sort((a, b) => { const av = sortVal(a), bv = sortVal(b); const cmp = av < bv ? -1 : av > bv ? 1 : 0; return s.sortDir === 'asc' ? cmp : -cmp; });
+
+    const columns = [
+      { key: 'supplier', label: 'Supplier' }, { key: 'ref', label: 'Reference' }, { key: 'date', label: 'Invoice date' },
+      { key: 'total', label: 'Total value' }, { key: 'construction', label: 'Construction' }, { key: 'services', label: 'Services' },
+    ].map(col => ({ label: col.label, onSort: () => this.toggleSort(col.key), arrow: s.sortKey === col.key ? (s.sortDir === 'asc' ? '▲' : '▼') : '' }));
+
+    const gridRows = rows.map(c => ({
+      supplier: c.inv.supplier, ref: c.inv.ref, dateDisplay: this.fmtDate(c.inv.date),
+      totalDisplay: this.fmt(c.total), constructionDisplay: this.fmt(c.construction), servicesDisplay: this.fmt(c.services),
+      confidenceSummary: c.confidenceSummary, confidenceTagClass: c.confidenceTagClass, status: c.status, tagClass: c.tagClass,
+      open: () => this.openDetail(c.inv.id),
+    }));
+
+    const statusFilters = ['all', 'Needs review', 'Flagged', 'Reviewed'].map(v => ({
+      label: v === 'all' ? 'All' : v, checked: s.statusFilter === v, onSelect: () => this.setStatusFilter(v),
+    }));
+
+    let detail = null;
+    if (s.view === 'detail') {
+      const c = computed.find(x => x.inv.id === s.selectedId);
+      if (c) {
+        detail = {
+          ref: c.inv.ref, supplier: c.inv.supplier, dateDisplay: this.fmtDate(c.inv.date),
+          totalDisplay: this.fmt(c.total), constructionDisplay: this.fmt(c.construction), servicesDisplay: this.fmt(c.services),
+          confidenceSummary: c.confidenceSummary, confidenceTagClass: c.confidenceTagClass, status: c.status, tagClass: c.tagClass,
+          lines: c.inv.lines.map((l, i) => {
+            const isEditing = s.editing && s.editing.invoiceId === c.inv.id && s.editing.lineIndex === i;
+            const draft = isEditing ? s.editDraft : null;
+            return {
+              description: l.description, amountDisplay: this.fmt(l.amount),
+              classLabel: l.classification === 'construction' ? 'Construction' : 'Services',
+              classTagClass: l.classification === 'construction' ? 'tag tag-accent-2' : 'tag tag-neutral',
+              confidenceLabel: l.confidence === 'high' ? 'High confidence' : 'Low confidence',
+              confidenceTagClass: l.confidence === 'high' ? 'tag tag-neutral' : 'tag tag-accent',
+              citation: l.citation, reasoning: l.reasoning,
+              overridden: l.overridden, overrideReason: l.overrideReason,
+              isEditing, editGroupName: 'edit-' + c.inv.id + '-' + i,
+              editIsConstruction: isEditing && draft.classification === 'construction',
+              editIsServices: isEditing && draft.classification === 'services',
+              setConstruction: () => this.setEditDraft({ classification: 'construction' }),
+              setServices: () => this.setEditDraft({ classification: 'services' }),
+              editReason: isEditing ? draft.reason : '',
+              setReason: (e) => this.setEditDraft({ reason: e.target.value }),
+              saveDisabled: isEditing && requireReason && !draft.reason.trim(),
+              saveEdit: () => this.saveEdit(),
+              cancelEdit: () => this.cancelEdit(),
+              startEdit: () => this.startEdit(c.inv.id, i, l.classification),
+              showOverrideBtn: !isEditing,
+            };
+          }),
+        };
+      }
+    }
+
+    const processedBatch = s.processedBatch ? s.processedBatch.map(inv => {
+      const c = this.computeInvoice(inv);
+      return { supplier: inv.supplier, ref: inv.ref, totalDisplay: this.fmt(c.total), confidenceSummary: c.confidenceSummary, status: c.status, tagClass: c.tagClass, open: () => this.openDetail(inv.id) };
+    }) : null;
+
+    return {
+      isDashboard: s.view === 'dashboard', isGrid: s.view === 'grid', isDetail: s.view === 'detail' && !!detail, isUpload: s.view === 'upload',
+      crumbs, goGrid: this.goGrid, goDashboard: this.goDashboard, goUpload: this.goUpload,
+      onFilesSelected: this.onFilesSelected, processInvoices: this.processInvoices,
+      queuedFiles: s.queuedFiles, hasQueuedFiles: s.queuedFiles.length > 0,
+      processDisabled: s.processing || (s.queuedFiles.length === 0 && s.pool.length === 0),
+      processLabel: s.processing ? 'Processing…' : (s.pool.length === 0 && s.queuedFiles.length === 0 ? 'No more sample invoices' : 'Process invoices'),
+      processedBatch, hasProcessedBatch: !!processedBatch,
+      pct, servicesPct: 100 - pct,
+      totalDisplay: this.fmt(totalAll), constructionDisplay: this.fmt(constructionAll), servicesDisplay: this.fmt(servicesAll),
+      invoiceCount: computed.length,
+      donutGradient: `conic-gradient(var(--color-accent-600) 0% ${pct}%, var(--color-neutral-300) ${pct}% 100%)`,
+      metrics: [
+        { kicker: 'TOTAL INVOICED VALUE', value: this.fmt(totalAll), note: `${computed.length} invoices this quarter` },
+        { kicker: 'CONSTRUCTION SPEND', value: this.fmt(constructionAll), note: `${pct}% of total — CIS relevant` },
+        { kicker: 'SERVICES SPEND', value: this.fmt(servicesAll), note: `${100 - pct}% of total — non-CIS` },
+      ],
+      trend, cisRate, deductionDisplay: this.fmt(constructionAll * (cisRate / 100)),
+      needsReviewCount, reviewRows,
+      search: s.search, onSearch: this.onSearch, statusFilters,
+      columns, gridRows, gridEmpty: gridRows.length === 0,
+      detail,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

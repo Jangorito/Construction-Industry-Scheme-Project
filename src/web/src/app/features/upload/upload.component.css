@@ -1,0 +1,91 @@
+.upload-page {
+  padding: var(--space-8);
+  max-width: 720px;
+}
+
+.upload-heading {
+  margin: 0 0 var(--space-2);
+}
+
+.upload-subtitle {
+  margin-bottom: var(--space-4);
+}
+
+.upload-card {
+  position: relative;
+  padding: var(--space-6);
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+}
+
+.upload-icn {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-accent);
+}
+
+.choose-files-label {
+  cursor: pointer;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.queued-list {
+  width: 100%;
+  text-align: left;
+  margin-top: var(--space-2);
+}
+
+.queued-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 13px;
+}
+
+.queued-name {
+  flex: 1;
+}
+
+.process-btn {
+  margin-top: var(--space-3);
+}
+
+.batch-card {
+  position: relative;
+  padding: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.batch-title {
+  margin-bottom: var(--space-3);
+}
+
+.batch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.batch-row-text {
+  flex: 1;
+}
+
+.batch-supplier {
+  font-size: 14px;
+}
+
+.batch-row-error {
+  opacity: 0.9;
+}
+
+.go-grid-btn {
+  margin-top: var(--space-3);
+}

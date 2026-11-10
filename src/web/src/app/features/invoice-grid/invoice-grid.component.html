@@ -1,0 +1,59 @@
+<div class="grid-page">
+  <div class="grid-toolbar">
+    <h2 class="grid-title">Invoices</h2>
+    <input
+      class="input search-input"
+      placeholder="Search supplier or reference…"
+      [value]="store.search()"
+      (input)="onSearchInput($event)"
+    />
+    <div class="seg">
+      @for (f of statusFilters; track f) {
+        <label class="seg-opt">
+          <input
+            type="radio"
+            name="statusFilter"
+            style="display:none"
+            [checked]="store.statusFilter() === f"
+            (change)="store.setStatusFilter(f)"
+          />
+          <span>{{ f === 'all' ? 'All' : f }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <div class="card blueprint grid-table-card">
+    <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+    <table class="table">
+      <thead>
+        <tr>
+          @for (col of columns; track col.key) {
+            <th class="sortable-th" (click)="store.setSort(col.key)">
+              {{ col.label }} <span class="sort-arrow">{{ arrowFor(col.key) }}</span>
+            </th>
+          }
+          <th>AI confidence</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of store.gridRows(); track r.inv.id) {
+          <tr class="clickable-row" [routerLink]="['/invoices', r.inv.id]">
+            <td>{{ r.inv.supplier }}</td>
+            <td>{{ r.inv.ref }}</td>
+            <td>{{ r.inv.date | ukDate }}</td>
+            <td>{{ r.total | gbp }}</td>
+            <td>{{ r.construction | gbp }}</td>
+            <td>{{ r.services | gbp }}</td>
+            <td><span [class]="r.confidenceTagClass">{{ r.confidenceSummary }}</span></td>
+            <td><span [class]="r.tagClass">{{ r.status }}</span></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if (store.gridRows().length === 0) {
+      <div class="grid-empty">No invoices match this filter.</div>
+    }
+  </div>
+</div>

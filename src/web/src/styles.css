@@ -1,0 +1,30 @@
+/* @import must stay the first statement in this file to be valid CSS. */
+@import './styles/industry.css';
+
+/* Global rules that lived in the mockup's inline <style> block, carried
+   over as-is (see POC/Mock Up/CIS Invoice Compliance Tool/*.html). */
+body { margin: 0; background: var(--color-bg); color: var(--color-text); min-height: 100vh; }
+a { color: var(--color-accent); text-decoration: none; }
+a:hover { color: var(--color-accent-700); }
+.icn {
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  flex: none;
+}
+
+/* Deliberate addition: none of industry.css's 4 tag variants fit an
+   upload-failure state, so a small danger token is added here rather than
+   editing the vendored industry.css file. */
+:root {
+  --color-danger: #b3261e;
+}
+.tag-danger {
+  background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+  color: var(--color-danger);
+}
